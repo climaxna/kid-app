@@ -102,19 +102,31 @@ body {
   background: white;
   overflow: hidden;
 }
-#pokemon-svg-layer {
+#pokemon-img-layer {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   pointer-events: none;
   display: flex; align-items: center; justify-content: center;
-  padding: 10px;
+  padding: 16px;
 }
-#pokemon-svg-layer svg { max-width: 100%; max-height: 100%; }
+#pokemon-img-layer img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+  /* 컬러 이미지를 흑백 윤곽선 도안 스타일로 변환 */
+  filter: grayscale(1) contrast(10) brightness(1.8) invert(0);
+  opacity: 0.85;
+  image-rendering: pixelated;
+}
 #draw-canvas {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   touch-action: none;
   cursor: crosshair;
+}
+#loading-msg {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: #aaa; pointer-events: none;
 }
 
 #toast {
@@ -151,11 +163,16 @@ body {
 </div>
 
 <div id="pokemon-bar">
-  <button class="pokemon-btn active" data-pokemon="pikachu"><span class="emoji">⚡</span>피카츄</button>
-  <button class="pokemon-btn" data-pokemon="charmander"><span class="emoji">🔥</span>파이리</button>
-  <button class="pokemon-btn" data-pokemon="squirtle"><span class="emoji">💧</span>꼬부기</button>
-  <button class="pokemon-btn" data-pokemon="bulbasaur"><span class="emoji">🌿</span>이상해씨</button>
-  <button class="pokemon-btn" data-pokemon="gengar"><span class="emoji">👻</span>겐가</button>
+  <button class="pokemon-btn active" data-id="25" data-name="피카츄"><span class="emoji">⚡</span>피카츄</button>
+  <button class="pokemon-btn" data-id="4" data-name="파이리"><span class="emoji">🔥</span>파이리</button>
+  <button class="pokemon-btn" data-id="7" data-name="꼬부기"><span class="emoji">💧</span>꼬부기</button>
+  <button class="pokemon-btn" data-id="1" data-name="이상해씨"><span class="emoji">🌿</span>이상해씨</button>
+  <button class="pokemon-btn" data-id="133" data-name="이브이"><span class="emoji">🤎</span>이브이</button>
+  <button class="pokemon-btn" data-id="39" data-name="푸린"><span class="emoji">🩷</span>푸린</button>
+  <button class="pokemon-btn" data-id="54" data-name="고라파덕"><span class="emoji">💛</span>고라파덕</button>
+  <button class="pokemon-btn" data-id="143" data-name="잠만보"><span class="emoji">🐻</span>잠만보</button>
+  <button class="pokemon-btn" data-id="94" data-name="겐가"><span class="emoji">👻</span>겐가</button>
+  <button class="pokemon-btn" data-id="150" data-name="뮤츠"><span class="emoji">💜</span>뮤츠</button>
 </div>
 
 <div id="main">
@@ -166,6 +183,7 @@ body {
     <button class="color-btn" data-color="#34C759" style="background:#34C759"></button>
     <button class="color-btn" data-color="#007AFF" style="background:#007AFF"></button>
     <button class="color-btn" data-color="#AF52DE" style="background:#AF52DE"></button>
+    <button class="color-btn" data-color="#FF69B4" style="background:#FF69B4"></button>
     <button class="color-btn" data-color="#8B4513" style="background:#8B4513"></button>
     <button class="color-btn" data-color="#1C1C1E" style="background:#1C1C1E"></button>
     <button class="color-btn eraser-btn" data-color="eraser" style="background:white">✕</button>
@@ -177,7 +195,10 @@ body {
   </div>
 
   <div id="canvas-area">
-    <div id="pokemon-svg-layer"></div>
+    <div id="pokemon-img-layer">
+      <img id="pokemon-img" src="" alt="포켓몬" crossorigin="anonymous"/>
+    </div>
+    <div id="loading-msg">불러오는 중...</div>
     <canvas id="draw-canvas"></canvas>
   </div>
 </div>
@@ -194,243 +215,34 @@ body {
 </div>
 
 <script>
-// ── Pokemon SVG outlines ──────────────────────────────────────────────────────
-const SVG = {
-pikachu: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
-  <!-- left ear -->
-  <path d="M138,110 L112,32 L152,70 Z" stroke-width="4"/>
-  <path d="M128,65 L118,38 L142,62" stroke-width="3" stroke="#222"/>
-  <!-- right ear -->
-  <path d="M262,110 L288,32 L248,70 Z" stroke-width="4"/>
-  <path d="M272,65 L282,38 L258,62" stroke-width="3"/>
-  <!-- head -->
-  <ellipse cx="200" cy="175" rx="95" ry="88" stroke-width="4"/>
-  <!-- left eye -->
-  <circle cx="168" cy="158" r="16" stroke-width="3"/>
-  <circle cx="172" cy="155" r="9" fill="#222" stroke="none"/>
-  <circle cx="174" cy="152" r="3.5" fill="white" stroke="none"/>
-  <!-- right eye -->
-  <circle cx="232" cy="158" r="16" stroke-width="3"/>
-  <circle cx="236" cy="155" r="9" fill="#222" stroke="none"/>
-  <circle cx="238" cy="152" r="3.5" fill="white" stroke="none"/>
-  <!-- cheeks -->
-  <ellipse cx="142" cy="185" rx="24" ry="17" stroke-width="3"/>
-  <ellipse cx="258" cy="185" rx="24" ry="17" stroke-width="3"/>
-  <!-- nose -->
-  <ellipse cx="200" cy="178" rx="6" ry="4" fill="#222" stroke="none"/>
-  <!-- mouth -->
-  <path d="M184,193 Q200,210 216,193" stroke-width="3"/>
-  <path d="M184,193 Q178,202 182,210" stroke-width="2"/>
-  <path d="M216,193 Q222,202 218,210" stroke-width="2"/>
-  <!-- neck -->
-  <path d="M162,258 Q200,268 238,258" stroke-width="3"/>
-  <!-- body -->
-  <ellipse cx="200" cy="325" rx="80" ry="85" stroke-width="4"/>
-  <!-- belly -->
-  <ellipse cx="200" cy="340" rx="50" ry="52" stroke-width="3"/>
-  <!-- left arm -->
-  <path d="M125,295 Q100,285 92,310 Q88,330 105,340 Q118,345 128,330 Q136,310 125,295 Z" stroke-width="3"/>
-  <!-- left hand fingers -->
-  <path d="M93,332 L85,345 M101,341 L95,354 M112,346 L108,360" stroke-width="2"/>
-  <!-- right arm -->
-  <path d="M275,295 Q300,285 308,310 Q312,330 295,340 Q282,345 272,330 Q264,310 275,295 Z" stroke-width="3"/>
-  <!-- right hand fingers -->
-  <path d="M307,332 L315,345 M299,341 L305,354 M288,346 L292,360" stroke-width="2"/>
-  <!-- left leg -->
-  <ellipse cx="165" cy="402" rx="32" ry="24" stroke-width="3"/>
-  <!-- right leg -->
-  <ellipse cx="235" cy="402" rx="32" ry="24" stroke-width="3"/>
-  <!-- feet -->
-  <path d="M138,410 Q148,425 168,422 Q186,419 190,410" stroke-width="3"/>
-  <path d="M210,410 Q214,425 234,422 Q252,419 260,410" stroke-width="3"/>
-  <!-- tail zigzag -->
-  <path d="M278,360 L305,325 L330,295 L352,255 L338,230 L318,238 L315,268 L298,298 L278,330" stroke-width="5"/>
-  <!-- back stripes -->
-  <path d="M148,240 Q175,230 200,235" stroke-width="4"/>
-  <path d="M162,258 Q188,248 212,253" stroke-width="4"/>
-</svg>`,
+// ── Pokemon image loader (official artwork via PokeAPI sprites) ───────────────
+const pokemonImg = document.getElementById('pokemon-img');
+const loadingMsg = document.getElementById('loading-msg');
 
-charmander: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
-  <!-- head -->
-  <ellipse cx="200" cy="148" rx="78" ry="74" stroke-width="4"/>
-  <!-- left eye -->
-  <circle cx="172" cy="132" r="14" stroke-width="3"/>
-  <circle cx="175" cy="129" r="7" fill="#222" stroke="none"/>
-  <circle cx="177" cy="126" r="3" fill="white" stroke="none"/>
-  <!-- right eye -->
-  <circle cx="228" cy="132" r="14" stroke-width="3"/>
-  <circle cx="231" cy="129" r="7" fill="#222" stroke="none"/>
-  <circle cx="233" cy="126" r="3" fill="white" stroke="none"/>
-  <!-- nostrils -->
-  <circle cx="193" cy="152" r="3.5" fill="#222" stroke="none"/>
-  <circle cx="207" cy="152" r="3.5" fill="#222" stroke="none"/>
-  <!-- mouth -->
-  <path d="M182,165 Q200,180 218,165" stroke-width="3"/>
-  <!-- body -->
-  <ellipse cx="200" cy="295" rx="72" ry="85" stroke-width="4"/>
-  <!-- belly -->
-  <path d="M162,265 Q200,252 238,265 Q248,300 238,340 Q200,358 162,340 Q152,305 162,265 Z" stroke-width="3"/>
-  <!-- left arm -->
-  <path d="M130,268 Q108,258 100,282 Q96,302 112,312 Q126,318 136,300 Q142,280 130,268 Z" stroke-width="3"/>
-  <!-- left claws -->
-  <path d="M100,305 L93,318 M108,313 L102,326 M116,315 L112,328" stroke-width="2"/>
-  <!-- right arm -->
-  <path d="M270,268 Q292,258 300,282 Q304,302 288,312 Q274,318 264,300 Q258,280 270,268 Z" stroke-width="3"/>
-  <!-- right claws -->
-  <path d="M300,305 L307,318 M292,313 L298,326 M284,315 L288,328" stroke-width="2"/>
-  <!-- left leg -->
-  <ellipse cx="165" cy="372" rx="30" ry="24" stroke-width="3"/>
-  <!-- right leg -->
-  <ellipse cx="235" cy="372" rx="30" ry="24" stroke-width="3"/>
-  <!-- left foot claws -->
-  <path d="M143,380 L138,394 M153,384 L150,398 M163,386 L161,400 M173,384 L172,398" stroke-width="2"/>
-  <!-- right foot claws -->
-  <path d="M213,384 L212,398 M223,386 L222,400 M233,384 L232,398 M243,380 L245,394" stroke-width="2"/>
-  <!-- tail -->
-  <path d="M268,358 Q295,365 312,350 Q322,330 310,310 Q298,292 280,300" stroke-width="5"/>
-  <!-- flame -->
-  <path d="M280,298 Q292,278 285,258 Q276,268 272,282 Q268,265 258,270 Q265,285 263,302" stroke-width="3"/>
-  <path d="M285,258 Q295,240 288,220 Q278,233 276,248" stroke-width="3"/>
-</svg>`,
+function loadPokemon(id, name) {
+  loadingMsg.style.display = 'flex';
+  pokemonImg.style.display = 'none';
+  const url = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+  pokemonImg.onload = () => {
+    loadingMsg.style.display = 'none';
+    pokemonImg.style.display = 'block';
+    const w = canvas.width / dpr, h = canvas.height / dpr;
+    c.clearRect(0, 0, w, h);
+    showToast(name + '를 골랐어요! 색칠해 보세요 🎨');
+  };
+  pokemonImg.onerror = () => {
+    loadingMsg.textContent = '이미지를 불러오지 못했어요 😢';
+  };
+  pokemonImg.src = url;
+}
 
-squirtle: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
-  <!-- head -->
-  <ellipse cx="200" cy="138" rx="74" ry="70" stroke-width="4"/>
-  <!-- ear bumps -->
-  <ellipse cx="143" cy="116" rx="20" ry="13" stroke-width="3" transform="rotate(-25,143,116)"/>
-  <ellipse cx="257" cy="116" rx="20" ry="13" stroke-width="3" transform="rotate(25,257,116)"/>
-  <!-- left eye -->
-  <circle cx="175" cy="125" r="15" stroke-width="3"/>
-  <circle cx="178" cy="122" r="8" fill="#222" stroke="none"/>
-  <circle cx="180" cy="119" r="3" fill="white" stroke="none"/>
-  <!-- right eye -->
-  <circle cx="225" cy="125" r="15" stroke-width="3"/>
-  <circle cx="228" cy="122" r="8" fill="#222" stroke="none"/>
-  <circle cx="230" cy="119" r="3" fill="white" stroke="none"/>
-  <!-- mouth -->
-  <path d="M182,158 Q200,172 218,158" stroke-width="3"/>
-  <!-- chin stripes -->
-  <path d="M178,167 L173,180 M188,170 L185,183 M212,170 L215,183 M222,167 L227,180" stroke-width="2"/>
-  <!-- shell body -->
-  <ellipse cx="200" cy="298" rx="88" ry="94" stroke-width="5"/>
-  <!-- shell pattern center -->
-  <ellipse cx="200" cy="298" rx="64" ry="70" stroke-width="3"/>
-  <!-- shell lines -->
-  <path d="M200,232 L200,365" stroke-width="2"/>
-  <path d="M140,262 L260,332" stroke-width="2"/>
-  <path d="M140,334 L260,264" stroke-width="2"/>
-  <!-- left arm -->
-  <path d="M115,268 Q92,258 85,278 Q82,298 98,308 Q112,314 122,298 Q128,278 115,268 Z" stroke-width="3"/>
-  <!-- left hand -->
-  <path d="M84,300 L77,312 M92,308 L86,320 M100,310 L96,322" stroke-width="2"/>
-  <!-- right arm -->
-  <path d="M285,268 Q308,258 315,278 Q318,298 302,308 Q288,314 278,298 Q272,278 285,268 Z" stroke-width="3"/>
-  <!-- right hand -->
-  <path d="M316,300 L323,312 M308,308 L314,320 M300,310 L304,322" stroke-width="2"/>
-  <!-- left leg -->
-  <ellipse cx="162" cy="382" rx="30" ry="22" stroke-width="3"/>
-  <!-- right leg -->
-  <ellipse cx="238" cy="382" rx="30" ry="22" stroke-width="3"/>
-  <!-- tail -->
-  <path d="M248,362 Q272,358 285,342 Q290,322 278,308 Q268,300 258,310 Q265,296 252,292 Q242,302 246,318 Q232,312 228,328 Q232,348 248,362 Z" stroke-width="3"/>
-</svg>`,
-
-bulbasaur: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
-  <!-- body -->
-  <ellipse cx="200" cy="308" rx="112" ry="90" stroke-width="4"/>
-  <!-- spots -->
-  <ellipse cx="142" cy="290" rx="18" ry="13" stroke-width="2"/>
-  <ellipse cx="260" cy="294" rx="16" ry="12" stroke-width="2"/>
-  <ellipse cx="165" cy="345" rx="15" ry="11" stroke-width="2"/>
-  <ellipse cx="242" cy="342" rx="14" ry="10" stroke-width="2"/>
-  <!-- head -->
-  <ellipse cx="200" cy="188" rx="84" ry="78" stroke-width="4"/>
-  <!-- left ear -->
-  <ellipse cx="148" cy="143" rx="22" ry="30" stroke-width="3" transform="rotate(-12,148,143)"/>
-  <!-- right ear -->
-  <ellipse cx="252" cy="143" rx="22" ry="30" stroke-width="3" transform="rotate(12,252,143)"/>
-  <!-- left eye (red) -->
-  <circle cx="172" cy="170" r="15" stroke-width="3"/>
-  <circle cx="175" cy="167" r="9" fill="#e94560" stroke="none"/>
-  <circle cx="177" cy="164" r="3.5" fill="white" stroke="none"/>
-  <!-- right eye (red) -->
-  <circle cx="228" cy="170" r="15" stroke-width="3"/>
-  <circle cx="231" cy="167" r="9" fill="#e94560" stroke="none"/>
-  <circle cx="233" cy="164" r="3.5" fill="white" stroke="none"/>
-  <!-- nostrils -->
-  <circle cx="192" cy="188" r="3.5" fill="#222" stroke="none"/>
-  <circle cx="208" cy="188" r="3.5" fill="#222" stroke="none"/>
-  <!-- mouth -->
-  <path d="M183,202 Q200,216 217,202" stroke-width="3"/>
-  <!-- front left leg -->
-  <rect x="122" y="368" width="42" height="50" rx="14" stroke-width="3"/>
-  <path d="M122,412 L117,428 M132,416 L128,432 M143,417 L140,433 M155,414 L153,430" stroke-width="2"/>
-  <!-- front right leg -->
-  <rect x="236" y="368" width="42" height="50" rx="14" stroke-width="3"/>
-  <path d="M236,414 L234,430 M247,417 L246,433 M258,416 L258,432 M269,412 L270,428" stroke-width="2"/>
-  <!-- back left leg (partially hidden) -->
-  <path d="M112,340 Q108,368 118,390 Q132,400 148,395 Q162,385 160,360" stroke-width="3"/>
-  <!-- back right leg -->
-  <path d="M288,340 Q292,368 282,390 Q268,400 252,395 Q238,385 240,360" stroke-width="3"/>
-  <!-- bulb base -->
-  <ellipse cx="200" cy="238" rx="60" ry="68" stroke-width="4"/>
-  <!-- bulb ribs -->
-  <path d="M152,238 Q160,210 178,198" stroke-width="3"/>
-  <path d="M248,238 Q240,210 222,198" stroke-width="3"/>
-  <path d="M158,260 Q172,240 200,232 Q228,240 242,260" stroke-width="3"/>
-  <!-- leaves on bulb -->
-  <path d="M200,175 Q178,152 170,125 Q186,142 200,145 Q214,142 230,125 Q222,152 200,175 Z" stroke-width="3"/>
-  <path d="M200,175 L200,125" stroke-width="2"/>
-  <path d="M175,150 Q188,142 200,145" stroke-width="2"/>
-  <path d="M225,150 Q212,142 200,145" stroke-width="2"/>
-</svg>`,
-
-gengar: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
-  <!-- body outline with spiky silhouette -->
-  <path d="M200,385
-    Q155,382 128,358 Q105,332 98,300
-    Q88,275 92,248
-    Q80,228 72,205 Q82,194 98,202
-    Q86,178 90,155 Q106,130 128,136
-    Q120,112 128,95 Q145,82 158,96
-    Q164,75 178,68 Q192,62 200,68
-    Q208,62 222,68 Q236,75 242,96
-    Q255,82 272,95 Q280,112 272,136
-    Q294,130 310,155 Q314,178 302,202
-    Q318,194 328,205 Q320,228 308,248
-    Q312,275 302,300 Q295,332 272,358 Q245,382 200,385 Z"
-    stroke-width="4"/>
-  <!-- left eye -->
-  <ellipse cx="165" cy="202" rx="24" ry="30" stroke-width="3"/>
-  <ellipse cx="165" cy="200" rx="14" ry="18" fill="#e94560" stroke="none"/>
-  <ellipse cx="161" cy="195" r="6" fill="white" stroke="none"/>
-  <!-- right eye -->
-  <ellipse cx="235" cy="202" rx="24" ry="30" stroke-width="3"/>
-  <ellipse cx="235" cy="200" rx="14" ry="18" fill="#e94560" stroke="none"/>
-  <ellipse cx="231" cy="195" r="6" fill="white" stroke="none"/>
-  <!-- wide grin arc -->
-  <path d="M142,265 Q200,312 258,265" stroke-width="4"/>
-  <!-- teeth -->
-  <path d="M155,270 L152,290 L164,274" stroke-width="2"/>
-  <path d="M174,280 L171,300 L184,284" stroke-width="2"/>
-  <path d="M200,285 L198,305 L210,288" stroke-width="2"/>
-  <path d="M222,280 L221,300 L234,284" stroke-width="2"/>
-  <path d="M242,270 L240,290 L252,274" stroke-width="2"/>
-  <!-- left arm -->
-  <path d="M100,278 Q72,268 65,248 Q68,228 84,232 Q76,218 86,212 Q98,218 100,235" stroke-width="3"/>
-  <path d="M65,248 Q56,260 60,275 Q70,283 82,275" stroke-width="3"/>
-  <!-- left claws -->
-  <path d="M57,272 L50,285 M66,280 L60,293 M76,282 L72,295" stroke-width="2"/>
-  <!-- right arm -->
-  <path d="M300,278 Q328,268 335,248 Q332,228 316,232 Q324,218 314,212 Q302,218 300,235" stroke-width="3"/>
-  <path d="M335,248 Q344,260 340,275 Q330,283 318,275" stroke-width="3"/>
-  <!-- right claws -->
-  <path d="M343,272 L350,285 M334,280 L340,293 M324,282 L328,295" stroke-width="2"/>
-  <!-- belly stripes -->
-  <path d="M155,330 Q200,348 245,330" stroke-width="3"/>
-  <path d="M145,315 Q200,334 255,315" stroke-width="2"/>
-</svg>`
-};
+document.querySelectorAll('.pokemon-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pokemon-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    loadPokemon(btn.dataset.id, btn.dataset.name);
+  });
+});
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let currentColor = '#FF3B30';
@@ -448,6 +260,7 @@ const INSTRUMENTS = {
   '#34C759': { type: 'piano-high' },
   '#007AFF': { type: 'piano-low' },
   '#AF52DE': { type: 'violin' },
+  '#FF69B4': { type: 'xylophone' },
   '#8B4513': { type: 'bass' },
   '#1C1C1E': { type: 'bass' },
   'eraser':  { type: 'none' }
@@ -476,7 +289,6 @@ function stopSound() {
 
 function playDrum() {
   const ac = ctx();
-  // noise burst
   const len = ac.sampleRate * 0.15;
   const buf = ac.createBuffer(1, len, ac.sampleRate);
   const d = buf.getChannelData(0);
@@ -484,7 +296,6 @@ function playDrum() {
   const src = ac.createBufferSource(); src.buffer = buf;
   const g = ac.createGain(); g.gain.value = 0.5;
   src.connect(g).connect(ac.destination); src.start();
-  // low thud
   const o = ac.createOscillator(), g2 = ac.createGain();
   o.frequency.setValueAtTime(110, ac.currentTime);
   o.frequency.exponentialRampToValueAtTime(35, ac.currentTime + 0.18);
@@ -591,7 +402,7 @@ function drawLine(pos) {
 function onStart(e) {
   e.preventDefault();
   isDrawing = true; lastPoint = null;
-  ctx(); // activate audio context on first touch
+  ctx();
   playSound(currentColor, true);
   drawLine(getPos(e));
 }
@@ -613,24 +424,6 @@ canvas.addEventListener('touchstart', onStart, { passive: false });
 canvas.addEventListener('touchmove', onMove, { passive: false });
 canvas.addEventListener('touchend', onEnd);
 canvas.addEventListener('touchcancel', onEnd);
-
-// ── Pokemon selector ──────────────────────────────────────────────────────────
-const NAMES = { pikachu:'피카츄', charmander:'파이리', squirtle:'꼬부기', bulbasaur:'이상해씨', gengar:'겐가' };
-
-function loadPokemon(name) {
-  document.getElementById('pokemon-svg-layer').innerHTML = SVG[name];
-  const w = canvas.width / dpr, h = canvas.height / dpr;
-  c.clearRect(0, 0, w, h);
-  showToast(NAMES[name] + '를 골랐어요! 색칠해 보세요 🎨');
-}
-
-document.querySelectorAll('.pokemon-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.pokemon-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    loadPokemon(btn.dataset.pokemon);
-  });
-});
 
 // ── Color palette ─────────────────────────────────────────────────────────────
 document.querySelectorAll('.color-btn').forEach(btn => {
@@ -674,7 +467,7 @@ function showToast(msg) {
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-loadPokemon('pikachu');
+loadPokemon('25', '피카츄');
 </script>
 </body>
 </html>
