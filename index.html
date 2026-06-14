@@ -10,29 +10,22 @@ body {
   background: #1a1a2e;
   font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
   height: 100dvh;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
   overflow: hidden;
-  user-select: none;
-  -webkit-user-select: none;
+  user-select: none; -webkit-user-select: none;
 }
 #header {
   background: linear-gradient(135deg, #16213e, #0f3460);
   border-bottom: 3px solid #e94560;
   padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   flex-shrink: 0;
 }
 #header h1 { color: #FFD700; font-size: 18px; font-weight: 900; }
-#sound-indicator { display: flex; align-items: center; gap: 6px; color: #4ade80; font-size: 13px; }
-#sound-dot { width: 10px; height: 10px; border-radius: 50%; background: #4ade80; }
 
 #pokemon-bar {
   background: #16213e;
-  display: flex;
-  gap: 6px;
+  display: flex; gap: 6px;
   padding: 8px 10px;
   overflow-x: auto;
   border-bottom: 2px solid #0f3460;
@@ -46,7 +39,7 @@ body {
   border-radius: 10px; border: 2px solid transparent;
   color: #888; font-size: 11px; font-weight: 700;
   background: #0f3460; flex-shrink: 0;
-  transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 .pokemon-btn.active { border-color: #FFD700; color: #FFD700; background: #1a3a5c; }
 .pokemon-btn .emoji { font-size: 24px; line-height: 1; }
@@ -55,37 +48,32 @@ body {
 
 #palette {
   background: #16213e;
-  display: flex; flex-direction: column;
-  align-items: center;
+  display: flex; flex-direction: column; align-items: center;
   gap: 5px; padding: 8px 7px;
   border-right: 2px solid #0f3460;
-  flex-shrink: 0;
-  overflow-y: auto;
+  flex-shrink: 0; overflow-y: auto;
 }
 #palette::-webkit-scrollbar { display: none; }
 .color-btn {
-  width: 42px; height: 42px; border-radius: 50%;
+  width: 44px; height: 44px; border-radius: 50%;
   border: 3px solid transparent; cursor: pointer;
-  transition: all 0.12s; flex-shrink: 0;
-  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0; -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s;
 }
-.color-btn.active { border-color: #fff; transform: scale(1.2); }
-.eraser-btn { border-color: #444 !important; font-size: 18px; color: #888; display: flex; align-items: center; justify-content: center; }
+.color-btn.active { border-color: #fff; transform: scale(1.18); }
+.eraser-btn { border-color: #555 !important; font-size: 18px; color: #aaa;
+  display: flex; align-items: center; justify-content: center; }
 .eraser-btn.active { border-color: #FFD700 !important; }
-
 #clear-btn {
-  width: 42px; height: 42px; border-radius: 10px;
+  width: 44px; height: 44px; border-radius: 10px;
   background: #e94560; border: none; cursor: pointer;
   font-size: 20px; margin-top: 4px;
   display: flex; align-items: center; justify-content: center;
-  -webkit-tap-highlight-color: transparent;
   flex-shrink: 0;
 }
 
 #canvas-area {
-  flex: 1; position: relative;
-  background: white;
-  overflow: hidden;
+  flex: 1; position: relative; background: white; overflow: hidden;
 }
 #draw-canvas {
   position: absolute; inset: 0;
@@ -93,19 +81,17 @@ body {
   touch-action: none;
   cursor: crosshair;
 }
-
 #loading-overlay {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  background: white; font-size: 16px; color: #aaa;
-  z-index: 10;
+  background: white; font-size: 18px; color: #888; z-index: 10;
 }
 #loading-overlay.hidden { display: none; }
 
 #toast {
   position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-  background: rgba(0,0,0,0.8); color: white;
-  padding: 8px 20px; border-radius: 20px; font-size: 14px;
+  background: rgba(0,0,0,0.82); color: white;
+  padding: 9px 22px; border-radius: 22px; font-size: 14px;
   opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100;
   white-space: nowrap;
 }
@@ -129,10 +115,6 @@ body {
 
 <div id="header">
   <h1>🎨 포켓몬 색칠판</h1>
-  <div id="sound-indicator">
-    <div id="sound-dot"></div>
-    <span>소리 켜짐</span>
-  </div>
 </div>
 
 <div id="pokemon-bar">
@@ -181,218 +163,229 @@ body {
 </div>
 
 <script>
+// ── Canvas setup ──────────────────────────────────────────────────────────────
 const canvas = document.getElementById('draw-canvas');
-const c = canvas.getContext('2d', { willReadFrequently: true });
-const dpr = window.devicePixelRatio || 1;
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+const dpr = Math.min(window.devicePixelRatio || 1, 2); // cap at 2 for performance
 
-// Hidden canvas for boundary detection (outline pixels)
-const boundaryCanvas = document.createElement('canvas');
-const bc = boundaryCanvas.getContext('2d', { willReadFrequently: true });
+// Boundary canvas: same physical size as main canvas
+// White = fillable, Black = outline boundary
+const bCanvas = document.createElement('canvas');
+const bCtx = bCanvas.getContext('2d', { willReadFrequently: true });
+
+// Outline display canvas: drawn on top for visual
+const oCanvas = document.createElement('canvas');
+const oCtx = oCanvas.getContext('2d');
 
 let currentColor = '#FF3B30';
-let currentPokemonImg = null;
+let currentImg = null;
 let audioCtx = null;
-let activeOsc = null, activeGain = null;
 
 // ── Resize ────────────────────────────────────────────────────────────────────
-function getCanvasSize() {
-  const area = document.getElementById('canvas-area');
-  const r = area.getBoundingClientRect();
-  return { w: r.width, h: r.height };
+function cssSize() {
+  const r = document.getElementById('canvas-area').getBoundingClientRect();
+  return { w: Math.round(r.width), h: Math.round(r.height) };
 }
 
 function resize() {
-  const { w, h } = getCanvasSize();
-  canvas.width = w * dpr;
-  canvas.height = h * dpr;
-  canvas.style.width = w + 'px';
-  canvas.style.height = h + 'px';
-  c.scale(dpr, dpr);
-  boundaryCanvas.width = w;
-  boundaryCanvas.height = h;
-  if (currentPokemonImg) redraw(currentPokemonImg);
-}
-window.addEventListener('resize', resize);
+  const { w, h } = cssSize();
+  const pw = w * dpr, ph = h * dpr;
 
-// ── Draw outline onto canvas and boundary canvas ───────────────────────────────
-function computeImgRect(img, cw, ch) {
-  const pad = 24;
-  const availW = cw - pad * 2;
-  const availH = ch - pad * 2;
-  const scale = Math.min(availW / img.width, availH / img.height);
-  const dw = img.width * scale;
-  const dh = img.height * scale;
-  const dx = (cw - dw) / 2;
-  const dy = (ch - dh) / 2;
+  canvas.width = pw; canvas.height = ph;
+  canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+  ctx.scale(dpr, dpr);
+
+  bCanvas.width = pw; bCanvas.height = ph;
+  oCanvas.width = pw; oCanvas.height = ph;
+
+  if (currentImg) buildAndDraw(currentImg);
+}
+window.addEventListener('resize', () => { resize(); });
+
+// ── Build outline from image ──────────────────────────────────────────────────
+function imgFitRect(img) {
+  const { w, h } = cssSize();
+  const pad = 28 * dpr;
+  const pw = w * dpr, ph = h * dpr;
+  const scale = Math.min((pw - pad*2) / img.width, (ph - pad*2) / img.height);
+  const dw = img.width * scale, dh = img.height * scale;
+  const dx = (pw - dw) / 2, dy = (ph - dh) / 2;
   return { dx, dy, dw, dh };
 }
 
-function redraw(img) {
-  const { w, h } = getCanvasSize();
+function buildAndDraw(img) {
+  const pw = bCanvas.width, ph = bCanvas.height;
+  const { dx, dy, dw, dh } = imgFitRect(img);
 
-  // 1) White background
-  c.clearRect(0, 0, w, h);
-  c.fillStyle = 'white';
-  c.fillRect(0, 0, w, h);
+  // ── Step 1: draw original image on temp canvas ────────────────────────────
+  const tmp = document.createElement('canvas');
+  tmp.width = pw; tmp.height = ph;
+  const tc = tmp.getContext('2d');
+  tc.clearRect(0, 0, pw, ph);
+  tc.drawImage(img, dx, dy, dw, dh);
+  const src = tc.getImageData(0, 0, pw, ph).data;
 
-  const { dx, dy, dw, dh } = computeImgRect(img, w, h);
-
-  // 2) Build boundary canvas: outline pixels = black, rest = white
-  bc.clearRect(0, 0, w, h);
-  bc.fillStyle = 'white';
-  bc.fillRect(0, 0, w, h);
-  bc.drawImage(img, dx, dy, dw, dh);
-
-  const imgData = bc.getImageData(0, 0, w, h);
-  const data = imgData.data;
-  for (let i = 0; i < data.length; i += 4) {
-    const a = data[i + 3];
-    const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
-    // Dark + opaque pixels = outline boundary
-    const isBoundary = a > 80 && gray < 160;
-    data[i]     = isBoundary ? 0 : 255;
-    data[i + 1] = isBoundary ? 0 : 255;
-    data[i + 2] = isBoundary ? 0 : 255;
-    data[i + 3] = 255;
+  // ── Step 2: grayscale (alpha-premultiplied onto white bg) ─────────────────
+  const gray = new Float32Array(pw * ph);
+  for (let i = 0; i < pw * ph; i++) {
+    const a = src[i*4+3] / 255;
+    // Composite onto white
+    const r = src[i*4]   * a + 255 * (1-a);
+    const g = src[i*4+1] * a + 255 * (1-a);
+    const b = src[i*4+2] * a + 255 * (1-a);
+    gray[i] = 0.299*r + 0.587*g + 0.114*b;
   }
-  bc.putImageData(imgData, 0, 0);
 
-  // 3) Draw outline on main canvas (dark lines only)
-  c.drawImage(boundaryCanvas, 0, 0);
-}
-
-// ── Pokemon loader ─────────────────────────────────────────────────────────────
-function loadPokemon(id, name) {
-  document.getElementById('loading-overlay').classList.remove('hidden');
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    currentPokemonImg = img;
-    resize();
-    document.getElementById('loading-overlay').classList.add('hidden');
-    showToast(name + ' 색칠해 보세요! 🎨');
-  };
-  img.onerror = () => {
-    document.getElementById('loading-overlay').textContent = '이미지를 불러오지 못했어요 😢';
-  };
-  img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
-}
-
-// ── Flood fill ────────────────────────────────────────────────────────────────
-function hexToRgb(hex) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return [r, g, b];
-}
-
-function colorMatch(data, idx, r, g, b, a) {
-  return data[idx]===r && data[idx+1]===g && data[idx+2]===b && data[idx+3]===a;
-}
-
-function floodFill(startX, startY, fillHex) {
-  const { w, h } = getCanvasSize();
-  const iw = Math.round(w), ih = Math.round(h);
-
-  // Get boundary data
-  const bData = bc.getImageData(0, 0, iw, ih).data;
-
-  // Check if starting pixel is a boundary
-  const si = (startY * iw + startX) * 4;
-  if (bData[si] < 128) return; // clicked on outline boundary, skip
-
-  // Work on main canvas
-  const imageData = c.getImageData(0, 0, iw, ih);
-  const data = imageData.data;
-
-  const idx = (y, x) => (y * iw + x) * 4;
-  const ti = idx(startY, startX);
-  const targetR = data[ti], targetG = data[ti+1], targetB = data[ti+2], targetA = data[ti+3];
-
-  const [fillR, fillG, fillB] = hexToRgb(fillHex);
-  if (targetR===fillR && targetG===fillG && targetB===fillB && targetA===255) return;
-
-  const visited = new Uint8Array(iw * ih);
-  const queue = [startX + startY * iw];
-  visited[startX + startY * iw] = 1;
-
-  while (queue.length > 0) {
-    const pos = queue.pop();
-    const x = pos % iw;
-    const y = (pos / iw) | 0;
-    const i = pos * 4;
-
-    data[i]   = fillR;
-    data[i+1] = fillG;
-    data[i+2] = fillB;
-    data[i+3] = 255;
-
-    const neighbors = [
-      x-1 >= 0   ? pos-1   : -1,
-      x+1 < iw   ? pos+1   : -1,
-      y-1 >= 0   ? pos-iw  : -1,
-      y+1 < ih   ? pos+iw  : -1,
-    ];
-
-    for (const n of neighbors) {
-      if (n < 0 || visited[n]) continue;
-      const ni = n * 4;
-      // Stop at boundary
-      if (bData[ni] < 128) continue;
-      // Only fill pixels matching the original color
-      if (!colorMatch(data, ni, targetR, targetG, targetB, targetA)) continue;
-      visited[n] = 1;
-      queue.push(n);
+  // ── Step 3: Sobel edge detection ──────────────────────────────────────────
+  const edge = new Float32Array(pw * ph);
+  for (let y = 1; y < ph-1; y++) {
+    for (let x = 1; x < pw-1; x++) {
+      const tl=gray[(y-1)*pw+(x-1)], tc2=gray[(y-1)*pw+x], tr=gray[(y-1)*pw+(x+1)];
+      const ml=gray[y*pw+(x-1)],                             mr=gray[y*pw+(x+1)];
+      const bl=gray[(y+1)*pw+(x-1)], bc2=gray[(y+1)*pw+x], br=gray[(y+1)*pw+(x+1)];
+      const gx = -tl - 2*ml - bl + tr + 2*mr + br;
+      const gy = -tl - 2*tc2 - tr + bl + 2*bc2 + br;
+      edge[y*pw+x] = Math.sqrt(gx*gx + gy*gy);
     }
   }
 
-  c.putImageData(imageData, 0, 0);
-
-  // Re-draw outline on top
-  c.drawImage(boundaryCanvas, 0, 0);
-}
-
-// ── Eraser: paint white in a circle ──────────────────────────────────────────
-function erase(x, y) {
-  c.save();
-  c.globalCompositeOperation = 'source-over';
-  c.fillStyle = 'white';
-  c.beginPath();
-  c.arc(x, y, 18, 0, Math.PI * 2);
-  c.fill();
-  c.restore();
-  // Re-draw outline
-  c.drawImage(boundaryCanvas, 0, 0);
-}
-
-// ── Tap handler ───────────────────────────────────────────────────────────────
-function getPos(e) {
-  const r = canvas.getBoundingClientRect();
-  const src = e.touches ? e.touches[0] : e;
-  return {
-    x: Math.round((src.clientX - r.left)),
-    y: Math.round((src.clientY - r.top))
-  };
-}
-
-canvas.addEventListener('click', (e) => {
-  if (!currentPokemonImg) return;
-  const { x, y } = getPos(e);
-  if (currentColor === 'eraser') {
-    erase(x, y);
-  } else {
-    floodFill(x, y, currentColor);
-    playSound(currentColor);
+  // ── Step 4: Threshold + dilate for thick visible outline ─────────────────
+  const THRESHOLD = 35;
+  const DILATE = Math.round(1.5 * dpr); // thicker line on high-dpr
+  const isBoundary = new Uint8Array(pw * ph);
+  for (let i = 0; i < pw * ph; i++) {
+    if (edge[i] > THRESHOLD) isBoundary[i] = 1;
   }
-});
+  const dilated = new Uint8Array(pw * ph);
+  for (let y = 0; y < ph; y++) {
+    for (let x = 0; x < pw; x++) {
+      if (!isBoundary[y*pw+x]) continue;
+      for (let dy2 = -DILATE; dy2 <= DILATE; dy2++) {
+        for (let dx2 = -DILATE; dx2 <= DILATE; dx2++) {
+          const ny = y+dy2, nx = x+dx2;
+          if (ny>=0 && ny<ph && nx>=0 && nx<pw) dilated[ny*pw+nx] = 1;
+        }
+      }
+    }
+  }
 
-canvas.addEventListener('touchend', (e) => {
+  // ── Step 5: Also mark outside-image pixels as boundary ───────────────────
+  for (let i = 0; i < pw * ph; i++) {
+    if (src[i*4+3] < 30) dilated[i] = 1; // transparent = outside
+  }
+
+  // ── Step 6: Write boundary canvas (black=boundary, white=fillable) ───────
+  const bData = bCtx.createImageData(pw, ph);
+  for (let i = 0; i < pw * ph; i++) {
+    const v = dilated[i] ? 0 : 255;
+    bData.data[i*4] = v; bData.data[i*4+1] = v;
+    bData.data[i*4+2] = v; bData.data[i*4+3] = 255;
+  }
+  bCtx.putImageData(bData, 0, 0);
+
+  // ── Step 7: Write outline display canvas (black lines only, rest transparent)
+  const oData = oCtx.createImageData(pw, ph);
+  for (let i = 0; i < pw * ph; i++) {
+    if (dilated[i]) {
+      oData.data[i*4] = 0; oData.data[i*4+1] = 0;
+      oData.data[i*4+2] = 0; oData.data[i*4+3] = 255;
+    } else {
+      oData.data[i*4+3] = 0; // transparent
+    }
+  }
+  oCtx.putImageData(oData, 0, 0);
+
+  // ── Step 8: Draw to main canvas: white bg + outline on top ───────────────
+  ctx.clearRect(0, 0, canvas.width/dpr, canvas.height/dpr);
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, canvas.width/dpr, canvas.height/dpr);
+  drawOutlineOnTop();
+}
+
+function drawOutlineOnTop() {
+  const { w, h } = cssSize();
+  ctx.drawImage(oCanvas, 0, 0, w, h);
+}
+
+// ── Flood Fill ────────────────────────────────────────────────────────────────
+function hexToRgb(hex) {
+  return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+}
+
+function floodFill(cssX, cssY, fillHex) {
+  const px = Math.round(cssX * dpr);
+  const py = Math.round(cssY * dpr);
+  const W = bCanvas.width, H = bCanvas.height;
+
+  if (px < 0 || py < 0 || px >= W || py >= H) return;
+
+  // Check boundary
+  const bPx = bCtx.getImageData(px, py, 1, 1).data;
+  if (bPx[0] < 128) return; // on boundary, skip
+
+  // Read color canvas (physical pixels)
+  const imgData = ctx.getImageData(0, 0, W, H);
+  const data = imgData.data;
+  const bAll = bCtx.getImageData(0, 0, W, H).data;
+
+  const ti = (py * W + px) * 4;
+  const tR = data[ti], tG = data[ti+1], tB = data[ti+2], tA = data[ti+3];
+
+  const [fR, fG, fB] = hexToRgb(fillHex);
+  if (tR===fR && tG===fG && tB===fB && tA===255) return;
+
+  const stack = [py * W + px];
+  const visited = new Uint8Array(W * H);
+  visited[py * W + px] = 1;
+
+  while (stack.length) {
+    const pos = stack.pop();
+    const x = pos % W, y = (pos / W) | 0;
+    const i = pos * 4;
+    data[i] = fR; data[i+1] = fG; data[i+2] = fB; data[i+3] = 255;
+
+    const ns = [];
+    if (x > 0)   ns.push(pos - 1);
+    if (x < W-1) ns.push(pos + 1);
+    if (y > 0)   ns.push(pos - W);
+    if (y < H-1) ns.push(pos + W);
+
+    for (const n of ns) {
+      if (visited[n]) continue;
+      if (bAll[n*4] < 128) continue; // boundary
+      const ni = n * 4;
+      if (data[ni]!==tR || data[ni+1]!==tG || data[ni+2]!==tB || data[ni+3]!==tA) continue;
+      visited[n] = 1;
+      stack.push(n);
+    }
+  }
+
+  ctx.putImageData(imgData, 0, 0);
+  // Re-draw outline on top
+  drawOutlineOnTop();
+}
+
+// ── Eraser ────────────────────────────────────────────────────────────────────
+function erase(cssX, cssY) {
+  const r = 22;
+  ctx.save();
+  ctx.fillStyle = 'white';
+  ctx.beginPath();
+  ctx.arc(cssX, cssY, r, 0, Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+  drawOutlineOnTop();
+}
+
+// ── Pointer events (works for both mouse & touch) ────────────────────────────
+canvas.addEventListener('pointerdown', (e) => {
   e.preventDefault();
-  if (!currentPokemonImg) return;
+  if (!currentImg) return;
+
   const r = canvas.getBoundingClientRect();
-  const t = e.changedTouches[0];
-  const x = Math.round(t.clientX - r.left);
-  const y = Math.round(t.clientY - r.top);
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+
   if (currentColor === 'eraser') {
     erase(x, y);
   } else {
@@ -401,7 +394,24 @@ canvas.addEventListener('touchend', (e) => {
   }
 }, { passive: false });
 
-// ── Color palette ─────────────────────────────────────────────────────────────
+// ── Pokemon loader ─────────────────────────────────────────────────────────────
+function loadPokemon(id, name) {
+  document.getElementById('loading-overlay').classList.remove('hidden');
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    currentImg = img;
+    buildAndDraw(img);
+    document.getElementById('loading-overlay').classList.add('hidden');
+    showToast(name + ' 색칠해 보세요! 🎨');
+  };
+  img.onerror = () => {
+    document.getElementById('loading-overlay').textContent = '이미지 오류 😢';
+  };
+  img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+}
+
+// ── Color buttons ─────────────────────────────────────────────────────────────
 document.querySelectorAll('.color-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
@@ -410,7 +420,7 @@ document.querySelectorAll('.color-btn').forEach(btn => {
   });
 });
 
-// ── Pokemon selector ──────────────────────────────────────────────────────────
+// ── Pokemon buttons ───────────────────────────────────────────────────────────
 document.querySelectorAll('.pokemon-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.pokemon-btn').forEach(b => b.classList.remove('active'));
@@ -428,100 +438,85 @@ document.getElementById('modal-cancel').addEventListener('click', () => {
 });
 document.getElementById('modal-confirm').addEventListener('click', () => {
   document.getElementById('modal-overlay').classList.remove('show');
-  if (currentPokemonImg) redraw(currentPokemonImg);
-  showToast('그림을 깨끗하게 지웠어요!');
+  if (currentImg) buildAndDraw(currentImg);
+  showToast('다시 색칠해봐요! 🎨');
 });
 
 // ── Audio ─────────────────────────────────────────────────────────────────────
 const SOUNDS = {
-  '#FF3B30': 'drum', '#FF9500': 'maracas', '#FFD700': 'xylophone',
-  '#34C759': 'piano-high', '#007AFF': 'piano-low', '#AF52DE': 'violin',
-  '#FF69B4': 'xylophone', '#8B4513': 'bass', '#1C1C1E': 'bass'
+  '#FF3B30':'drum','#FF9500':'maracas','#FFD700':'xylo',
+  '#34C759':'piano-hi','#007AFF':'piano-lo','#AF52DE':'violin',
+  '#FF69B4':'xylo','#8B4513':'bass','#1C1C1E':'bass'
 };
 
-function getAudioCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
+function getAC() {
+  if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  if (audioCtx.state==='suspended') audioCtx.resume();
   return audioCtx;
 }
 
 function playSound(color) {
-  if (color === 'eraser') return;
-  const type = SOUNDS[color];
-  if (!type) return;
-  const ac = getAudioCtx();
-
-  if (type === 'drum') {
-    const len = ac.sampleRate * 0.15;
-    const buf = ac.createBuffer(1, len, ac.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 3);
-    const src = ac.createBufferSource(); src.buffer = buf;
-    const g = ac.createGain(); g.gain.value = 0.5;
-    src.connect(g).connect(ac.destination); src.start();
-    const o = ac.createOscillator(), g2 = ac.createGain();
-    o.frequency.setValueAtTime(110, ac.currentTime);
-    o.frequency.exponentialRampToValueAtTime(35, ac.currentTime + 0.18);
-    g2.gain.setValueAtTime(0.9, ac.currentTime);
-    g2.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.22);
-    o.connect(g2).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.22);
-  } else if (type === 'maracas') {
-    const len = ac.sampleRate * 0.1;
-    const buf = ac.createBuffer(1, len, ac.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 1.5);
-    const src = ac.createBufferSource(); src.buffer = buf;
-    const f = ac.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 4000; f.Q.value = 0.5;
-    const g = ac.createGain(); g.gain.value = 0.7;
-    src.connect(f).connect(g).connect(ac.destination); src.start();
-  } else if (type === 'xylophone') {
-    const notes = [523, 659, 784, 1047];
-    const freq = notes[Math.floor(Math.random() * notes.length)];
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = 'triangle'; o.frequency.value = freq;
-    g.gain.setValueAtTime(0.6, ac.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.5);
-    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.5);
-  } else if (type === 'piano-high') {
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = 'sine'; o.frequency.value = 523;
-    g.gain.setValueAtTime(0.5, ac.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.8);
-    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.8);
-  } else if (type === 'piano-low') {
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = 'sine'; o.frequency.value = 262;
-    g.gain.setValueAtTime(0.5, ac.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.8);
-    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.8);
-  } else if (type === 'violin') {
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = 'sawtooth'; o.frequency.value = 440; o.detune.value = 8;
-    g.gain.setValueAtTime(0.3, ac.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.6);
-    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.6);
-  } else if (type === 'bass') {
-    const o = ac.createOscillator(), g = ac.createGain();
-    o.type = 'triangle'; o.frequency.value = 110;
-    g.gain.setValueAtTime(0.5, ac.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.5);
-    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.5);
+  const type = SOUNDS[color]; if (!type) return;
+  const ac = getAC();
+  if (type==='drum') {
+    const len=ac.sampleRate*0.15, buf=ac.createBuffer(1,len,ac.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+    const s=ac.createBufferSource(); s.buffer=buf;
+    const g=ac.createGain(); g.gain.value=0.5;
+    s.connect(g).connect(ac.destination); s.start();
+    const o=ac.createOscillator(),g2=ac.createGain();
+    o.frequency.setValueAtTime(100,ac.currentTime);
+    o.frequency.exponentialRampToValueAtTime(30,ac.currentTime+0.2);
+    g2.gain.setValueAtTime(0.8,ac.currentTime);
+    g2.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.22);
+    o.connect(g2).connect(ac.destination); o.start(); o.stop(ac.currentTime+0.22);
+  } else if (type==='maracas') {
+    const len=ac.sampleRate*0.1, buf=ac.createBuffer(1,len,ac.sampleRate), d=buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,1.5);
+    const s=ac.createBufferSource(); s.buffer=buf;
+    const f=ac.createBiquadFilter(); f.type='bandpass'; f.frequency.value=4000; f.Q.value=0.5;
+    const g=ac.createGain(); g.gain.value=0.7;
+    s.connect(f).connect(g).connect(ac.destination); s.start();
+  } else if (type==='xylo') {
+    const notes=[523,659,784,1047];
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type='triangle'; o.frequency.value=notes[Math.floor(Math.random()*notes.length)];
+    g.gain.setValueAtTime(0.6,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.5);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime+0.5);
+  } else if (type==='piano-hi'||type==='piano-lo') {
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type='sine'; o.frequency.value=type==='piano-hi'?523:262;
+    g.gain.setValueAtTime(0.5,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.9);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime+0.9);
+  } else if (type==='violin') {
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type='sawtooth'; o.frequency.value=440; o.detune.value=8;
+    g.gain.setValueAtTime(0.3,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.6);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime+0.6);
+  } else if (type==='bass') {
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type='triangle'; o.frequency.value=110;
+    g.gain.setValueAtTime(0.5,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.5);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime+0.5);
   }
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.style.opacity = '1';
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.style.opacity='1';
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.style.opacity = '0', 2200);
+  toastTimer=setTimeout(()=>el.style.opacity='0',2200);
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 resize();
-loadPokemon('25', '피카츄');
+loadPokemon('25','피카츄');
 </script>
 </body>
 </html>
