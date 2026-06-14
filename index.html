@@ -1,27 +1,680 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>키즈 앱</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #fff9c4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    h1 {
-      font-size: 3rem;
-      color: #ff6f00;
-      text-align: center;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🎨 포켓몬 소리 색칠판</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #1a1a2e;
+  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#header {
+  background: linear-gradient(135deg, #16213e, #0f3460);
+  border-bottom: 3px solid #e94560;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+#header h1 { color: #FFD700; font-size: 18px; font-weight: 900; letter-spacing: -0.5px; }
+#sound-indicator { display: flex; align-items: center; gap: 6px; color: #4ade80; font-size: 13px; }
+#sound-dot { width: 10px; height: 10px; border-radius: 50%; background: #4ade80; }
+
+#pokemon-bar {
+  background: #16213e;
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  overflow-x: auto;
+  border-bottom: 2px solid #0f3460;
+  flex-shrink: 0;
+  -webkit-overflow-scrolling: touch;
+}
+#pokemon-bar::-webkit-scrollbar { display: none; }
+.pokemon-btn {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 3px; cursor: pointer; padding: 6px 12px;
+  border-radius: 10px; border: 2px solid transparent;
+  color: #888; font-size: 11px; font-weight: 700;
+  background: #0f3460; flex-shrink: 0;
+  transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+}
+.pokemon-btn.active { border-color: #FFD700; color: #FFD700; background: #1a3a5c; }
+.pokemon-btn .emoji { font-size: 24px; line-height: 1; }
+
+#main { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+
+#palette {
+  background: #16213e;
+  display: flex; flex-direction: column;
+  align-items: center;
+  gap: 5px; padding: 8px 7px;
+  border-right: 2px solid #0f3460;
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+#palette::-webkit-scrollbar { display: none; }
+.color-btn {
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 3px solid transparent; cursor: pointer;
+  transition: all 0.12s; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.color-btn.active { border-color: #fff; transform: scale(1.2); }
+.eraser-btn { border-color: #444 !important; }
+.eraser-btn.active { border-color: #FFD700 !important; }
+
+#brush-size-group { display: flex; flex-direction: column; gap: 4px; align-items: center; margin-top: 2px; }
+.size-btn {
+  background: #0f3460; border: 2px solid transparent;
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.size-btn.active { border-color: #FFD700; background: #1a3a5c; }
+.size-btn.small { width: 36px; height: 36px; }
+.size-btn.large { width: 42px; height: 42px; }
+.size-dot { background: white; border-radius: 50%; pointer-events: none; }
+.size-btn.small .size-dot { width: 8px; height: 8px; }
+.size-btn.large .size-dot { width: 18px; height: 18px; }
+
+#clear-btn {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: #e94560; border: none; cursor: pointer;
+  font-size: 20px; margin-top: 4px;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+#canvas-area {
+  flex: 1; position: relative;
+  background: white;
+  overflow: hidden;
+}
+#pokemon-svg-layer {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  padding: 10px;
+}
+#pokemon-svg-layer svg { max-width: 100%; max-height: 100%; }
+#draw-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+#toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,0.8); color: white;
+  padding: 8px 20px; border-radius: 20px; font-size: 14px;
+  opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 100;
+  white-space: nowrap;
+}
+#modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+  display: none; align-items: center; justify-content: center; z-index: 200;
+}
+#modal-overlay.show { display: flex; }
+#modal {
+  background: #16213e; border: 2px solid #e94560;
+  border-radius: 16px; padding: 28px 24px; text-align: center; color: white; max-width: 280px;
+}
+#modal p { font-size: 17px; margin-bottom: 22px; line-height: 1.5; }
+#modal-buttons { display: flex; gap: 12px; justify-content: center; }
+.modal-btn { padding: 11px 28px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; }
+#modal-cancel { background: #3a3a4a; color: white; }
+#modal-confirm { background: #e94560; color: white; }
+</style>
 </head>
 <body>
-  <h1>안녕하세요! 키즈 앱</h1>
+
+<div id="header">
+  <h1>🎨 포켓몬 소리 색칠판</h1>
+  <div id="sound-indicator">
+    <div id="sound-dot"></div>
+    <span>소리 켜짐</span>
+  </div>
+</div>
+
+<div id="pokemon-bar">
+  <button class="pokemon-btn active" data-pokemon="pikachu"><span class="emoji">⚡</span>피카츄</button>
+  <button class="pokemon-btn" data-pokemon="charmander"><span class="emoji">🔥</span>파이리</button>
+  <button class="pokemon-btn" data-pokemon="squirtle"><span class="emoji">💧</span>꼬부기</button>
+  <button class="pokemon-btn" data-pokemon="bulbasaur"><span class="emoji">🌿</span>이상해씨</button>
+  <button class="pokemon-btn" data-pokemon="gengar"><span class="emoji">👻</span>겐가</button>
+</div>
+
+<div id="main">
+  <div id="palette">
+    <button class="color-btn active" data-color="#FF3B30" style="background:#FF3B30"></button>
+    <button class="color-btn" data-color="#FF9500" style="background:#FF9500"></button>
+    <button class="color-btn" data-color="#FFD700" style="background:#FFD700"></button>
+    <button class="color-btn" data-color="#34C759" style="background:#34C759"></button>
+    <button class="color-btn" data-color="#007AFF" style="background:#007AFF"></button>
+    <button class="color-btn" data-color="#AF52DE" style="background:#AF52DE"></button>
+    <button class="color-btn" data-color="#8B4513" style="background:#8B4513"></button>
+    <button class="color-btn" data-color="#1C1C1E" style="background:#1C1C1E"></button>
+    <button class="color-btn eraser-btn" data-color="eraser" style="background:white">✕</button>
+    <div id="brush-size-group">
+      <button class="size-btn small active" data-size="10"><div class="size-dot"></div></button>
+      <button class="size-btn large" data-size="26"><div class="size-dot"></div></button>
+    </div>
+    <button id="clear-btn">🗑</button>
+  </div>
+
+  <div id="canvas-area">
+    <div id="pokemon-svg-layer"></div>
+    <canvas id="draw-canvas"></canvas>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div id="modal-overlay">
+  <div id="modal">
+    <p>그림을 모두 지울까요?</p>
+    <div id="modal-buttons">
+      <button class="modal-btn" id="modal-cancel">취소</button>
+      <button class="modal-btn" id="modal-confirm">지우기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Pokemon SVG outlines ──────────────────────────────────────────────────────
+const SVG = {
+pikachu: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
+  <!-- left ear -->
+  <path d="M138,110 L112,32 L152,70 Z" stroke-width="4"/>
+  <path d="M128,65 L118,38 L142,62" stroke-width="3" stroke="#222"/>
+  <!-- right ear -->
+  <path d="M262,110 L288,32 L248,70 Z" stroke-width="4"/>
+  <path d="M272,65 L282,38 L258,62" stroke-width="3"/>
+  <!-- head -->
+  <ellipse cx="200" cy="175" rx="95" ry="88" stroke-width="4"/>
+  <!-- left eye -->
+  <circle cx="168" cy="158" r="16" stroke-width="3"/>
+  <circle cx="172" cy="155" r="9" fill="#222" stroke="none"/>
+  <circle cx="174" cy="152" r="3.5" fill="white" stroke="none"/>
+  <!-- right eye -->
+  <circle cx="232" cy="158" r="16" stroke-width="3"/>
+  <circle cx="236" cy="155" r="9" fill="#222" stroke="none"/>
+  <circle cx="238" cy="152" r="3.5" fill="white" stroke="none"/>
+  <!-- cheeks -->
+  <ellipse cx="142" cy="185" rx="24" ry="17" stroke-width="3"/>
+  <ellipse cx="258" cy="185" rx="24" ry="17" stroke-width="3"/>
+  <!-- nose -->
+  <ellipse cx="200" cy="178" rx="6" ry="4" fill="#222" stroke="none"/>
+  <!-- mouth -->
+  <path d="M184,193 Q200,210 216,193" stroke-width="3"/>
+  <path d="M184,193 Q178,202 182,210" stroke-width="2"/>
+  <path d="M216,193 Q222,202 218,210" stroke-width="2"/>
+  <!-- neck -->
+  <path d="M162,258 Q200,268 238,258" stroke-width="3"/>
+  <!-- body -->
+  <ellipse cx="200" cy="325" rx="80" ry="85" stroke-width="4"/>
+  <!-- belly -->
+  <ellipse cx="200" cy="340" rx="50" ry="52" stroke-width="3"/>
+  <!-- left arm -->
+  <path d="M125,295 Q100,285 92,310 Q88,330 105,340 Q118,345 128,330 Q136,310 125,295 Z" stroke-width="3"/>
+  <!-- left hand fingers -->
+  <path d="M93,332 L85,345 M101,341 L95,354 M112,346 L108,360" stroke-width="2"/>
+  <!-- right arm -->
+  <path d="M275,295 Q300,285 308,310 Q312,330 295,340 Q282,345 272,330 Q264,310 275,295 Z" stroke-width="3"/>
+  <!-- right hand fingers -->
+  <path d="M307,332 L315,345 M299,341 L305,354 M288,346 L292,360" stroke-width="2"/>
+  <!-- left leg -->
+  <ellipse cx="165" cy="402" rx="32" ry="24" stroke-width="3"/>
+  <!-- right leg -->
+  <ellipse cx="235" cy="402" rx="32" ry="24" stroke-width="3"/>
+  <!-- feet -->
+  <path d="M138,410 Q148,425 168,422 Q186,419 190,410" stroke-width="3"/>
+  <path d="M210,410 Q214,425 234,422 Q252,419 260,410" stroke-width="3"/>
+  <!-- tail zigzag -->
+  <path d="M278,360 L305,325 L330,295 L352,255 L338,230 L318,238 L315,268 L298,298 L278,330" stroke-width="5"/>
+  <!-- back stripes -->
+  <path d="M148,240 Q175,230 200,235" stroke-width="4"/>
+  <path d="M162,258 Q188,248 212,253" stroke-width="4"/>
+</svg>`,
+
+charmander: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
+  <!-- head -->
+  <ellipse cx="200" cy="148" rx="78" ry="74" stroke-width="4"/>
+  <!-- left eye -->
+  <circle cx="172" cy="132" r="14" stroke-width="3"/>
+  <circle cx="175" cy="129" r="7" fill="#222" stroke="none"/>
+  <circle cx="177" cy="126" r="3" fill="white" stroke="none"/>
+  <!-- right eye -->
+  <circle cx="228" cy="132" r="14" stroke-width="3"/>
+  <circle cx="231" cy="129" r="7" fill="#222" stroke="none"/>
+  <circle cx="233" cy="126" r="3" fill="white" stroke="none"/>
+  <!-- nostrils -->
+  <circle cx="193" cy="152" r="3.5" fill="#222" stroke="none"/>
+  <circle cx="207" cy="152" r="3.5" fill="#222" stroke="none"/>
+  <!-- mouth -->
+  <path d="M182,165 Q200,180 218,165" stroke-width="3"/>
+  <!-- body -->
+  <ellipse cx="200" cy="295" rx="72" ry="85" stroke-width="4"/>
+  <!-- belly -->
+  <path d="M162,265 Q200,252 238,265 Q248,300 238,340 Q200,358 162,340 Q152,305 162,265 Z" stroke-width="3"/>
+  <!-- left arm -->
+  <path d="M130,268 Q108,258 100,282 Q96,302 112,312 Q126,318 136,300 Q142,280 130,268 Z" stroke-width="3"/>
+  <!-- left claws -->
+  <path d="M100,305 L93,318 M108,313 L102,326 M116,315 L112,328" stroke-width="2"/>
+  <!-- right arm -->
+  <path d="M270,268 Q292,258 300,282 Q304,302 288,312 Q274,318 264,300 Q258,280 270,268 Z" stroke-width="3"/>
+  <!-- right claws -->
+  <path d="M300,305 L307,318 M292,313 L298,326 M284,315 L288,328" stroke-width="2"/>
+  <!-- left leg -->
+  <ellipse cx="165" cy="372" rx="30" ry="24" stroke-width="3"/>
+  <!-- right leg -->
+  <ellipse cx="235" cy="372" rx="30" ry="24" stroke-width="3"/>
+  <!-- left foot claws -->
+  <path d="M143,380 L138,394 M153,384 L150,398 M163,386 L161,400 M173,384 L172,398" stroke-width="2"/>
+  <!-- right foot claws -->
+  <path d="M213,384 L212,398 M223,386 L222,400 M233,384 L232,398 M243,380 L245,394" stroke-width="2"/>
+  <!-- tail -->
+  <path d="M268,358 Q295,365 312,350 Q322,330 310,310 Q298,292 280,300" stroke-width="5"/>
+  <!-- flame -->
+  <path d="M280,298 Q292,278 285,258 Q276,268 272,282 Q268,265 258,270 Q265,285 263,302" stroke-width="3"/>
+  <path d="M285,258 Q295,240 288,220 Q278,233 276,248" stroke-width="3"/>
+</svg>`,
+
+squirtle: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
+  <!-- head -->
+  <ellipse cx="200" cy="138" rx="74" ry="70" stroke-width="4"/>
+  <!-- ear bumps -->
+  <ellipse cx="143" cy="116" rx="20" ry="13" stroke-width="3" transform="rotate(-25,143,116)"/>
+  <ellipse cx="257" cy="116" rx="20" ry="13" stroke-width="3" transform="rotate(25,257,116)"/>
+  <!-- left eye -->
+  <circle cx="175" cy="125" r="15" stroke-width="3"/>
+  <circle cx="178" cy="122" r="8" fill="#222" stroke="none"/>
+  <circle cx="180" cy="119" r="3" fill="white" stroke="none"/>
+  <!-- right eye -->
+  <circle cx="225" cy="125" r="15" stroke-width="3"/>
+  <circle cx="228" cy="122" r="8" fill="#222" stroke="none"/>
+  <circle cx="230" cy="119" r="3" fill="white" stroke="none"/>
+  <!-- mouth -->
+  <path d="M182,158 Q200,172 218,158" stroke-width="3"/>
+  <!-- chin stripes -->
+  <path d="M178,167 L173,180 M188,170 L185,183 M212,170 L215,183 M222,167 L227,180" stroke-width="2"/>
+  <!-- shell body -->
+  <ellipse cx="200" cy="298" rx="88" ry="94" stroke-width="5"/>
+  <!-- shell pattern center -->
+  <ellipse cx="200" cy="298" rx="64" ry="70" stroke-width="3"/>
+  <!-- shell lines -->
+  <path d="M200,232 L200,365" stroke-width="2"/>
+  <path d="M140,262 L260,332" stroke-width="2"/>
+  <path d="M140,334 L260,264" stroke-width="2"/>
+  <!-- left arm -->
+  <path d="M115,268 Q92,258 85,278 Q82,298 98,308 Q112,314 122,298 Q128,278 115,268 Z" stroke-width="3"/>
+  <!-- left hand -->
+  <path d="M84,300 L77,312 M92,308 L86,320 M100,310 L96,322" stroke-width="2"/>
+  <!-- right arm -->
+  <path d="M285,268 Q308,258 315,278 Q318,298 302,308 Q288,314 278,298 Q272,278 285,268 Z" stroke-width="3"/>
+  <!-- right hand -->
+  <path d="M316,300 L323,312 M308,308 L314,320 M300,310 L304,322" stroke-width="2"/>
+  <!-- left leg -->
+  <ellipse cx="162" cy="382" rx="30" ry="22" stroke-width="3"/>
+  <!-- right leg -->
+  <ellipse cx="238" cy="382" rx="30" ry="22" stroke-width="3"/>
+  <!-- tail -->
+  <path d="M248,362 Q272,358 285,342 Q290,322 278,308 Q268,300 258,310 Q265,296 252,292 Q242,302 246,318 Q232,312 228,328 Q232,348 248,362 Z" stroke-width="3"/>
+</svg>`,
+
+bulbasaur: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
+  <!-- body -->
+  <ellipse cx="200" cy="308" rx="112" ry="90" stroke-width="4"/>
+  <!-- spots -->
+  <ellipse cx="142" cy="290" rx="18" ry="13" stroke-width="2"/>
+  <ellipse cx="260" cy="294" rx="16" ry="12" stroke-width="2"/>
+  <ellipse cx="165" cy="345" rx="15" ry="11" stroke-width="2"/>
+  <ellipse cx="242" cy="342" rx="14" ry="10" stroke-width="2"/>
+  <!-- head -->
+  <ellipse cx="200" cy="188" rx="84" ry="78" stroke-width="4"/>
+  <!-- left ear -->
+  <ellipse cx="148" cy="143" rx="22" ry="30" stroke-width="3" transform="rotate(-12,148,143)"/>
+  <!-- right ear -->
+  <ellipse cx="252" cy="143" rx="22" ry="30" stroke-width="3" transform="rotate(12,252,143)"/>
+  <!-- left eye (red) -->
+  <circle cx="172" cy="170" r="15" stroke-width="3"/>
+  <circle cx="175" cy="167" r="9" fill="#e94560" stroke="none"/>
+  <circle cx="177" cy="164" r="3.5" fill="white" stroke="none"/>
+  <!-- right eye (red) -->
+  <circle cx="228" cy="170" r="15" stroke-width="3"/>
+  <circle cx="231" cy="167" r="9" fill="#e94560" stroke="none"/>
+  <circle cx="233" cy="164" r="3.5" fill="white" stroke="none"/>
+  <!-- nostrils -->
+  <circle cx="192" cy="188" r="3.5" fill="#222" stroke="none"/>
+  <circle cx="208" cy="188" r="3.5" fill="#222" stroke="none"/>
+  <!-- mouth -->
+  <path d="M183,202 Q200,216 217,202" stroke-width="3"/>
+  <!-- front left leg -->
+  <rect x="122" y="368" width="42" height="50" rx="14" stroke-width="3"/>
+  <path d="M122,412 L117,428 M132,416 L128,432 M143,417 L140,433 M155,414 L153,430" stroke-width="2"/>
+  <!-- front right leg -->
+  <rect x="236" y="368" width="42" height="50" rx="14" stroke-width="3"/>
+  <path d="M236,414 L234,430 M247,417 L246,433 M258,416 L258,432 M269,412 L270,428" stroke-width="2"/>
+  <!-- back left leg (partially hidden) -->
+  <path d="M112,340 Q108,368 118,390 Q132,400 148,395 Q162,385 160,360" stroke-width="3"/>
+  <!-- back right leg -->
+  <path d="M288,340 Q292,368 282,390 Q268,400 252,395 Q238,385 240,360" stroke-width="3"/>
+  <!-- bulb base -->
+  <ellipse cx="200" cy="238" rx="60" ry="68" stroke-width="4"/>
+  <!-- bulb ribs -->
+  <path d="M152,238 Q160,210 178,198" stroke-width="3"/>
+  <path d="M248,238 Q240,210 222,198" stroke-width="3"/>
+  <path d="M158,260 Q172,240 200,232 Q228,240 242,260" stroke-width="3"/>
+  <!-- leaves on bulb -->
+  <path d="M200,175 Q178,152 170,125 Q186,142 200,145 Q214,142 230,125 Q222,152 200,175 Z" stroke-width="3"/>
+  <path d="M200,175 L200,125" stroke-width="2"/>
+  <path d="M175,150 Q188,142 200,145" stroke-width="2"/>
+  <path d="M225,150 Q212,142 200,145" stroke-width="2"/>
+</svg>`,
+
+gengar: `<svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#222" stroke-linecap="round" stroke-linejoin="round">
+  <!-- body outline with spiky silhouette -->
+  <path d="M200,385
+    Q155,382 128,358 Q105,332 98,300
+    Q88,275 92,248
+    Q80,228 72,205 Q82,194 98,202
+    Q86,178 90,155 Q106,130 128,136
+    Q120,112 128,95 Q145,82 158,96
+    Q164,75 178,68 Q192,62 200,68
+    Q208,62 222,68 Q236,75 242,96
+    Q255,82 272,95 Q280,112 272,136
+    Q294,130 310,155 Q314,178 302,202
+    Q318,194 328,205 Q320,228 308,248
+    Q312,275 302,300 Q295,332 272,358 Q245,382 200,385 Z"
+    stroke-width="4"/>
+  <!-- left eye -->
+  <ellipse cx="165" cy="202" rx="24" ry="30" stroke-width="3"/>
+  <ellipse cx="165" cy="200" rx="14" ry="18" fill="#e94560" stroke="none"/>
+  <ellipse cx="161" cy="195" r="6" fill="white" stroke="none"/>
+  <!-- right eye -->
+  <ellipse cx="235" cy="202" rx="24" ry="30" stroke-width="3"/>
+  <ellipse cx="235" cy="200" rx="14" ry="18" fill="#e94560" stroke="none"/>
+  <ellipse cx="231" cy="195" r="6" fill="white" stroke="none"/>
+  <!-- wide grin arc -->
+  <path d="M142,265 Q200,312 258,265" stroke-width="4"/>
+  <!-- teeth -->
+  <path d="M155,270 L152,290 L164,274" stroke-width="2"/>
+  <path d="M174,280 L171,300 L184,284" stroke-width="2"/>
+  <path d="M200,285 L198,305 L210,288" stroke-width="2"/>
+  <path d="M222,280 L221,300 L234,284" stroke-width="2"/>
+  <path d="M242,270 L240,290 L252,274" stroke-width="2"/>
+  <!-- left arm -->
+  <path d="M100,278 Q72,268 65,248 Q68,228 84,232 Q76,218 86,212 Q98,218 100,235" stroke-width="3"/>
+  <path d="M65,248 Q56,260 60,275 Q70,283 82,275" stroke-width="3"/>
+  <!-- left claws -->
+  <path d="M57,272 L50,285 M66,280 L60,293 M76,282 L72,295" stroke-width="2"/>
+  <!-- right arm -->
+  <path d="M300,278 Q328,268 335,248 Q332,228 316,232 Q324,218 314,212 Q302,218 300,235" stroke-width="3"/>
+  <path d="M335,248 Q344,260 340,275 Q330,283 318,275" stroke-width="3"/>
+  <!-- right claws -->
+  <path d="M343,272 L350,285 M334,280 L340,293 M324,282 L328,295" stroke-width="2"/>
+  <!-- belly stripes -->
+  <path d="M155,330 Q200,348 245,330" stroke-width="3"/>
+  <path d="M145,315 Q200,334 255,315" stroke-width="2"/>
+</svg>`
+};
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let currentColor = '#FF3B30';
+let brushSize = 10;
+let isDrawing = false;
+let lastPoint = null;
+let audioCtx = null;
+let activeOsc = null, activeGain = null;
+
+// ── Audio ─────────────────────────────────────────────────────────────────────
+const INSTRUMENTS = {
+  '#FF3B30': { type: 'drum' },
+  '#FF9500': { type: 'maracas' },
+  '#FFD700': { type: 'xylophone' },
+  '#34C759': { type: 'piano-high' },
+  '#007AFF': { type: 'piano-low' },
+  '#AF52DE': { type: 'violin' },
+  '#8B4513': { type: 'bass' },
+  '#1C1C1E': { type: 'bass' },
+  'eraser':  { type: 'none' }
+};
+const SUSTAIN = new Set(['piano-high','piano-low','violin','bass']);
+
+function ctx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function stopSound() {
+  if (activeGain) {
+    try {
+      activeGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      activeGain.gain.setValueAtTime(activeGain.gain.value, audioCtx.currentTime);
+      activeGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.18);
+    } catch(e) {}
+  }
+  if (activeOsc) {
+    try { activeOsc.stop(audioCtx.currentTime + 0.22); } catch(e) {}
+  }
+  activeOsc = null; activeGain = null;
+}
+
+function playDrum() {
+  const ac = ctx();
+  // noise burst
+  const len = ac.sampleRate * 0.15;
+  const buf = ac.createBuffer(1, len, ac.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 3);
+  const src = ac.createBufferSource(); src.buffer = buf;
+  const g = ac.createGain(); g.gain.value = 0.5;
+  src.connect(g).connect(ac.destination); src.start();
+  // low thud
+  const o = ac.createOscillator(), g2 = ac.createGain();
+  o.frequency.setValueAtTime(110, ac.currentTime);
+  o.frequency.exponentialRampToValueAtTime(35, ac.currentTime + 0.18);
+  g2.gain.setValueAtTime(0.9, ac.currentTime);
+  g2.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.22);
+  o.connect(g2).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.22);
+}
+
+function playMaracas() {
+  const ac = ctx();
+  const len = ac.sampleRate * 0.1;
+  const buf = ac.createBuffer(1, len, ac.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 1.5);
+  const src = ac.createBufferSource(); src.buffer = buf;
+  const f = ac.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 4000; f.Q.value = 0.5;
+  const g = ac.createGain(); g.gain.value = 0.7;
+  src.connect(f).connect(g).connect(ac.destination); src.start();
+}
+
+function playXylophone() {
+  const ac = ctx();
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = 'triangle'; o.frequency.value = 1047;
+  g.gain.setValueAtTime(0.7, ac.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.45);
+  o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.45);
+}
+
+function startSustain(freq, waveType, detune = 0) {
+  stopSound();
+  const ac = ctx();
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = waveType; o.frequency.value = freq;
+  if (detune) o.detune.value = detune;
+  g.gain.setValueAtTime(0, ac.currentTime);
+  g.gain.linearRampToValueAtTime(0.45, ac.currentTime + 0.06);
+  o.connect(g).connect(ac.destination); o.start();
+  activeOsc = o; activeGain = g;
+}
+
+function playSound(color, isStart) {
+  if (color === 'eraser') return;
+  const inst = INSTRUMENTS[color];
+  if (!inst || inst.type === 'none') return;
+  if (SUSTAIN.has(inst.type)) {
+    if (isStart) {
+      if (inst.type === 'piano-high') startSustain(523, 'sine');
+      else if (inst.type === 'piano-low') startSustain(262, 'sine');
+      else if (inst.type === 'violin') startSustain(440, 'sawtooth', 8);
+      else if (inst.type === 'bass') startSustain(110, 'triangle');
+    } else stopSound();
+  } else {
+    if (!isStart) return;
+    if (inst.type === 'drum') playDrum();
+    else if (inst.type === 'maracas') playMaracas();
+    else if (inst.type === 'xylophone') playXylophone();
+  }
+}
+
+// ── Canvas ────────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('draw-canvas');
+const c = canvas.getContext('2d');
+const dpr = window.devicePixelRatio || 1;
+
+function resize() {
+  const area = document.getElementById('canvas-area');
+  const r = area.getBoundingClientRect();
+  canvas.width = r.width * dpr;
+  canvas.height = r.height * dpr;
+  canvas.style.width = r.width + 'px';
+  canvas.style.height = r.height + 'px';
+  c.scale(dpr, dpr);
+}
+window.addEventListener('resize', resize);
+resize();
+
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return { x: src.clientX - r.left, y: src.clientY - r.top };
+}
+
+function drawLine(pos) {
+  c.lineCap = 'round'; c.lineJoin = 'round';
+  c.lineWidth = brushSize;
+  if (currentColor === 'eraser') {
+    c.globalCompositeOperation = 'destination-out';
+    c.strokeStyle = 'rgba(0,0,0,1)';
+    c.fillStyle = 'rgba(0,0,0,1)';
+  } else {
+    c.globalCompositeOperation = 'source-over';
+    c.strokeStyle = currentColor;
+    c.fillStyle = currentColor;
+  }
+  if (lastPoint) {
+    c.beginPath(); c.moveTo(lastPoint.x, lastPoint.y); c.lineTo(pos.x, pos.y); c.stroke();
+  } else {
+    c.beginPath(); c.arc(pos.x, pos.y, brushSize/2, 0, Math.PI*2); c.fill();
+  }
+  lastPoint = pos;
+}
+
+function onStart(e) {
+  e.preventDefault();
+  isDrawing = true; lastPoint = null;
+  ctx(); // activate audio context on first touch
+  playSound(currentColor, true);
+  drawLine(getPos(e));
+}
+function onMove(e) {
+  if (!isDrawing) return;
+  e.preventDefault();
+  drawLine(getPos(e));
+}
+function onEnd() {
+  isDrawing = false; lastPoint = null;
+  playSound(currentColor, false);
+}
+
+canvas.addEventListener('mousedown', onStart);
+canvas.addEventListener('mousemove', onMove);
+canvas.addEventListener('mouseup', onEnd);
+canvas.addEventListener('mouseleave', onEnd);
+canvas.addEventListener('touchstart', onStart, { passive: false });
+canvas.addEventListener('touchmove', onMove, { passive: false });
+canvas.addEventListener('touchend', onEnd);
+canvas.addEventListener('touchcancel', onEnd);
+
+// ── Pokemon selector ──────────────────────────────────────────────────────────
+const NAMES = { pikachu:'피카츄', charmander:'파이리', squirtle:'꼬부기', bulbasaur:'이상해씨', gengar:'겐가' };
+
+function loadPokemon(name) {
+  document.getElementById('pokemon-svg-layer').innerHTML = SVG[name];
+  const w = canvas.width / dpr, h = canvas.height / dpr;
+  c.clearRect(0, 0, w, h);
+  showToast(NAMES[name] + '를 골랐어요! 색칠해 보세요 🎨');
+}
+
+document.querySelectorAll('.pokemon-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pokemon-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    loadPokemon(btn.dataset.pokemon);
+  });
+});
+
+// ── Color palette ─────────────────────────────────────────────────────────────
+document.querySelectorAll('.color-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentColor = btn.dataset.color;
+  });
+});
+
+// ── Brush size ────────────────────────────────────────────────────────────────
+document.querySelectorAll('.size-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    brushSize = parseInt(btn.dataset.size);
+  });
+});
+
+// ── Clear ─────────────────────────────────────────────────────────────────────
+document.getElementById('clear-btn').addEventListener('click', () => {
+  document.getElementById('modal-overlay').classList.add('show');
+});
+document.getElementById('modal-cancel').addEventListener('click', () => {
+  document.getElementById('modal-overlay').classList.remove('show');
+});
+document.getElementById('modal-confirm').addEventListener('click', () => {
+  document.getElementById('modal-overlay').classList.remove('show');
+  c.clearRect(0, 0, canvas.width/dpr, canvas.height/dpr);
+  showToast('그림을 깨끗하게 지웠어요!');
+});
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.style.opacity = '0', 2200);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+loadPokemon('pikachu');
+</script>
 </body>
 </html>
