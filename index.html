@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>🎨 포켓몬 소리 색칠판</title>
+<title>🎨 포켓몬 색칠판</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -25,7 +25,7 @@ body {
   justify-content: space-between;
   flex-shrink: 0;
 }
-#header h1 { color: #FFD700; font-size: 18px; font-weight: 900; letter-spacing: -0.5px; }
+#header h1 { color: #FFD700; font-size: 18px; font-weight: 900; }
 #sound-indicator { display: flex; align-items: center; gap: 6px; color: #4ade80; font-size: 13px; }
 #sound-dot { width: 10px; height: 10px; border-radius: 50%; background: #4ade80; }
 
@@ -70,23 +70,8 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .color-btn.active { border-color: #fff; transform: scale(1.2); }
-.eraser-btn { border-color: #444 !important; }
+.eraser-btn { border-color: #444 !important; font-size: 18px; color: #888; display: flex; align-items: center; justify-content: center; }
 .eraser-btn.active { border-color: #FFD700 !important; }
-
-#brush-size-group { display: flex; flex-direction: column; gap: 4px; align-items: center; margin-top: 2px; }
-.size-btn {
-  background: #0f3460; border: 2px solid transparent;
-  border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.12s; flex-shrink: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-.size-btn.active { border-color: #FFD700; background: #1a3a5c; }
-.size-btn.small { width: 36px; height: 36px; }
-.size-btn.large { width: 42px; height: 42px; }
-.size-dot { background: white; border-radius: 50%; pointer-events: none; }
-.size-btn.small .size-dot { width: 8px; height: 8px; }
-.size-btn.large .size-dot { width: 18px; height: 18px; }
 
 #clear-btn {
   width: 42px; height: 42px; border-radius: 10px;
@@ -102,32 +87,20 @@ body {
   background: white;
   overflow: hidden;
 }
-#pokemon-img-layer {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  display: flex; align-items: center; justify-content: center;
-  padding: 16px;
-}
-#pokemon-img-layer img {
-  max-width: 100%; max-height: 100%;
-  object-fit: contain;
-  /* 컬러 이미지를 흑백 윤곽선 도안 스타일로 변환 */
-  filter: grayscale(1) contrast(10) brightness(1.8) invert(0);
-  opacity: 0.85;
-  image-rendering: pixelated;
-}
 #draw-canvas {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   touch-action: none;
   cursor: crosshair;
 }
-#loading-msg {
+
+#loading-overlay {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; color: #aaa; pointer-events: none;
+  background: white; font-size: 16px; color: #aaa;
+  z-index: 10;
 }
+#loading-overlay.hidden { display: none; }
 
 #toast {
   position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -155,7 +128,7 @@ body {
 <body>
 
 <div id="header">
-  <h1>🎨 포켓몬 소리 색칠판</h1>
+  <h1>🎨 포켓몬 색칠판</h1>
   <div id="sound-indicator">
     <div id="sound-dot"></div>
     <span>소리 켜짐</span>
@@ -187,18 +160,11 @@ body {
     <button class="color-btn" data-color="#8B4513" style="background:#8B4513"></button>
     <button class="color-btn" data-color="#1C1C1E" style="background:#1C1C1E"></button>
     <button class="color-btn eraser-btn" data-color="eraser" style="background:white">✕</button>
-    <div id="brush-size-group">
-      <button class="size-btn small active" data-size="10"><div class="size-dot"></div></button>
-      <button class="size-btn large" data-size="26"><div class="size-dot"></div></button>
-    </div>
     <button id="clear-btn">🗑</button>
   </div>
 
   <div id="canvas-area">
-    <div id="pokemon-img-layer">
-      <img id="pokemon-img" src="" alt="포켓몬" crossorigin="anonymous"/>
-    </div>
-    <div id="loading-msg">불러오는 중...</div>
+    <div id="loading-overlay">불러오는 중... 🎨</div>
     <canvas id="draw-canvas"></canvas>
   </div>
 </div>
@@ -215,215 +181,225 @@ body {
 </div>
 
 <script>
-// ── Pokemon image loader (official artwork via PokeAPI sprites) ───────────────
-const pokemonImg = document.getElementById('pokemon-img');
-const loadingMsg = document.getElementById('loading-msg');
+const canvas = document.getElementById('draw-canvas');
+const c = canvas.getContext('2d', { willReadFrequently: true });
+const dpr = window.devicePixelRatio || 1;
 
-function loadPokemon(id, name) {
-  loadingMsg.style.display = 'flex';
-  pokemonImg.style.display = 'none';
-  const url = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
-  pokemonImg.onload = () => {
-    loadingMsg.style.display = 'none';
-    pokemonImg.style.display = 'block';
-    const w = canvas.width / dpr, h = canvas.height / dpr;
-    c.clearRect(0, 0, w, h);
-    showToast(name + '를 골랐어요! 색칠해 보세요 🎨');
-  };
-  pokemonImg.onerror = () => {
-    loadingMsg.textContent = '이미지를 불러오지 못했어요 😢';
-  };
-  pokemonImg.src = url;
-}
+// Hidden canvas for boundary detection (outline pixels)
+const boundaryCanvas = document.createElement('canvas');
+const bc = boundaryCanvas.getContext('2d', { willReadFrequently: true });
 
-document.querySelectorAll('.pokemon-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.pokemon-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    loadPokemon(btn.dataset.id, btn.dataset.name);
-  });
-});
-
-// ── State ─────────────────────────────────────────────────────────────────────
 let currentColor = '#FF3B30';
-let brushSize = 10;
-let isDrawing = false;
-let lastPoint = null;
+let currentPokemonImg = null;
 let audioCtx = null;
 let activeOsc = null, activeGain = null;
 
-// ── Audio ─────────────────────────────────────────────────────────────────────
-const INSTRUMENTS = {
-  '#FF3B30': { type: 'drum' },
-  '#FF9500': { type: 'maracas' },
-  '#FFD700': { type: 'xylophone' },
-  '#34C759': { type: 'piano-high' },
-  '#007AFF': { type: 'piano-low' },
-  '#AF52DE': { type: 'violin' },
-  '#FF69B4': { type: 'xylophone' },
-  '#8B4513': { type: 'bass' },
-  '#1C1C1E': { type: 'bass' },
-  'eraser':  { type: 'none' }
-};
-const SUSTAIN = new Set(['piano-high','piano-low','violin','bass']);
-
-function ctx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  return audioCtx;
-}
-
-function stopSound() {
-  if (activeGain) {
-    try {
-      activeGain.gain.cancelScheduledValues(audioCtx.currentTime);
-      activeGain.gain.setValueAtTime(activeGain.gain.value, audioCtx.currentTime);
-      activeGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.18);
-    } catch(e) {}
-  }
-  if (activeOsc) {
-    try { activeOsc.stop(audioCtx.currentTime + 0.22); } catch(e) {}
-  }
-  activeOsc = null; activeGain = null;
-}
-
-function playDrum() {
-  const ac = ctx();
-  const len = ac.sampleRate * 0.15;
-  const buf = ac.createBuffer(1, len, ac.sampleRate);
-  const d = buf.getChannelData(0);
-  for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 3);
-  const src = ac.createBufferSource(); src.buffer = buf;
-  const g = ac.createGain(); g.gain.value = 0.5;
-  src.connect(g).connect(ac.destination); src.start();
-  const o = ac.createOscillator(), g2 = ac.createGain();
-  o.frequency.setValueAtTime(110, ac.currentTime);
-  o.frequency.exponentialRampToValueAtTime(35, ac.currentTime + 0.18);
-  g2.gain.setValueAtTime(0.9, ac.currentTime);
-  g2.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.22);
-  o.connect(g2).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.22);
-}
-
-function playMaracas() {
-  const ac = ctx();
-  const len = ac.sampleRate * 0.1;
-  const buf = ac.createBuffer(1, len, ac.sampleRate);
-  const d = buf.getChannelData(0);
-  for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 1.5);
-  const src = ac.createBufferSource(); src.buffer = buf;
-  const f = ac.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 4000; f.Q.value = 0.5;
-  const g = ac.createGain(); g.gain.value = 0.7;
-  src.connect(f).connect(g).connect(ac.destination); src.start();
-}
-
-function playXylophone() {
-  const ac = ctx();
-  const o = ac.createOscillator(), g = ac.createGain();
-  o.type = 'triangle'; o.frequency.value = 1047;
-  g.gain.setValueAtTime(0.7, ac.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.45);
-  o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.45);
-}
-
-function startSustain(freq, waveType, detune = 0) {
-  stopSound();
-  const ac = ctx();
-  const o = ac.createOscillator(), g = ac.createGain();
-  o.type = waveType; o.frequency.value = freq;
-  if (detune) o.detune.value = detune;
-  g.gain.setValueAtTime(0, ac.currentTime);
-  g.gain.linearRampToValueAtTime(0.45, ac.currentTime + 0.06);
-  o.connect(g).connect(ac.destination); o.start();
-  activeOsc = o; activeGain = g;
-}
-
-function playSound(color, isStart) {
-  if (color === 'eraser') return;
-  const inst = INSTRUMENTS[color];
-  if (!inst || inst.type === 'none') return;
-  if (SUSTAIN.has(inst.type)) {
-    if (isStart) {
-      if (inst.type === 'piano-high') startSustain(523, 'sine');
-      else if (inst.type === 'piano-low') startSustain(262, 'sine');
-      else if (inst.type === 'violin') startSustain(440, 'sawtooth', 8);
-      else if (inst.type === 'bass') startSustain(110, 'triangle');
-    } else stopSound();
-  } else {
-    if (!isStart) return;
-    if (inst.type === 'drum') playDrum();
-    else if (inst.type === 'maracas') playMaracas();
-    else if (inst.type === 'xylophone') playXylophone();
-  }
-}
-
-// ── Canvas ────────────────────────────────────────────────────────────────────
-const canvas = document.getElementById('draw-canvas');
-const c = canvas.getContext('2d');
-const dpr = window.devicePixelRatio || 1;
-
-function resize() {
+// ── Resize ────────────────────────────────────────────────────────────────────
+function getCanvasSize() {
   const area = document.getElementById('canvas-area');
   const r = area.getBoundingClientRect();
-  canvas.width = r.width * dpr;
-  canvas.height = r.height * dpr;
-  canvas.style.width = r.width + 'px';
-  canvas.style.height = r.height + 'px';
+  return { w: r.width, h: r.height };
+}
+
+function resize() {
+  const { w, h } = getCanvasSize();
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
   c.scale(dpr, dpr);
+  boundaryCanvas.width = w;
+  boundaryCanvas.height = h;
+  if (currentPokemonImg) redraw(currentPokemonImg);
 }
 window.addEventListener('resize', resize);
-resize();
 
+// ── Draw outline onto canvas and boundary canvas ───────────────────────────────
+function computeImgRect(img, cw, ch) {
+  const pad = 24;
+  const availW = cw - pad * 2;
+  const availH = ch - pad * 2;
+  const scale = Math.min(availW / img.width, availH / img.height);
+  const dw = img.width * scale;
+  const dh = img.height * scale;
+  const dx = (cw - dw) / 2;
+  const dy = (ch - dh) / 2;
+  return { dx, dy, dw, dh };
+}
+
+function redraw(img) {
+  const { w, h } = getCanvasSize();
+
+  // 1) White background
+  c.clearRect(0, 0, w, h);
+  c.fillStyle = 'white';
+  c.fillRect(0, 0, w, h);
+
+  const { dx, dy, dw, dh } = computeImgRect(img, w, h);
+
+  // 2) Build boundary canvas: outline pixels = black, rest = white
+  bc.clearRect(0, 0, w, h);
+  bc.fillStyle = 'white';
+  bc.fillRect(0, 0, w, h);
+  bc.drawImage(img, dx, dy, dw, dh);
+
+  const imgData = bc.getImageData(0, 0, w, h);
+  const data = imgData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const a = data[i + 3];
+    const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+    // Dark + opaque pixels = outline boundary
+    const isBoundary = a > 80 && gray < 160;
+    data[i]     = isBoundary ? 0 : 255;
+    data[i + 1] = isBoundary ? 0 : 255;
+    data[i + 2] = isBoundary ? 0 : 255;
+    data[i + 3] = 255;
+  }
+  bc.putImageData(imgData, 0, 0);
+
+  // 3) Draw outline on main canvas (dark lines only)
+  c.drawImage(boundaryCanvas, 0, 0);
+}
+
+// ── Pokemon loader ─────────────────────────────────────────────────────────────
+function loadPokemon(id, name) {
+  document.getElementById('loading-overlay').classList.remove('hidden');
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    currentPokemonImg = img;
+    resize();
+    document.getElementById('loading-overlay').classList.add('hidden');
+    showToast(name + ' 색칠해 보세요! 🎨');
+  };
+  img.onerror = () => {
+    document.getElementById('loading-overlay').textContent = '이미지를 불러오지 못했어요 😢';
+  };
+  img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+}
+
+// ── Flood fill ────────────────────────────────────────────────────────────────
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return [r, g, b];
+}
+
+function colorMatch(data, idx, r, g, b, a) {
+  return data[idx]===r && data[idx+1]===g && data[idx+2]===b && data[idx+3]===a;
+}
+
+function floodFill(startX, startY, fillHex) {
+  const { w, h } = getCanvasSize();
+  const iw = Math.round(w), ih = Math.round(h);
+
+  // Get boundary data
+  const bData = bc.getImageData(0, 0, iw, ih).data;
+
+  // Check if starting pixel is a boundary
+  const si = (startY * iw + startX) * 4;
+  if (bData[si] < 128) return; // clicked on outline boundary, skip
+
+  // Work on main canvas
+  const imageData = c.getImageData(0, 0, iw, ih);
+  const data = imageData.data;
+
+  const idx = (y, x) => (y * iw + x) * 4;
+  const ti = idx(startY, startX);
+  const targetR = data[ti], targetG = data[ti+1], targetB = data[ti+2], targetA = data[ti+3];
+
+  const [fillR, fillG, fillB] = hexToRgb(fillHex);
+  if (targetR===fillR && targetG===fillG && targetB===fillB && targetA===255) return;
+
+  const visited = new Uint8Array(iw * ih);
+  const queue = [startX + startY * iw];
+  visited[startX + startY * iw] = 1;
+
+  while (queue.length > 0) {
+    const pos = queue.pop();
+    const x = pos % iw;
+    const y = (pos / iw) | 0;
+    const i = pos * 4;
+
+    data[i]   = fillR;
+    data[i+1] = fillG;
+    data[i+2] = fillB;
+    data[i+3] = 255;
+
+    const neighbors = [
+      x-1 >= 0   ? pos-1   : -1,
+      x+1 < iw   ? pos+1   : -1,
+      y-1 >= 0   ? pos-iw  : -1,
+      y+1 < ih   ? pos+iw  : -1,
+    ];
+
+    for (const n of neighbors) {
+      if (n < 0 || visited[n]) continue;
+      const ni = n * 4;
+      // Stop at boundary
+      if (bData[ni] < 128) continue;
+      // Only fill pixels matching the original color
+      if (!colorMatch(data, ni, targetR, targetG, targetB, targetA)) continue;
+      visited[n] = 1;
+      queue.push(n);
+    }
+  }
+
+  c.putImageData(imageData, 0, 0);
+
+  // Re-draw outline on top
+  c.drawImage(boundaryCanvas, 0, 0);
+}
+
+// ── Eraser: paint white in a circle ──────────────────────────────────────────
+function erase(x, y) {
+  c.save();
+  c.globalCompositeOperation = 'source-over';
+  c.fillStyle = 'white';
+  c.beginPath();
+  c.arc(x, y, 18, 0, Math.PI * 2);
+  c.fill();
+  c.restore();
+  // Re-draw outline
+  c.drawImage(boundaryCanvas, 0, 0);
+}
+
+// ── Tap handler ───────────────────────────────────────────────────────────────
 function getPos(e) {
   const r = canvas.getBoundingClientRect();
   const src = e.touches ? e.touches[0] : e;
-  return { x: src.clientX - r.left, y: src.clientY - r.top };
+  return {
+    x: Math.round((src.clientX - r.left)),
+    y: Math.round((src.clientY - r.top))
+  };
 }
 
-function drawLine(pos) {
-  c.lineCap = 'round'; c.lineJoin = 'round';
-  c.lineWidth = brushSize;
+canvas.addEventListener('click', (e) => {
+  if (!currentPokemonImg) return;
+  const { x, y } = getPos(e);
   if (currentColor === 'eraser') {
-    c.globalCompositeOperation = 'destination-out';
-    c.strokeStyle = 'rgba(0,0,0,1)';
-    c.fillStyle = 'rgba(0,0,0,1)';
+    erase(x, y);
   } else {
-    c.globalCompositeOperation = 'source-over';
-    c.strokeStyle = currentColor;
-    c.fillStyle = currentColor;
+    floodFill(x, y, currentColor);
+    playSound(currentColor);
   }
-  if (lastPoint) {
-    c.beginPath(); c.moveTo(lastPoint.x, lastPoint.y); c.lineTo(pos.x, pos.y); c.stroke();
+});
+
+canvas.addEventListener('touchend', (e) => {
+  e.preventDefault();
+  if (!currentPokemonImg) return;
+  const r = canvas.getBoundingClientRect();
+  const t = e.changedTouches[0];
+  const x = Math.round(t.clientX - r.left);
+  const y = Math.round(t.clientY - r.top);
+  if (currentColor === 'eraser') {
+    erase(x, y);
   } else {
-    c.beginPath(); c.arc(pos.x, pos.y, brushSize/2, 0, Math.PI*2); c.fill();
+    floodFill(x, y, currentColor);
+    playSound(currentColor);
   }
-  lastPoint = pos;
-}
-
-function onStart(e) {
-  e.preventDefault();
-  isDrawing = true; lastPoint = null;
-  ctx();
-  playSound(currentColor, true);
-  drawLine(getPos(e));
-}
-function onMove(e) {
-  if (!isDrawing) return;
-  e.preventDefault();
-  drawLine(getPos(e));
-}
-function onEnd() {
-  isDrawing = false; lastPoint = null;
-  playSound(currentColor, false);
-}
-
-canvas.addEventListener('mousedown', onStart);
-canvas.addEventListener('mousemove', onMove);
-canvas.addEventListener('mouseup', onEnd);
-canvas.addEventListener('mouseleave', onEnd);
-canvas.addEventListener('touchstart', onStart, { passive: false });
-canvas.addEventListener('touchmove', onMove, { passive: false });
-canvas.addEventListener('touchend', onEnd);
-canvas.addEventListener('touchcancel', onEnd);
+}, { passive: false });
 
 // ── Color palette ─────────────────────────────────────────────────────────────
 document.querySelectorAll('.color-btn').forEach(btn => {
@@ -434,12 +410,12 @@ document.querySelectorAll('.color-btn').forEach(btn => {
   });
 });
 
-// ── Brush size ────────────────────────────────────────────────────────────────
-document.querySelectorAll('.size-btn').forEach(btn => {
+// ── Pokemon selector ──────────────────────────────────────────────────────────
+document.querySelectorAll('.pokemon-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.pokemon-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    brushSize = parseInt(btn.dataset.size);
+    loadPokemon(btn.dataset.id, btn.dataset.name);
   });
 });
 
@@ -452,9 +428,86 @@ document.getElementById('modal-cancel').addEventListener('click', () => {
 });
 document.getElementById('modal-confirm').addEventListener('click', () => {
   document.getElementById('modal-overlay').classList.remove('show');
-  c.clearRect(0, 0, canvas.width/dpr, canvas.height/dpr);
+  if (currentPokemonImg) redraw(currentPokemonImg);
   showToast('그림을 깨끗하게 지웠어요!');
 });
+
+// ── Audio ─────────────────────────────────────────────────────────────────────
+const SOUNDS = {
+  '#FF3B30': 'drum', '#FF9500': 'maracas', '#FFD700': 'xylophone',
+  '#34C759': 'piano-high', '#007AFF': 'piano-low', '#AF52DE': 'violin',
+  '#FF69B4': 'xylophone', '#8B4513': 'bass', '#1C1C1E': 'bass'
+};
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playSound(color) {
+  if (color === 'eraser') return;
+  const type = SOUNDS[color];
+  if (!type) return;
+  const ac = getAudioCtx();
+
+  if (type === 'drum') {
+    const len = ac.sampleRate * 0.15;
+    const buf = ac.createBuffer(1, len, ac.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 3);
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const g = ac.createGain(); g.gain.value = 0.5;
+    src.connect(g).connect(ac.destination); src.start();
+    const o = ac.createOscillator(), g2 = ac.createGain();
+    o.frequency.setValueAtTime(110, ac.currentTime);
+    o.frequency.exponentialRampToValueAtTime(35, ac.currentTime + 0.18);
+    g2.gain.setValueAtTime(0.9, ac.currentTime);
+    g2.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.22);
+    o.connect(g2).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.22);
+  } else if (type === 'maracas') {
+    const len = ac.sampleRate * 0.1;
+    const buf = ac.createBuffer(1, len, ac.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 1.5);
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const f = ac.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 4000; f.Q.value = 0.5;
+    const g = ac.createGain(); g.gain.value = 0.7;
+    src.connect(f).connect(g).connect(ac.destination); src.start();
+  } else if (type === 'xylophone') {
+    const notes = [523, 659, 784, 1047];
+    const freq = notes[Math.floor(Math.random() * notes.length)];
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'triangle'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.6, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.5);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.5);
+  } else if (type === 'piano-high') {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sine'; o.frequency.value = 523;
+    g.gain.setValueAtTime(0.5, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.8);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.8);
+  } else if (type === 'piano-low') {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sine'; o.frequency.value = 262;
+    g.gain.setValueAtTime(0.5, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.8);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.8);
+  } else if (type === 'violin') {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sawtooth'; o.frequency.value = 440; o.detune.value = 8;
+    g.gain.setValueAtTime(0.3, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.6);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.6);
+  } else if (type === 'bass') {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'triangle'; o.frequency.value = 110;
+    g.gain.setValueAtTime(0.5, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.5);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + 0.5);
+  }
+}
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
 let toastTimer;
@@ -467,6 +520,7 @@ function showToast(msg) {
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+resize();
 loadPokemon('25', '피카츄');
 </script>
 </body>
