@@ -212,12 +212,15 @@ def save_draft(session, blog_id, title, body_text, category_id, editor_source, d
     ok = False
     try:
         j = resp.json()
-        ok = bool(
-            j.get("isSuccess")
-            or isinstance(j.get("result"), dict)
-            or j.get("logNo")
-            or str(j.get("code", "")).lower() in ("success", "0", "200")
-        )
+        if "isSuccess" in j:
+            ok = bool(j["isSuccess"])
+        else:
+            result = j.get("result")
+            ok = bool(
+                (isinstance(result, dict) and result.get("logNo"))
+                or j.get("logNo")
+                or str(j.get("code", "")).lower() in ("success", "0", "200")
+            )
         preview = json.dumps(j, ensure_ascii=False)[:500]
     except ValueError:
         preview = text[:500]
