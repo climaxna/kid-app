@@ -17,6 +17,7 @@ RabbitTempPostWrite/RabbitTempPostUpdate 요청을 그대로 재현한다.
 """
 import argparse
 import json
+import re
 import secrets
 import sys
 import time
@@ -126,17 +127,135 @@ def load_session(cookies_path: Path, blog_id: str, category_id: int) -> requests
     return session
 
 
+URL_RE = re.compile(r"(https?://[^\s]+)")
+
+
+def text_node(value: str, link: str | None = None) -> dict:
+    node = {"id": se_id(), "value": value}
+    if link:
+        node["link"] = {"url": link, "@ctype": "urlLink"}
+    node["@ctype"] = "textNode"
+    return node
+
+
+def linkify_nodes(text: str) -> list[dict]:
+    """줄 안의 http(s):// URL을 클릭 가능한 urlLink textNode로 분리."""
+    nodes = []
+    pos = 0
+    for m in URL_RE.finditer(text):
+        if m.start() > pos:
+            nodes.append(text_node(text[pos:m.start()]))
+        url = m.group(1)
+        nodes.append(text_node(url, link=url))
+        pos = m.end()
+    if pos < len(text) or not nodes:
+        nodes.append(text_node(text[pos:]))
+    return nodes
+
+
+def paragraph(text: str) -> dict:
+    return {
+        "id": se_id(),
+        "nodes": linkify_nodes(text),
+        "@ctype": "paragraph",
+    }
+
+
+def is_table_separator(line: str) -> bool:
+    """`|------|------|` 같은 마크다운 표 구분선인지 확인."""
+    stripped = line.strip()
+    if not stripped.startswith("|"):
+        return False
+    parts = [p.strip() for p in stripped.strip("|").split("|")]
+    return bool(parts) and all(re.fullmatch(r":?-{2,}:?", p) for p in parts if p)
+
+
+def parse_table_row(line: str) -> list[str]:
+    cells = [c.strip() for c in line.strip().strip("|").split("|")]
+    return [c.replace("**", "") for c in cells]
+
+
+def table_cell(text: str, width: float) -> dict:
+    return {
+        "id": se_id(),
+        "colSpan": 1,
+        "rowSpan": 1,
+        "width": width,
+        "height": 43,
+        "value": [paragraph(text)] if text else None,
+        "@ctype": "tableCell",
+    }
+
+
+def table_component(rows: list[list[str]]) -> dict:
+    col_count = max(len(r) for r in rows)
+    cell_width = round(100 / col_count, 2)
+    se_rows = [
+        {
+            "cells": [
+                table_cell(row[i] if i < len(row) else "", cell_width)
+                for i in range(col_count)
+            ],
+            "@ctype": "tableRow",
+        }
+        for row in rows
+    ]
+    return {
+        "id": se_id(),
+        "layout": "default",
+        "width": 100,
+        "rows": se_rows,
+        "columnCount": col_count,
+        "borderStyleName": "thinLine",
+        "@ctype": "table",
+    }
+
+
+def text_component(paragraphs: list[dict]) -> dict:
+    return {
+        "id": se_id(),
+        "layout": "default",
+        "value": paragraphs,
+        "@ctype": "text",
+    }
+
+
+def body_to_components(body_text: str) -> list[dict]:
+    """본문 텍스트를 최상위 컴포넌트 리스트(text/table)로 변환.
+
+    `| a | b |` 헤더 다음 줄이 `|---|---|` 형태 구분선이면 마크다운 표로 보고
+    실제 네이버 table 컴포넌트로 변환한다 (table은 text와 형제 관계인 별도 컴포넌트여야 함).
+    그 외 줄은 일반 문단(URL은 자동 링크)으로 묶어 하나의 text 컴포넌트에 담는다.
+    """
+    lines = body_text.split("\n")
+    components: list[dict] = []
+    para_buffer: list[dict] = []
+
+    def flush_paragraphs():
+        if para_buffer:
+            components.append(text_component(list(para_buffer)))
+            para_buffer.clear()
+
+    i, n = 0, len(lines)
+    while i < n:
+        line = lines[i]
+        if line.strip().startswith("|") and i + 1 < n and is_table_separator(lines[i + 1]):
+            rows = [parse_table_row(line)]
+            i += 2
+            while i < n and lines[i].strip().startswith("|"):
+                rows.append(parse_table_row(lines[i]))
+                i += 1
+            flush_paragraphs()
+            components.append(table_component(rows))
+            continue
+        para_buffer.append(paragraph(line))
+        i += 1
+    flush_paragraphs()
+    return components or [text_component([paragraph("")])]
+
+
 def build_document_model(title: str, body_text: str) -> str:
     """제목/본문을 네이버 SE 에디터 documentModel JSON 문자열로 변환 (실제 캡처 구조)."""
-    def paragraph(text: str) -> dict:
-        return {
-            "id": se_id(),
-            "nodes": [{"id": se_id(), "value": text, "@ctype": "textNode"}],
-            "@ctype": "paragraph",
-        }
-
-    body_paragraphs = [paragraph(line) for line in body_text.split("\n")] or [paragraph("")]
-
     document = {
         "documentId": "",
         "document": {
@@ -154,12 +273,7 @@ def build_document_model(title: str, body_text: str) -> str:
                     "align": "left",
                     "@ctype": "documentTitle",
                 },
-                {
-                    "id": se_id(),
-                    "layout": "default",
-                    "value": body_paragraphs,
-                    "@ctype": "text",
-                },
+                *body_to_components(body_text),
             ],
         },
     }
