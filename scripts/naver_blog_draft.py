@@ -26,6 +26,8 @@ from pathlib import Path
 
 import requests
 
+import tour_images
+
 # 임시저장(신규 생성) 엔드포인트. 기존 임시글 갱신은 RabbitTempPostUpdate.naver
 WRITE_URL = "https://blog.naver.com/RabbitTempPostWrite.naver"
 DEFAULT_BLOG_ID = "climaxna"
@@ -220,16 +222,51 @@ def text_component(paragraphs: list[dict]) -> dict:
     }
 
 
-def body_to_components(body_text: str) -> list[dict]:
-    """본문 텍스트를 최상위 컴포넌트 리스트(text/table)로 변환.
+IMAGE_PLACEHOLDER_RE = re.compile(r"^\s*📷\s*\[사진\s*\d+\]\s*검색어:\s*`([^`]+)`")
+ATTRIBUTION_RE = re.compile(r"^\s*\(ⓒ")
+
+
+def image_component(upload: dict, represent: bool = False) -> dict:
+    path = upload["path"]
+    return {
+        "id": se_id(),
+        "layout": "default",
+        "src": f"{tour_images.IMAGE_DOMAIN}{path}?type=w1",
+        "internalResource": True,
+        "represent": represent,
+        "path": path,
+        "domain": tour_images.IMAGE_DOMAIN,
+        "fileSize": upload["fileSize"],
+        "width": upload["width"],
+        "widthPercentage": 0,
+        "height": upload["height"],
+        "originalWidth": upload["width"],
+        "originalHeight": upload["height"],
+        "fileName": upload["fileName"],
+        "caption": None,
+        "format": "normal",
+        "displayFormat": "normal",
+        "imageLoaded": True,
+        "contentMode": "normal",
+        "origin": {"srcFrom": "local", "@ctype": "imageOrigin"},
+        "ai": False,
+        "@ctype": "image",
+    }
+
+
+def body_to_components(body_text: str, session=None, blog_id=None) -> list[dict]:
+    """본문 텍스트를 최상위 컴포넌트 리스트(text/table/image)로 변환.
 
     `| a | b |` 헤더 다음 줄이 `|---|---|` 형태 구분선이면 마크다운 표로 보고
     실제 네이버 table 컴포넌트로 변환한다 (table은 text와 형제 관계인 별도 컴포넌트여야 함).
+    `📷 [사진 N] 검색어: `키워드`` 줄은 (session/blog_id가 있으면) 한국관광공사 관광사진에서
+    검색해 다운로드하고 네이버에 업로드해 실제 image 컴포넌트로 바꾼다 (실패 시 원문 유지).
     그 외 줄은 일반 문단(URL은 자동 링크)으로 묶어 하나의 text 컴포넌트에 담는다.
     """
     lines = body_text.split("\n")
     components: list[dict] = []
     para_buffer: list[dict] = []
+    represent_used = False
 
     def flush_paragraphs():
         if para_buffer:
@@ -239,6 +276,25 @@ def body_to_components(body_text: str) -> list[dict]:
     i, n = 0, len(lines)
     while i < n:
         line = lines[i]
+        m = IMAGE_PLACEHOLDER_RE.match(line) if session is not None and blog_id else None
+        if m:
+            keyword = m.group(1)
+            result = None
+            try:
+                result = tour_images.fetch_and_upload(session, blog_id, keyword)
+            except Exception as e:
+                print(f"[경고] 이미지 검색/업로드 실패 ({keyword}): {e}")
+            if result:
+                item, upload = result
+                flush_paragraphs()
+                components.append(image_component(upload, represent=not represent_used))
+                represent_used = True
+                photographer = item["photographer"] or "포토코리아"
+                para_buffer.append(paragraph(f"(ⓒ한국관광공사 {photographer})"))
+                i += 1
+                if i < n and ATTRIBUTION_RE.match(lines[i]):
+                    i += 1
+                continue
         if line.strip().startswith("|") and i + 1 < n and is_table_separator(lines[i + 1]):
             rows = [parse_table_row(line)]
             i += 2
@@ -254,7 +310,7 @@ def body_to_components(body_text: str) -> list[dict]:
     return components or [text_component([paragraph("")])]
 
 
-def build_document_model(title: str, body_text: str) -> str:
+def build_document_model(title: str, body_text: str, session=None, blog_id=None) -> str:
     """제목/본문을 네이버 SE 에디터 documentModel JSON 문자열로 변환 (실제 캡처 구조)."""
     document = {
         "documentId": "",
@@ -273,7 +329,7 @@ def build_document_model(title: str, body_text: str) -> str:
                     "align": "left",
                     "@ctype": "documentTitle",
                 },
-                *body_to_components(body_text),
+                *body_to_components(body_text, session=session, blog_id=blog_id),
             ],
         },
     }
@@ -303,7 +359,7 @@ def build_population_params(category_id: int, editor_source: str, auto_save_no: 
 def save_draft(session, blog_id, title, body_text, category_id, editor_source, debug=False) -> bool:
     data = {
         "blogId": blog_id,
-        "documentModel": build_document_model(title, body_text),
+        "documentModel": build_document_model(title, body_text, session=session, blog_id=blog_id),
         "mediaResources": json.dumps({"image": [], "video": [], "file": []}, separators=(",", ":")),
         "populationParams": build_population_params(
             category_id, editor_source, auto_save_no=int(time.time() * 1000)
