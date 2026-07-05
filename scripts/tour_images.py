@@ -98,19 +98,48 @@ def _search_variants(keyword: str) -> list[str]:
     return out
 
 
-def search_and_download(keyword: str, dest_path: str) -> dict | None:
-    """키워드(긴 문구 허용)로 관광사진을 검색해 첫 결과를 dest_path에 저장.
+def search_and_download(
+    keyword: str,
+    dest_path: str,
+    region_hint: str | None = "완도",
+    exclude_urls: set[str] | None = None,
+) -> dict | None:
+    """키워드(긴 문구 허용)로 관광사진을 검색해 dest_path에 저장.
 
-    전체 문구가 결과가 없으면 점점 짧은 변형으로 재시도한다. 성공 시 item 메타 반환."""
+    전체 문구가 결과가 없으면 점점 짧은 변형으로 재시도한다. 각 변형에서:
+    - region_hint가 있으면 위치(location)에 그 지명이 포함된 사진만 채택
+      (예: '신비의 바닷길' 검색이 엉뚱하게 진도 사진을 반환하는 것 방지).
+    - exclude_urls에 있는 사진(이미 이 문서에서 쓴 사진)은 건너뛰어, 같은 문서 내
+      사진이 반복되지 않고 다른 사진으로 로테이션되게 한다.
+    두 조건을 다 만족하는 후보가 없으면 region_hint만 만족하는 것으로,
+    그마저 없으면 최후 수단으로 중복 허용."""
+    exclude_urls = exclude_urls or set()
+    fallback: tuple[dict, str] | None = None  # (region_hint는 맞지만 중복인 사진, variant)
+
+    def _save(item: dict, variant: str) -> dict:
+        out = dict(item)
+        data = download_image(out["image_url"])
+        with open(dest_path, "wb") as f:
+            f.write(data)
+        out["matched_keyword"] = variant
+        return out
+
     for variant in _search_variants(keyword):
-        items = search_gallery(variant, num_rows=3)
-        if items and items[0]["image_url"]:
-            item = items[0]
-            data = download_image(item["image_url"])
-            with open(dest_path, "wb") as f:
-                f.write(data)
-            item["matched_keyword"] = variant
-            return item
+        items = search_gallery(variant, num_rows=10)
+        region_items = [
+            it for it in items
+            if it["image_url"] and (not region_hint or region_hint in it["location"])
+        ]
+        if not region_items:
+            continue
+        fresh = [it for it in region_items if it["image_url"] not in exclude_urls]
+        if fresh:
+            return _save(fresh[0], variant)
+        if fallback is None:
+            fallback = (region_items[0], variant)
+    if fallback:
+        item, variant = fallback
+        return _save(item, variant + " (중복)")
     return None
 
 

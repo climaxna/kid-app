@@ -273,16 +273,19 @@ def prepare_image_results(body_text: str) -> list:
     tmpdir = tempfile.mkdtemp(prefix="wando_img_")
     items_by_idx: dict[int, dict] = {}
     to_upload: list[tuple[int, str]] = []
+    used_urls: set[str] = set()  # 같은 문서 내 사진 중복 방지 (로테이션)
     for idx, kw in enumerate(keywords):
         dest = os.path.join(tmpdir, f"{idx}.jpg")
         try:
-            item = tour_images.search_and_download(kw, dest)
+            item = tour_images.search_and_download(kw, dest, exclude_urls=used_urls)
         except Exception as e:
             print(f"[경고] 이미지 검색/다운로드 실패 ({kw}): {e}")
             item = None
         if item:
             items_by_idx[idx] = item
             to_upload.append((idx, dest))
+            used_urls.add(item["image_url"])
+            print(f"[정보] 사진 {idx + 1} 매칭: '{item['matched_keyword']}' → {item['title']} (ⓒ{item['photographer']})")
         else:
             print(f"[경고] 이미지 없음 ({kw}) — 이 자리는 텍스트로 유지")
 
