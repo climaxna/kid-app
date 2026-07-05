@@ -14,6 +14,10 @@ RabbitTempPostWrite/RabbitTempPostUpdate 요청을 그대로 재현한다.
     python scripts/naver_blog_draft.py "제목" "본문" --category 18 --debug
 
 본문에 줄바꿈(\\n)이 있으면 문단(paragraph)이 분리된다.
+
+사진: 본문의 `📷 [사진 N] 검색어: `키워드`` 표시는 기본적으로 텍스트 그대로 유지된다
+(수동으로 이미지를 넣을 자리 표시용). --with-images 옵션을 주면 한국관광공사
+관광사진에서 자동 검색·업로드해 실제 사진으로 채워 넣는다 (tour_images.py).
 """
 import argparse
 import json
@@ -407,7 +411,7 @@ def build_population_params(category_id: int, editor_source: str, auto_save_no: 
 
 
 def save_draft(session, blog_id, title, body_text, category_id, editor_source, debug=False,
-               with_images=True) -> bool:
+               with_images=False) -> bool:
     image_results = prepare_image_results(body_text) if with_images else None
     data = {
         "blogId": blog_id,
@@ -471,8 +475,8 @@ def main():
                     help="editorSource 토큰 (세션별로 다르면 최신값 지정)")
     ap.add_argument("--cookies", help="cookies.json 경로 (기본: 자동 탐색)")
     ap.add_argument("--debug", action="store_true", help="전송 payload 출력")
-    ap.add_argument("--no-images", action="store_true",
-                    help="사진 검색·업로드 생략 (placeholder 텍스트 유지)")
+    ap.add_argument("--with-images", action="store_true",
+                    help="사진 자동 검색·업로드 활성화 (기본: 꺼짐, placeholder 텍스트 유지)")
     args = ap.parse_args()
 
     if args.body_file:
@@ -485,7 +489,7 @@ def main():
     session = load_session(find_cookies_path(args.cookies), args.blog_id, args.category)
     success = save_draft(
         session, args.blog_id, args.title, body_text, args.category, args.editor_source,
-        debug=args.debug, with_images=not args.no_images,
+        debug=args.debug, with_images=args.with_images,
     )
     sys.exit(0 if success else 1)
 
