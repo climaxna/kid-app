@@ -17,9 +17,11 @@ RabbitTempPostWrite/RabbitTempPostUpdate 요청을 그대로 재현한다.
 """
 import argparse
 import json
+import os
 import re
 import secrets
 import sys
+import tempfile
 import time
 import uuid
 from pathlib import Path
@@ -254,19 +256,68 @@ def image_component(upload: dict, represent: bool = False) -> dict:
     }
 
 
-def body_to_components(body_text: str, session=None, blog_id=None) -> list[dict]:
+def prepare_image_results(body_text: str) -> list:
+    """본문의 `📷 [사진 N] 검색어: `키워드`` 순서대로 관광사진을 검색·다운로드하고
+    브라우저로 네이버에 업로드한다. 각 placeholder에 대응하는 (item, upload) 또는 None
+    리스트를 순서대로 반환한다."""
+    lines = body_text.split("\n")
+    keywords = []
+    for line in lines:
+        m = IMAGE_PLACEHOLDER_RE.match(line)
+        if m:
+            keywords.append(m.group(1))
+    if not keywords:
+        return []
+
+    results: list = [None] * len(keywords)
+    tmpdir = tempfile.mkdtemp(prefix="wando_img_")
+    items_by_idx: dict[int, dict] = {}
+    to_upload: list[tuple[int, str]] = []
+    for idx, kw in enumerate(keywords):
+        dest = os.path.join(tmpdir, f"{idx}.jpg")
+        try:
+            item = tour_images.search_and_download(kw, dest)
+        except Exception as e:
+            print(f"[경고] 이미지 검색/다운로드 실패 ({kw}): {e}")
+            item = None
+        if item:
+            items_by_idx[idx] = item
+            to_upload.append((idx, dest))
+        else:
+            print(f"[경고] 이미지 없음 ({kw}) — 이 자리는 텍스트로 유지")
+
+    if to_upload:
+        try:
+            uploads = tour_images.upload_images_via_browser([p for _, p in to_upload])
+        except Exception as e:
+            print(f"[경고] 이미지 업로드 실패: {e}")
+            uploads = [None] * len(to_upload)
+        for (idx, _), up in zip(to_upload, uploads):
+            if up and up.get("path"):
+                results[idx] = (items_by_idx[idx], up)
+            else:
+                print(f"[경고] 업로드 실패 — 사진 {idx + 1}은 텍스트로 유지")
+
+    ok = sum(1 for r in results if r)
+    print(f"[정보] 이미지 {ok}/{len(keywords)}장 준비 완료")
+    return results
+
+
+def body_to_components(body_text: str, image_results: list | None = None) -> list[dict]:
     """본문 텍스트를 최상위 컴포넌트 리스트(text/table/image)로 변환.
 
     `| a | b |` 헤더 다음 줄이 `|---|---|` 형태 구분선이면 마크다운 표로 보고
     실제 네이버 table 컴포넌트로 변환한다 (table은 text와 형제 관계인 별도 컴포넌트여야 함).
-    `📷 [사진 N] 검색어: `키워드`` 줄은 (session/blog_id가 있으면) 한국관광공사 관광사진에서
-    검색해 다운로드하고 네이버에 업로드해 실제 image 컴포넌트로 바꾼다 (실패 시 원문 유지).
+    `📷 [사진 N] 검색어: `키워드`` 줄은 image_results(prepare_image_results 결과)의 대응
+    항목이 있으면 실제 image 컴포넌트로 바꾼다 (없으면 원문 텍스트 유지).
     그 외 줄은 일반 문단(URL은 자동 링크)으로 묶어 하나의 text 컴포넌트에 담는다.
     """
+    image_results = image_results or []
     lines = body_text.split("\n")
     components: list[dict] = []
     para_buffer: list[dict] = []
     represent_used = False
+    img_idx = 0
 
     def flush_paragraphs():
         if para_buffer:
@@ -276,14 +327,10 @@ def body_to_components(body_text: str, session=None, blog_id=None) -> list[dict]
     i, n = 0, len(lines)
     while i < n:
         line = lines[i]
-        m = IMAGE_PLACEHOLDER_RE.match(line) if session is not None and blog_id else None
+        m = IMAGE_PLACEHOLDER_RE.match(line)
         if m:
-            keyword = m.group(1)
-            result = None
-            try:
-                result = tour_images.fetch_and_upload(session, blog_id, keyword)
-            except Exception as e:
-                print(f"[경고] 이미지 검색/업로드 실패 ({keyword}): {e}")
+            result = image_results[img_idx] if img_idx < len(image_results) else None
+            img_idx += 1
             if result:
                 item, upload = result
                 flush_paragraphs()
@@ -310,7 +357,7 @@ def body_to_components(body_text: str, session=None, blog_id=None) -> list[dict]
     return components or [text_component([paragraph("")])]
 
 
-def build_document_model(title: str, body_text: str, session=None, blog_id=None) -> str:
+def build_document_model(title: str, body_text: str, image_results: list | None = None) -> str:
     """제목/본문을 네이버 SE 에디터 documentModel JSON 문자열로 변환 (실제 캡처 구조)."""
     document = {
         "documentId": "",
@@ -329,7 +376,7 @@ def build_document_model(title: str, body_text: str, session=None, blog_id=None)
                     "align": "left",
                     "@ctype": "documentTitle",
                 },
-                *body_to_components(body_text, session=session, blog_id=blog_id),
+                *body_to_components(body_text, image_results=image_results),
             ],
         },
     }
@@ -356,10 +403,12 @@ def build_population_params(category_id: int, editor_source: str, auto_save_no: 
     return json.dumps(params, ensure_ascii=False, separators=(",", ":"))
 
 
-def save_draft(session, blog_id, title, body_text, category_id, editor_source, debug=False) -> bool:
+def save_draft(session, blog_id, title, body_text, category_id, editor_source, debug=False,
+               with_images=True) -> bool:
+    image_results = prepare_image_results(body_text) if with_images else None
     data = {
         "blogId": blog_id,
-        "documentModel": build_document_model(title, body_text, session=session, blog_id=blog_id),
+        "documentModel": build_document_model(title, body_text, image_results=image_results),
         "mediaResources": json.dumps({"image": [], "video": [], "file": []}, separators=(",", ":")),
         "populationParams": build_population_params(
             category_id, editor_source, auto_save_no=int(time.time() * 1000)
@@ -419,6 +468,8 @@ def main():
                     help="editorSource 토큰 (세션별로 다르면 최신값 지정)")
     ap.add_argument("--cookies", help="cookies.json 경로 (기본: 자동 탐색)")
     ap.add_argument("--debug", action="store_true", help="전송 payload 출력")
+    ap.add_argument("--no-images", action="store_true",
+                    help="사진 검색·업로드 생략 (placeholder 텍스트 유지)")
     args = ap.parse_args()
 
     if args.body_file:
@@ -430,7 +481,8 @@ def main():
 
     session = load_session(find_cookies_path(args.cookies), args.blog_id, args.category)
     success = save_draft(
-        session, args.blog_id, args.title, body_text, args.category, args.editor_source, debug=args.debug
+        session, args.blog_id, args.title, body_text, args.category, args.editor_source,
+        debug=args.debug, with_images=not args.no_images,
     )
     sys.exit(0 if success else 1)
 

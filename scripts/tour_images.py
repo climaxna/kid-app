@@ -2,16 +2,18 @@
 # -*- coding: utf-8 -*-
 """
 한국관광공사 관광사진 API(PhotoGalleryService1)로 키워드 검색 후 이미지를 받아와
-네이버 블로그 업로드(blog.upphoto.naver.com simpleUpload)까지 처리하는 헬퍼.
+네이버 블로그에 업로드하는 헬퍼.
 
 사진은 공공누리 1유형(포토코리아, phoko.visitkorea.or.kr) 콘텐츠로 자유롭게
-다운로드·활용 가능하다. 업로드 토큰(base64) 구조는 실제 캡처로 확인한 형식을
-그대로 재현한다: "YYYYMMDDHHMMSS\\x07epochMillis\\x07blog_editor2\\x07blogId\\x070\\x072\\x07<32자hex>"
+다운로드·활용 가능하다. 네이버 업로드 토큰은 에디터 JS가 서명하므로 순수 HTTP로는
+위조가 불가능(SYSTEM 에러) → 실제 업로드는 브라우저(upload_images.mjs)로 수행하고,
+반환된 CDN 경로를 documentModel 저장에 사용한다.
 """
-import base64
-import mimetypes
-import secrets
-import time
+import json
+import os
+import shutil
+import subprocess
+import tempfile
 import urllib.parse
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -65,49 +67,71 @@ def download_image(url: str) -> bytes:
     return resp.content
 
 
-def _gen_upload_token(blog_id: str) -> str:
-    now = time.time()
-    ts = time.strftime("%Y%m%d%H%M%S", time.localtime(now))
-    millis = str(int(now * 1000))
-    nonce = secrets.token_hex(16)
-    raw = "\x07".join([ts, millis, "blog_editor2", blog_id, "0", "2", nonce])
-    return base64.b64encode(raw.encode("utf-8")).decode("ascii").rstrip("=")
+# 장소명일 가능성이 높은 접미사(섬/포구/명소). generic 지역명은 매칭이 너무 넓어 후순위.
+_PLACE_SUFFIXES = ("도", "항", "해변", "대교", "봉", "숲", "사", "원", "리", "마을", "센터", "기념관", "섬", "해안")
+_GENERIC_TOKENS = {"완도", "완도군", "전남", "전라남도", "여름", "가족", "바다", "풍경", "전경", "항공뷰"}
 
 
-def upload_image_to_naver(session: requests.Session, blog_id: str, image_bytes: bytes, filename: str) -> dict:
-    """이미지를 네이버 blogfiles CDN에 업로드하고 documentModel용 정보를 반환."""
-    token = _gen_upload_token(blog_id)
-    content_type = mimetypes.guess_type(filename)[0] or "image/jpeg"
-    upload_url = (
-        f"https://blog.upphoto.naver.com/{token}/simpleUpload/0"
-        f"?userId={blog_id}&extractExif=true&extractAnimatedCnt=false&extractAnimatedInfo=true"
-        f"&autorotate=true&extractDominantColor=false&type=&customQuery=&denyAnimatedImage=false"
-        f"&skipXcamFiltering=false"
+def _search_variants(keyword: str) -> list[str]:
+    """긴 검색 문구가 결과가 없을 때 시도할 축약 변형들을 우선순위대로 생성.
+
+    예) '완도 전복체험 노화도 해녀 전복'
+        → 전체 → '노화도'(장소명 토큰) → 접두 축약들 → 나머지 개별 토큰
+    섬 이름(예: 노화도) 같은 장소명 토큰을 generic 지역명('완도')보다 먼저 시도해
+    엉뚱한 지역 사진이 잡히는 걸 줄인다."""
+    tokens = keyword.split()
+    variants = [keyword]
+    # 1) 장소명 후보 토큰 (generic 제외, place suffix로 끝나는 것)
+    for t in tokens:
+        if t not in _GENERIC_TOKENS and any(t.endswith(s) for s in _PLACE_SUFFIXES):
+            variants.append(t)
+    # 2) 접두 축약 (앞쪽일수록 장소명일 가능성 높음)
+    for k in range(len(tokens) - 1, 0, -1):
+        variants.append(" ".join(tokens[:k]))
+    # 3) 나머지 개별 토큰
+    variants.extend(tokens)
+    seen, out = set(), []
+    for v in variants:
+        if v and v not in seen:
+            seen.add(v)
+            out.append(v)
+    return out
+
+
+def search_and_download(keyword: str, dest_path: str) -> dict | None:
+    """키워드(긴 문구 허용)로 관광사진을 검색해 첫 결과를 dest_path에 저장.
+
+    전체 문구가 결과가 없으면 점점 짧은 변형으로 재시도한다. 성공 시 item 메타 반환."""
+    for variant in _search_variants(keyword):
+        items = search_gallery(variant, num_rows=3)
+        if items and items[0]["image_url"]:
+            item = items[0]
+            data = download_image(item["image_url"])
+            with open(dest_path, "wb") as f:
+                f.write(data)
+            item["matched_keyword"] = variant
+            return item
+    return None
+
+
+def upload_images_via_browser(local_paths: list[str]) -> list[dict | None]:
+    """로컬 이미지들을 브라우저(Playwright)로 네이버에 업로드하고 경로 정보 리스트 반환.
+
+    업로드 토큰이 에디터 JS 서명값이라 순수 HTTP로는 위조 불가 → upload_images.mjs로
+    실제 브라우저 업로드를 수행한다. 반환 순서는 입력 순서와 동일(실패분은 None)."""
+    if not local_paths:
+        return []
+    scripts_dir = Path(__file__).resolve().parent
+    tmp = tempfile.mkdtemp(prefix="wando_upload_")
+    in_json = os.path.join(tmp, "input.json")
+    out_json = os.path.join(tmp, "output.json")
+    with open(in_json, "w", encoding="utf-8") as f:
+        json.dump(local_paths, f, ensure_ascii=False)
+    node = shutil.which("node") or "node"
+    subprocess.run(
+        [node, str(scripts_dir / "upload_images.mjs"), in_json, out_json],
+        check=True,
+        cwd=str(scripts_dir.parent),
     )
-    files = {"image": (filename, image_bytes, content_type)}
-    resp = session.post(upload_url, files=files, timeout=30)
-    resp.raise_for_status()
-    root = ET.fromstring(resp.content)
-    # <url>은 파일명 세그먼트(.../JPEG/파일명.jpg)를 포함, <path>는 미포함(.../JPEG).
-    # 실제 에디터 image 컴포넌트는 파일명이 붙은 경로를 써야 렌더링되므로 <url>을 사용.
-    image_path = root.findtext("url") or root.findtext("path")
-    return {
-        "path": image_path,
-        "width": int(root.findtext("width") or 0),
-        "height": int(root.findtext("height") or 0),
-        "fileSize": int(root.findtext("fileSize") or 0),
-        "fileName": root.findtext("fileName") or filename,
-    }
-
-
-def fetch_and_upload(session: requests.Session, blog_id: str, keyword: str) -> tuple[dict, dict] | None:
-    """키워드로 검색해서 첫 결과를 다운로드 후 업로드. (검색결과, 업로드결과) 또는 None."""
-    items = search_gallery(keyword, num_rows=3)
-    if not items or not items[0]["image_url"]:
-        return None
-    item = items[0]
-    ext = item["image_url"].rsplit(".", 1)[-1].split("?")[0] or "jpg"
-    filename = f"{keyword.replace(' ', '_')[:20]}.{ext}"
-    image_bytes = download_image(item["image_url"])
-    upload = upload_image_to_naver(session, blog_id, image_bytes, filename)
-    return item, upload
+    with open(out_json, encoding="utf-8") as f:
+        return json.load(f)
