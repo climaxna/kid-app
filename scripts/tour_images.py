@@ -88,8 +88,11 @@ def upload_image_to_naver(session: requests.Session, blog_id: str, image_bytes: 
     resp = session.post(upload_url, files=files, timeout=30)
     resp.raise_for_status()
     root = ET.fromstring(resp.content)
+    # <url>은 파일명 세그먼트(.../JPEG/파일명.jpg)를 포함, <path>는 미포함(.../JPEG).
+    # 실제 에디터 image 컴포넌트는 파일명이 붙은 경로를 써야 렌더링되므로 <url>을 사용.
+    image_path = root.findtext("url") or root.findtext("path")
     return {
-        "path": root.findtext("path"),
+        "path": image_path,
         "width": int(root.findtext("width") or 0),
         "height": int(root.findtext("height") or 0),
         "fileSize": int(root.findtext("fileSize") or 0),

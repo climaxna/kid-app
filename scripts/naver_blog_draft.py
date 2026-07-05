@@ -364,6 +364,7 @@ def save_draft(session, blog_id, title, body_text, category_id, editor_source, d
         "populationParams": build_population_params(
             category_id, editor_source, auto_save_no=int(time.time() * 1000)
         ),
+        "productApiVersion": "v1",
     }
     if debug:
         print("[디버그] 전송 URL:", WRITE_URL)
