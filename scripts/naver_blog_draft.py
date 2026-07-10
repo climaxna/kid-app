@@ -136,37 +136,100 @@ def load_session(cookies_path: Path, blog_id: str, category_id: int) -> requests
 
 
 URL_RE = re.compile(r"(https?://[^\s]+)")
+BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
+# 스타일 스키마(실제 캡처로 확인):
+#   textNode.style  = {"bold":true, "fontSizeCode":"fs24", "fontColor":"#rrggbb", "@ctype":"nodeStyle"}
+#   paragraph.style = {"align":"center", "@ctype":"paragraphStyle"}
+#   인용구 = @ctype:"quotation", 구분선 = @ctype:"horizontalLine"
 
 
-def text_node(value: str, link: str | None = None) -> dict:
+def text_node(value: str, link: str | None = None, bold: bool = False,
+              font_size: str | None = None, font_color: str | None = None) -> dict:
     node = {"id": se_id(), "value": value}
     if link:
         node["link"] = {"url": link, "@ctype": "urlLink"}
+    style = {}
+    if bold:
+        style["bold"] = True
+    if font_size:
+        style["fontSizeCode"] = font_size
+    if font_color:
+        style["fontColor"] = font_color
+    if style:
+        style["@ctype"] = "nodeStyle"
+        node["style"] = style
     node["@ctype"] = "textNode"
     return node
 
 
-def linkify_nodes(text: str) -> list[dict]:
-    """줄 안의 http(s):// URL을 클릭 가능한 urlLink textNode로 분리."""
-    nodes = []
+def _linkify_segment(seg: str, bold: bool, font_size, font_color, out: list):
+    """한 텍스트 조각 안의 URL을 링크 노드로 분리해 out에 추가."""
     pos = 0
-    for m in URL_RE.finditer(text):
+    for m in URL_RE.finditer(seg):
         if m.start() > pos:
-            nodes.append(text_node(text[pos:m.start()]))
+            out.append(text_node(seg[pos:m.start()], bold=bold, font_size=font_size, font_color=font_color))
         url = m.group(1)
-        nodes.append(text_node(url, link=url))
+        out.append(text_node(url, link=url, bold=bold, font_size=font_size, font_color=font_color))
         pos = m.end()
-    if pos < len(text) or not nodes:
-        nodes.append(text_node(text[pos:]))
+    if pos < len(seg):
+        out.append(text_node(seg[pos:], bold=bold, font_size=font_size, font_color=font_color))
+
+
+def inline_nodes(text: str, bold: bool = False, font_size=None, font_color=None,
+                 parse_bold: bool = False) -> list[dict]:
+    """줄을 textNode 리스트로. URL은 항상 링크로, parse_bold면 `**...**`도 굵게 처리."""
+    nodes: list[dict] = []
+    if parse_bold and "**" in text:
+        pos = 0
+        for m in BOLD_RE.finditer(text):
+            if m.start() > pos:
+                _linkify_segment(text[pos:m.start()], bold, font_size, font_color, nodes)
+            _linkify_segment(m.group(1), True, font_size, font_color, nodes)
+            pos = m.end()
+        if pos < len(text):
+            _linkify_segment(text[pos:], bold, font_size, font_color, nodes)
+    else:
+        _linkify_segment(text, bold, font_size, font_color, nodes)
+    if not nodes:
+        nodes.append(text_node("", bold=bold, font_size=font_size, font_color=font_color))
     return nodes
 
 
-def paragraph(text: str) -> dict:
-    return {
+def linkify_nodes(text: str) -> list[dict]:
+    """줄 안의 http(s):// URL을 클릭 가능한 urlLink textNode로 분리 (스타일 없음)."""
+    return inline_nodes(text)
+
+
+def paragraph(text: str, align: str | None = None, bold: bool = False,
+              font_size: str | None = None, font_color: str | None = None,
+              parse_bold: bool = False) -> dict:
+    para = {
         "id": se_id(),
-        "nodes": linkify_nodes(text),
+        "nodes": inline_nodes(text, bold=bold, font_size=font_size, font_color=font_color, parse_bold=parse_bold),
         "@ctype": "paragraph",
     }
+    if align:
+        para["style"] = {"align": align, "@ctype": "paragraphStyle"}
+    return para
+
+
+def quotation_component(lines: list[str]) -> dict:
+    paras = [paragraph(l, align="center") for l in lines] or [paragraph("")]
+    return {
+        "id": se_id(), "layout": "default", "value": paras,
+        "source": None, "align": "center", "@ctype": "quotation",
+    }
+
+
+def horizontal_line() -> dict:
+    return {"id": se_id(), "layout": "default", "align": "center", "@ctype": "horizontalLine"}
+
+
+MOMBLOG_DIRECTIVE = "<!-- momblog -->"
+HEADING_RE = re.compile(r"^##\s+(.*)$")
+QUOTE_RE = re.compile(r"^>\s?(.*)$")
+DIVIDER_RE = re.compile(r"^[\-─—]{3,}$")
+HEADING_FONT_SIZE = "fs19"
 
 
 def is_table_separator(line: str) -> bool:
@@ -321,6 +384,16 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
     """
     image_results = image_results or []
     lines = body_text.split("\n")
+
+    # momblog 지시자가 있으면 리치 스타일(가운데정렬·## 헤딩·> 인용구·--- 구분선·**볼드**) 활성화
+    momblog = any(ln.strip() == MOMBLOG_DIRECTIVE for ln in lines)
+    if momblog:
+        lines = [ln for ln in lines if ln.strip() != MOMBLOG_DIRECTIVE]
+    base_align = "center" if momblog else None
+
+    def make_para(text: str) -> dict:
+        return paragraph(text, align=base_align, parse_bold=momblog)
+
     components: list[dict] = []
     para_buffer: list[dict] = []
     represent_used = False
@@ -344,7 +417,7 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
                 components.append(image_component(upload, represent=not represent_used))
                 represent_used = True
                 photographer = item["photographer"] or "포토코리아"
-                para_buffer.append(paragraph(f"(ⓒ한국관광공사 {photographer})"))
+                para_buffer.append(make_para(f"(ⓒ한국관광공사 {photographer})"))
                 i += 1
                 if i < n and ATTRIBUTION_RE.match(lines[i]):
                     i += 1
@@ -358,7 +431,27 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
             flush_paragraphs()
             components.append(table_component(rows))
             continue
-        para_buffer.append(paragraph(line))
+        if momblog:
+            hm = HEADING_RE.match(line.strip())
+            if hm:
+                para_buffer.append(paragraph(
+                    hm.group(1), align="center", bold=True, font_size=HEADING_FONT_SIZE, parse_bold=True))
+                i += 1
+                continue
+            if DIVIDER_RE.match(line.strip()):
+                flush_paragraphs()
+                components.append(horizontal_line())
+                i += 1
+                continue
+            if QUOTE_RE.match(line):
+                qlines = []
+                while i < n and QUOTE_RE.match(lines[i]):
+                    qlines.append(QUOTE_RE.match(lines[i]).group(1))
+                    i += 1
+                flush_paragraphs()
+                components.append(quotation_component(qlines))
+                continue
+        para_buffer.append(make_para(line))
         i += 1
     flush_paragraphs()
     return components or [text_component([paragraph("")])]
