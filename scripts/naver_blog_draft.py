@@ -144,7 +144,8 @@ BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
 
 
 def text_node(value: str, link: str | None = None, bold: bool = False,
-              font_size: str | None = None, font_color: str | None = None) -> dict:
+              font_size: str | None = None, font_color: str | None = None,
+              font_family: str | None = None) -> dict:
     node = {"id": se_id(), "value": value}
     if link:
         node["link"] = {"url": link, "@ctype": "urlLink"}
@@ -155,6 +156,8 @@ def text_node(value: str, link: str | None = None, bold: bool = False,
         style["fontSizeCode"] = font_size
     if font_color:
         style["fontColor"] = font_color
+    if font_family:
+        style["fontFamily"] = font_family
     if style:
         style["@ctype"] = "nodeStyle"
         node["style"] = style
@@ -162,36 +165,36 @@ def text_node(value: str, link: str | None = None, bold: bool = False,
     return node
 
 
-def _linkify_segment(seg: str, bold: bool, font_size, font_color, out: list):
+def _linkify_segment(seg: str, bold: bool, font_size, font_color, font_family, out: list):
     """한 텍스트 조각 안의 URL을 링크 노드로 분리해 out에 추가."""
     pos = 0
     for m in URL_RE.finditer(seg):
         if m.start() > pos:
-            out.append(text_node(seg[pos:m.start()], bold=bold, font_size=font_size, font_color=font_color))
+            out.append(text_node(seg[pos:m.start()], bold=bold, font_size=font_size, font_color=font_color, font_family=font_family))
         url = m.group(1)
-        out.append(text_node(url, link=url, bold=bold, font_size=font_size, font_color=font_color))
+        out.append(text_node(url, link=url, bold=bold, font_size=font_size, font_color=font_color, font_family=font_family))
         pos = m.end()
     if pos < len(seg):
-        out.append(text_node(seg[pos:], bold=bold, font_size=font_size, font_color=font_color))
+        out.append(text_node(seg[pos:], bold=bold, font_size=font_size, font_color=font_color, font_family=font_family))
 
 
 def inline_nodes(text: str, bold: bool = False, font_size=None, font_color=None,
-                 parse_bold: bool = False) -> list[dict]:
+                 font_family=None, parse_bold: bool = False) -> list[dict]:
     """줄을 textNode 리스트로. URL은 항상 링크로, parse_bold면 `**...**`도 굵게 처리."""
     nodes: list[dict] = []
     if parse_bold and "**" in text:
         pos = 0
         for m in BOLD_RE.finditer(text):
             if m.start() > pos:
-                _linkify_segment(text[pos:m.start()], bold, font_size, font_color, nodes)
-            _linkify_segment(m.group(1), True, font_size, font_color, nodes)
+                _linkify_segment(text[pos:m.start()], bold, font_size, font_color, font_family, nodes)
+            _linkify_segment(m.group(1), True, font_size, font_color, font_family, nodes)
             pos = m.end()
         if pos < len(text):
-            _linkify_segment(text[pos:], bold, font_size, font_color, nodes)
+            _linkify_segment(text[pos:], bold, font_size, font_color, font_family, nodes)
     else:
-        _linkify_segment(text, bold, font_size, font_color, nodes)
+        _linkify_segment(text, bold, font_size, font_color, font_family, nodes)
     if not nodes:
-        nodes.append(text_node("", bold=bold, font_size=font_size, font_color=font_color))
+        nodes.append(text_node("", bold=bold, font_size=font_size, font_color=font_color, font_family=font_family))
     return nodes
 
 
@@ -202,10 +205,11 @@ def linkify_nodes(text: str) -> list[dict]:
 
 def paragraph(text: str, align: str | None = None, bold: bool = False,
               font_size: str | None = None, font_color: str | None = None,
-              parse_bold: bool = False) -> dict:
+              font_family: str | None = None, parse_bold: bool = False) -> dict:
     para = {
         "id": se_id(),
-        "nodes": inline_nodes(text, bold=bold, font_size=font_size, font_color=font_color, parse_bold=parse_bold),
+        "nodes": inline_nodes(text, bold=bold, font_size=font_size, font_color=font_color,
+                              font_family=font_family, parse_bold=parse_bold),
         "@ctype": "paragraph",
     }
     if align:
@@ -213,8 +217,10 @@ def paragraph(text: str, align: str | None = None, bold: bool = False,
     return para
 
 
-def quotation_component(lines: list[str]) -> dict:
-    paras = [paragraph(l, align="center") for l in lines] or [paragraph("")]
+def quotation_component(lines: list[str], profile: dict | None = None) -> dict:
+    p = profile or {}
+    paras = [paragraph(l, align="center", font_family=p.get("body_font"),
+                       font_color=p.get("body_color"), parse_bold=True) for l in lines] or [paragraph("")]
     return {
         "id": se_id(), "layout": "default", "value": paras,
         "source": None, "align": "center", "@ctype": "quotation",
@@ -225,11 +231,33 @@ def horizontal_line() -> dict:
     return {"id": se_id(), "layout": "default", "align": "center", "@ctype": "horizontalLine"}
 
 
-MOMBLOG_DIRECTIVE = "<!-- momblog -->"
 HEADING_RE = re.compile(r"^##\s+(.*)$")
 QUOTE_RE = re.compile(r"^>\s?(.*)$")
 DIVIDER_RE = re.compile(r"^[\-─—]{3,}$")
-HEADING_FONT_SIZE = "fs19"
+DIRECTIVE_RE = re.compile(r"^<!--\s*(momblog|travel|info)\s*-->$")
+
+# 콘텐츠 타입별 스타일 프로파일. `.md` 본문 최상단에 <!-- 이름 --> 지시자를 넣으면 적용.
+# 값의 근거는 모두 실제 네이버 에디터/레퍼런스 블로그에서 캡처해 확인한 것.
+STYLE_PROFILES = {
+    # 육아(호준맘 스타일): 가운데정렬, 굵은 검정 소제목
+    "momblog": {
+        "align": "center",
+        "body_font": None, "body_color": None,
+        "heading_font": None, "heading_color": None, "heading_size": "fs19", "heading_bold": True,
+    },
+    # 여행 감성(starkimpt 스타일): 가운데정렬, 본문 마루부리 회색, 소제목 바른히피 초록
+    "travel": {
+        "align": "center",
+        "body_font": "nanummaruburi", "body_color": "#666666",
+        "heading_font": "nanumbareunhipi", "heading_color": "#00a350", "heading_size": "fs19", "heading_bold": False,
+    },
+    # 정보/전문: 가운데정렬, 읽기 좋은 고딕 본문, 소제목은 굵은 남색 강조(신뢰감)
+    "info": {
+        "align": "center",
+        "body_font": None, "body_color": None,
+        "heading_font": None, "heading_color": "#1f4e79", "heading_size": "fs19", "heading_bold": True,
+    },
+}
 
 
 def is_table_separator(line: str) -> bool:
@@ -385,14 +413,22 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
     image_results = image_results or []
     lines = body_text.split("\n")
 
-    # momblog 지시자가 있으면 리치 스타일(가운데정렬·## 헤딩·> 인용구·--- 구분선·**볼드**) 활성화
-    momblog = any(ln.strip() == MOMBLOG_DIRECTIVE for ln in lines)
-    if momblog:
-        lines = [ln for ln in lines if ln.strip() != MOMBLOG_DIRECTIVE]
-    base_align = "center" if momblog else None
+    # <!-- momblog|travel|info --> 지시자가 있으면 해당 스타일 프로파일 활성화
+    profile = None
+    for ln in lines:
+        dm = DIRECTIVE_RE.match(ln.strip())
+        if dm:
+            profile = STYLE_PROFILES.get(dm.group(1))
+            break
+    styled = profile is not None
+    if styled:
+        lines = [ln for ln in lines if not DIRECTIVE_RE.match(ln.strip())]
+    p = profile or {}
+    base_align = p.get("align")
 
     def make_para(text: str) -> dict:
-        return paragraph(text, align=base_align, parse_bold=momblog)
+        return paragraph(text, align=base_align, font_family=p.get("body_font"),
+                         font_color=p.get("body_color"), parse_bold=styled)
 
     components: list[dict] = []
     para_buffer: list[dict] = []
@@ -431,11 +467,13 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
             flush_paragraphs()
             components.append(table_component(rows))
             continue
-        if momblog:
+        if styled:
             hm = HEADING_RE.match(line.strip())
             if hm:
                 para_buffer.append(paragraph(
-                    hm.group(1), align="center", bold=True, font_size=HEADING_FONT_SIZE, parse_bold=True))
+                    hm.group(1), align="center", bold=p.get("heading_bold", True),
+                    font_size=p.get("heading_size", "fs19"), font_color=p.get("heading_color"),
+                    font_family=p.get("heading_font"), parse_bold=True))
                 i += 1
                 continue
             if DIVIDER_RE.match(line.strip()):
@@ -449,7 +487,7 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
                     qlines.append(QUOTE_RE.match(lines[i]).group(1))
                     i += 1
                 flush_paragraphs()
-                components.append(quotation_component(qlines))
+                components.append(quotation_component(qlines, profile))
                 continue
         para_buffer.append(make_para(line))
         i += 1
