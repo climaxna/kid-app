@@ -219,11 +219,20 @@ def paragraph(text: str, align: str | None = None, bold: bool = False,
 
 def quotation_component(lines: list[str], profile: dict | None = None) -> dict:
     p = profile or {}
-    paras = [paragraph(l, align="center", font_family=p.get("body_font"),
-                       font_color=p.get("body_color"), parse_bold=True) for l in lines] or [paragraph("")]
+    quote_color = p.get("quote_color", p.get("body_color"))
+    if lines:
+        label = lines[0].strip()
+        if label.startswith(("아빠의 육아 기록", "경험담 초안")):
+            quote_color = p.get("experience_color", quote_color)
+        elif label.startswith(("주의", "안전", "상담")):
+            quote_color = p.get("warning_color", quote_color)
+    quote_align = p.get("quote_align", p.get("align", "center"))
+    paras = [paragraph(l, align=quote_align, font_family=p.get("quote_font", p.get("body_font")),
+                       font_size=p.get("quote_size", p.get("body_size")),
+                       font_color=quote_color, parse_bold=True) for l in lines] or [paragraph("")]
     return {
         "id": se_id(), "layout": "default", "value": paras,
-        "source": None, "align": "center", "@ctype": "quotation",
+        "source": None, "align": quote_align, "@ctype": "quotation",
     }
 
 
@@ -234,7 +243,7 @@ def horizontal_line() -> dict:
 HEADING_RE = re.compile(r"^##\s+(.*)$")
 QUOTE_RE = re.compile(r"^>\s?(.*)$")
 DIVIDER_RE = re.compile(r"^[\-─—]{3,}$")
-DIRECTIVE_RE = re.compile(r"^<!--\s*(momblog|travel|info)\s*-->$")
+DIRECTIVE_RE = re.compile(r"^<!--\s*(momblog|parenting|travel|info)\s*-->$")
 
 # 콘텐츠 타입별 스타일 프로파일. `.md` 본문 최상단에 <!-- 이름 --> 지시자를 넣으면 적용.
 # 값의 근거는 모두 실제 네이버 에디터/레퍼런스 블로그에서 캡처해 확인한 것.
@@ -244,6 +253,19 @@ STYLE_PROFILES = {
         "align": "center",
         "body_font": None, "body_color": None,
         "heading_font": None, "heading_color": None, "heading_size": "fs19", "heading_bold": True,
+    },
+    # 육아 정보: 모바일 장문 가독성을 위한 왼쪽정렬, 차분한 녹색 소제목.
+    # 경험은 따뜻한 갈색, 안전·상담 문구는 절제된 주황색으로 구분한다.
+    "parenting": {
+        "align": "center",
+        "body_font": None, "body_color": "#333333", "body_size": None,
+        "heading_align": "center",
+        "heading_font": None, "heading_color": "#3f6654", "heading_size": "fs19", "heading_bold": True,
+        "quote_align": "center", "quote_font": None, "quote_size": None, "quote_color": "#3f6654",
+        "experience_color": "#6b5a45", "warning_color": "#a14f3f",
+        "table_align": "left", "table_header_bold": True,
+        "table_header_color": "#3f6654", "table_header_size": "fs15",
+        "table_body_color": "#333333", "table_body_size": "fs15",
     },
     # 여행 감성(starkimpt 스타일): 가운데정렬, 본문 마루부리 회색, 소제목 바른히피 초록
     "travel": {
@@ -274,25 +296,35 @@ def parse_table_row(line: str) -> list[str]:
     return [c.replace("**", "") for c in cells]
 
 
-def table_cell(text: str, width: float) -> dict:
+def table_cell(text: str, width: float, profile: dict | None = None, header: bool = False) -> dict:
+    p = profile or {}
+    color = p.get("table_header_color") if header else p.get("table_body_color")
+    size = p.get("table_header_size") if header else p.get("table_body_size")
     return {
         "id": se_id(),
         "colSpan": 1,
         "rowSpan": 1,
         "width": width,
         "height": 43,
-        "value": [paragraph(text)] if text else None,
+        "value": [paragraph(
+            text, align=p.get("table_align"),
+            bold=header and bool(p.get("table_header_bold")),
+            font_size=size, font_color=color, parse_bold=True,
+        )] if text else None,
         "@ctype": "tableCell",
     }
 
 
-def table_component(rows: list[list[str]]) -> dict:
+def table_component(rows: list[list[str]], profile: dict | None = None) -> dict:
     col_count = max(len(r) for r in rows)
     cell_width = round(100 / col_count, 2)
     se_rows = [
         {
             "cells": [
-                table_cell(row[i] if i < len(row) else "", cell_width)
+                table_cell(
+                    row[i] if i < len(row) else "", cell_width,
+                    profile=profile, header=row is rows[0],
+                )
                 for i in range(col_count)
             ],
             "@ctype": "tableRow",
@@ -413,7 +445,7 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
     image_results = image_results or []
     lines = body_text.split("\n")
 
-    # <!-- momblog|travel|info --> 지시자가 있으면 해당 스타일 프로파일 활성화
+    # <!-- momblog|parenting|travel|info --> 지시자가 있으면 해당 스타일 프로파일 활성화
     profile = None
     for ln in lines:
         dm = DIRECTIVE_RE.match(ln.strip())
@@ -428,7 +460,8 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
 
     def make_para(text: str) -> dict:
         return paragraph(text, align=base_align, font_family=p.get("body_font"),
-                         font_color=p.get("body_color"), parse_bold=styled)
+                         font_size=p.get("body_size"), font_color=p.get("body_color"),
+                         parse_bold=styled)
 
     components: list[dict] = []
     para_buffer: list[dict] = []
@@ -465,13 +498,13 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
                 rows.append(parse_table_row(lines[i]))
                 i += 1
             flush_paragraphs()
-            components.append(table_component(rows))
+            components.append(table_component(rows, profile=profile))
             continue
         if styled:
             hm = HEADING_RE.match(line.strip())
             if hm:
                 para_buffer.append(paragraph(
-                    hm.group(1), align="center", bold=p.get("heading_bold", True),
+                    hm.group(1), align=p.get("heading_align", "center"), bold=p.get("heading_bold", True),
                     font_size=p.get("heading_size", "fs19"), font_color=p.get("heading_color"),
                     font_family=p.get("heading_font"), parse_bold=True))
                 i += 1
