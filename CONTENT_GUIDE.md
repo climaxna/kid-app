@@ -232,11 +232,16 @@ FAQ 구조화(리치 스니펫)는 **구글** 얘기다. **네이버는 FAQ 스�
 
 - 표(요금표, 코스표)는 마크다운 `| a | b |` + `|---|---|` 형식 그대로 쓴다
   (naver_blog_draft.py가 실제 네이버 표 컴포넌트로 자동 변환함).
+- 모든 마크다운 표는 **첫 행을 헤더로 처리해 배경색과 굵은 글씨를 적용**하고,
+  헤더·본문 셀의 글은 **가운데 정렬**한다. 프로파일별 헤더색은
+  `momblog=#ffe3c8`, `parenting/travel=#c2f4db`, `info=#b0f1ff`를 기본으로 한다.
+  개별 원고에서 표를 수동 꾸미지 않아도 다음 임시저장 때 자동 적용된다.
 - `http(s)://` URL은 자동으로 클릭 가능한 링크로 변환되니 그대로 쓰면 된다.
 - 없는 사실을 만들어내는 것보다 "확인 필요" 문구를 쓰는 게 항상 낫다.
 - 스타일 스키마 참고(캡처 확인): textNode.style = {bold, fontSizeCode(fs11~fs38),
   fontColor(#rrggbb), fontFamily(nanummaruburi/nanumbareunhipi/…), @ctype:nodeStyle};
-  paragraph.style = {align, @ctype:paragraphStyle}; 인용구=@ctype:quotation;
+  paragraph.style = {align, @ctype:paragraphStyle};
+  tableCell = {backgroundColor, textAlign, ...}; 인용구=@ctype:quotation;
   구분선=@ctype:horizontalLine.
 
 ## 2-1. 해시태그(태그) 규칙 — 넉넉하게 넣는다

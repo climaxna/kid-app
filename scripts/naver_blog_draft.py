@@ -253,6 +253,7 @@ STYLE_PROFILES = {
         "align": "center",
         "body_font": None, "body_color": None,
         "heading_font": None, "heading_color": None, "heading_size": "fs19", "heading_bold": True,
+        "table_header_background": "#ffe3c8", "table_header_color": "#823f00",
     },
     # 육아 정보: 모바일 장문 가독성을 위한 왼쪽정렬, 차분한 녹색 소제목.
     # 경험은 따뜻한 갈색, 안전·상담 문구는 절제된 주황색으로 구분한다.
@@ -263,7 +264,8 @@ STYLE_PROFILES = {
         "heading_font": None, "heading_color": "#3f6654", "heading_size": "fs19", "heading_bold": True,
         "quote_align": "center", "quote_font": None, "quote_size": None, "quote_color": "#3f6654",
         "experience_color": "#6b5a45", "warning_color": "#a14f3f",
-        "table_align": "left", "table_header_bold": True,
+        "table_align": "center", "table_header_bold": True,
+        "table_header_background": "#c2f4db",
         "table_header_color": "#3f6654", "table_header_size": "fs15",
         "table_body_color": "#333333", "table_body_size": "fs15",
     },
@@ -272,12 +274,14 @@ STYLE_PROFILES = {
         "align": "center",
         "body_font": "nanummaruburi", "body_color": "#666666",
         "heading_font": "nanumbareunhipi", "heading_color": "#00a350", "heading_size": "fs19", "heading_bold": False,
+        "table_header_background": "#c2f4db", "table_header_color": "#007433",
     },
     # 정보/전문: 가운데정렬, 읽기 좋은 고딕 본문, 소제목은 굵은 남색 강조(신뢰감)
     "info": {
         "align": "center",
         "body_font": None, "body_color": None,
         "heading_font": None, "heading_color": "#1f4e79", "heading_size": "fs19", "heading_bold": True,
+        "table_header_background": "#b0f1ff", "table_header_color": "#004e82",
     },
 }
 
@@ -298,6 +302,8 @@ def parse_table_row(line: str) -> list[str]:
 
 def table_cell(text: str, width: float, profile: dict | None = None, header: bool = False) -> dict:
     p = profile or {}
+    align = p.get("table_align", "center")
+    background = p.get("table_header_background", "#c2f4db") if header else ""
     color = p.get("table_header_color") if header else p.get("table_body_color")
     size = p.get("table_header_size") if header else p.get("table_body_size")
     return {
@@ -306,9 +312,11 @@ def table_cell(text: str, width: float, profile: dict | None = None, header: boo
         "rowSpan": 1,
         "width": width,
         "height": 43,
+        "backgroundColor": background,
+        "textAlign": align,
         "value": [paragraph(
-            text, align=p.get("table_align"),
-            bold=header and bool(p.get("table_header_bold")),
+            text, align=align,
+            bold=header and bool(p.get("table_header_bold", True)),
             font_size=size, font_color=color, parse_bold=True,
         )] if text else None,
         "@ctype": "tableCell",
