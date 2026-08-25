@@ -6,3 +6,15 @@ __pycache__/
 package.json
 package-lock.json
 scripts/*.mjs
+
+# 블로그 원고는 로컬에서만 보관한다. 이미 추적 중인 과거 원고에는 영향 없음.
+/baby/*.md
+/ferrycast/*.md
+/fishing/*.md
+/guides/*.md
+/islands/*.md
+/jeju/*.md
+/parenting/*.md
+/reviews/*.md
+/test/*.md
+/wando/*.md
