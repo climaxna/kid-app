@@ -7,6 +7,8 @@
 제주권 운항·결항은 FerryCast에서 출발 전에 확인하세요.
 https://ferrycast.kr/jeju
 
+📷 [생성이미지 1] 파일: `assets/posts/gapado-vs-marado-2026/01-thumbnail.png`
+
 ────
 
 ## 01. 한눈에 비교
@@ -23,6 +25,8 @@ https://ferrycast.kr/jeju
 
 > 빠른 결론｜길을 걷는 과정과 봄의 색이 중요하면 가파도, 최남단에 도착했다는 한 장면이 중요하면 마라도예요.
 
+📷 [생성이미지 2] 파일: `assets/posts/gapado-vs-marado-2026/02-comparison-overview.png`
+
 ────
 
 ## 02. 같은 지역에서 출발해도 표를 따로 확인하세요
@@ -32,6 +36,8 @@ https://ferrycast.kr/jeju
 가파도와 마라도를 하루에 모두 넣으면 가능 여부를 따지느라 여행이 촘촘해질 수 있어요. 배가 지연되거나 바람이 강해지면 다음 편에 영향을 받을 수 있으므로 한 섬을 중심으로 송악산·모슬포·산방산 일정을 연결하는 편이 여유롭습니다.
 
 > 일정 결정 순서｜운항 확인 → 귀항편 먼저 선택 → 섬 체류시간 계산 → 본섬 이동·주차 시간 확보
+
+📷 [생성이미지 3] 파일: `assets/posts/gapado-vs-marado-2026/03-access-mobility.png`
 
 ────
 
@@ -53,6 +59,8 @@ https://ferrycast.kr/jeju
 
 > 마라도 추천｜오래 걷기보다 우리나라 최남단에 직접 서 보는 상징적인 경험을 여행의 목표로 삼는 분
 
+📷 [생성이미지 4] 파일: `assets/posts/gapado-vs-marado-2026/04-attractions.png`
+
 ────
 
 ## 05. 상황별 추천
@@ -67,6 +75,8 @@ https://ferrycast.kr/jeju
 | 부모님과 상징적인 방문을 원함 | 마라도 |
 
 ⭐ **두 섬 모두 작지만 가파도는 ‘길과 계절’, 마라도는 ‘도착과 상징’이 중심이에요.** 봄 청보리 사진만 보고 가파도를 고르거나 짜장면만 생각하고 마라도를 고르기보다 여행 목적을 먼저 정하세요.
+
+📷 [생성이미지 5] 파일: `assets/posts/gapado-vs-marado-2026/05-key-travel-point.png`
 
 ────
 
@@ -84,9 +94,19 @@ https://ferrycast.kr/jeju
 
 **마라도**는 최남단이라는 상징을 중심으로 짧고 선명한 여행을 만드는 섬이에요. 체류시간은 짧아도 사방으로 열린 수평선과 바람이 강하게 기억됩니다.
 
+📷 [생성이미지 6] 파일: `assets/posts/gapado-vs-marado-2026/06-final-recommendation.png`
+
 출발 전 FerryCast 제주 화면과 해당 선사 공식 안내에서 운항·결항을 확인하고, 정확한 선착장과 귀항편을 최종 확인하세요.
 https://ferrycast.kr/jeju
 
 (이 글은 2026년 8월 확인 기준이며 시간표·운임·선박·청보리 상태·대여 운영은 방문일에 다시 확인해야 합니다.)
+
+참고｜비짓제주 가파도 올레길 10-1코스
+https://www.visitjeju.net/kr/detail/view?contentsid=CNTS_200000000013268
+
+참고｜비짓제주 마라도 최남단비·주요 동선
+https://www.visitjeju.net/kr/detail/view?contentsid=CNTS_200000000007991
+
+가파도와 마라도를 다녀오셨다면 어느 섬이 더 기억에 남았는지 댓글로 알려주세요.
 
 #가파도vs마라도 #가파도 #마라도 #제주섬여행 #가파도청보리 #가파도올레길 #대한민국최남단 #마라도여행 #운진항 #모슬포여행 #제주배편 #제주도보여행 #FerryCast

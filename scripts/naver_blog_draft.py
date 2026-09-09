@@ -18,6 +18,14 @@ RabbitTempPostWrite/RabbitTempPostUpdate 요청을 그대로 재현한다.
 사진: 본문의 `📷 [사진 N] 검색어: `키워드`` 표시는 기본적으로 텍스트 그대로 유지된다
 (수동으로 이미지를 넣을 자리 표시용). --with-images 옵션을 주면 한국관광공사
 관광사진에서 자동 검색·업로드해 실제 사진으로 채워 넣는다 (tour_images.py).
+
+로컬 이미지: 다음 표시도 --with-images 옵션에서 실제 이미지로 교체한다.
+    📷 [생성이미지 1] 파일: `assets/posts/<slug>/01.png`
+    📷 [실제사진 1] 파일: `private_media/<slug>/01.jpg`
+    📷 [편집사진 1] 파일: `assets/posts/<slug>/01-edited.png`
+
+Markdown 원고 전체는 --markdown-file 로 전달할 수 있다. 첫 `# 제목`을 제목으로,
+나머지를 본문으로 사용한다.
 """
 import argparse
 import json
@@ -217,10 +225,13 @@ def paragraph(text: str, align: str | None = None, bold: bool = False,
     return para
 
 
-def quotation_component(lines: list[str], profile: dict | None = None) -> dict:
+def quotation_component(lines: list[str], profile: dict | None = None,
+                        experience: bool = False) -> dict:
     p = profile or {}
     quote_color = p.get("quote_color", p.get("body_color"))
-    if lines:
+    if experience:
+        quote_color = p.get("experience_color", quote_color)
+    elif lines:
         label = lines[0].strip()
         if label.startswith(("아빠의 육아 기록", "경험담 초안")):
             quote_color = p.get("experience_color", quote_color)
@@ -244,6 +255,7 @@ HEADING_RE = re.compile(r"^##\s+(.*)$")
 QUOTE_RE = re.compile(r"^>\s?(.*)$")
 DIVIDER_RE = re.compile(r"^[\-─—]{3,}$")
 DIRECTIVE_RE = re.compile(r"^<!--\s*(momblog|parenting|travel|info)\s*-->$")
+EXPERIENCE_DIRECTIVE_RE = re.compile(r"^<!--\s*experience\s*-->$")
 
 # 콘텐츠 타입별 스타일 프로파일. `.md` 본문 최상단에 <!-- 이름 --> 지시자를 넣으면 적용.
 # 값의 근거는 모두 실제 네이버 에디터/레퍼런스 블로그에서 캡처해 확인한 것.
@@ -360,7 +372,18 @@ def text_component(paragraphs: list[dict]) -> dict:
 
 
 IMAGE_PLACEHOLDER_RE = re.compile(r"^\s*📷\s*\[사진\s*\d+\]\s*검색어:\s*`([^`]+)`")
+LOCAL_IMAGE_PLACEHOLDER_RE = re.compile(
+    r"^\s*📷\s*\[(생성이미지|실제사진|편집사진)\s*\d+\]\s*파일:\s*`([^`]+)`"
+)
 ATTRIBUTION_RE = re.compile(r"^\s*\(ⓒ")
+DISCLOSURE_RE = re.compile(
+    r"^\s*\((?:이해를 돕기 위한 생성 이미지입니다\.|"
+    r"실제 사진을 바탕으로 배경·색감을 보정한 이미지입니다\.)\)\s*$"
+)
+
+LOCAL_IMAGE_DISCLOSURES = {
+    "편집사진": "실제 사진을 바탕으로 배경·색감을 보정한 이미지입니다.",
+}
 
 
 def image_component(upload: dict, represent: bool = False) -> dict:
@@ -375,7 +398,7 @@ def image_component(upload: dict, represent: bool = False) -> dict:
         "domain": tour_images.IMAGE_DOMAIN,
         "fileSize": upload["fileSize"],
         "width": upload["width"],
-        "widthPercentage": 0,
+        "widthPercentage": 100,
         "height": upload["height"],
         "originalWidth": upload["width"],
         "originalHeight": upload["height"],
@@ -383,46 +406,97 @@ def image_component(upload: dict, represent: bool = False) -> dict:
         "caption": None,
         "format": "normal",
         "displayFormat": "normal",
+        "align": "center",
         "imageLoaded": True,
-        "contentMode": "normal",
+        "contentMode": "fit",
         "origin": {"srcFrom": "local", "@ctype": "imageOrigin"},
         "ai": False,
         "@ctype": "image",
     }
 
 
-def prepare_image_results(body_text: str) -> list:
-    """본문의 `📷 [사진 N] 검색어: `키워드`` 순서대로 관광사진을 검색·다운로드하고
-    브라우저로 네이버에 업로드한다. 각 placeholder에 대응하는 (item, upload) 또는 None
-    리스트를 순서대로 반환한다."""
+def _resolve_local_image(raw_path: str, image_base_dir: str | Path | None = None) -> Path | None:
+    """로컬 이미지 경로를 원고 폴더, 프로젝트 루트, 현재 폴더 순으로 찾는다."""
+    p = Path(raw_path).expanduser()
+    if p.is_absolute():
+        return p.resolve() if p.is_file() else None
+
+    project_root = Path(__file__).resolve().parent.parent
+    bases = []
+    if image_base_dir:
+        bases.append(Path(image_base_dir).resolve())
+    bases.extend([project_root, Path.cwd().resolve()])
+
+    seen: set[Path] = set()
+    for base in bases:
+        candidate = (base / p).resolve()
+        if candidate in seen:
+            continue
+        seen.add(candidate)
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def prepare_image_results(body_text: str, image_base_dir: str | Path | None = None) -> list:
+    """본문의 관광사진 검색 표시와 로컬 이미지 표시를 순서대로 준비해 업로드한다.
+
+    반환값은 각 이미지 표시에 대응하는 메타데이터 dict 또는 None 리스트다.
+    """
     lines = body_text.split("\n")
-    keywords = []
+    placeholders: list[dict] = []
     for line in lines:
         m = IMAGE_PLACEHOLDER_RE.match(line)
         if m:
-            keywords.append(m.group(1))
-    if not keywords:
+            placeholders.append({"kind": "tour", "keyword": m.group(1)})
+            continue
+        m = LOCAL_IMAGE_PLACEHOLDER_RE.match(line)
+        if m:
+            placeholders.append({"kind": m.group(1), "raw_path": m.group(2)})
+    if not placeholders:
         return []
 
-    results: list = [None] * len(keywords)
-    tmpdir = tempfile.mkdtemp(prefix="wando_img_")
-    items_by_idx: dict[int, dict] = {}
+    results: list = [None] * len(placeholders)
+    tmpdir = None
+    meta_by_idx: dict[int, dict] = {}
     to_upload: list[tuple[int, str]] = []
     used_urls: set[str] = set()  # 같은 문서 내 사진 중복 방지 (로테이션)
-    for idx, kw in enumerate(keywords):
-        dest = os.path.join(tmpdir, f"{idx}.jpg")
-        try:
-            item = tour_images.search_and_download(kw, dest, exclude_urls=used_urls)
-        except Exception as e:
-            print(f"[경고] 이미지 검색/다운로드 실패 ({kw}): {e}")
-            item = None
-        if item:
-            items_by_idx[idx] = item
-            to_upload.append((idx, dest))
-            used_urls.add(item["image_url"])
-            print(f"[정보] 사진 {idx + 1} 매칭: '{item['matched_keyword']}' → {item['title']} (ⓒ{item['photographer']})")
-        else:
-            print(f"[경고] 이미지 없음 ({kw}) — 이 자리는 텍스트로 유지")
+    for idx, placeholder in enumerate(placeholders):
+        if placeholder["kind"] == "tour":
+            if tmpdir is None:
+                tmpdir = tempfile.mkdtemp(prefix="wando_img_")
+            kw = placeholder["keyword"]
+            dest = os.path.join(tmpdir, f"{idx}.jpg")
+            try:
+                item = tour_images.search_and_download(kw, dest, exclude_urls=used_urls)
+            except Exception as e:
+                print(f"[경고] 이미지 검색/다운로드 실패 ({kw}): {e}")
+                item = None
+            if item:
+                meta_by_idx[idx] = {"kind": "tour", "item": item}
+                to_upload.append((idx, dest))
+                used_urls.add(item["image_url"])
+                print(
+                    f"[정보] 사진 {idx + 1} 매칭: '{item['matched_keyword']}' "
+                    f"→ {item['title']} (ⓒ{item['photographer']})"
+                )
+            else:
+                print(f"[경고] 이미지 없음 ({kw}) — 이 자리는 텍스트로 유지")
+            continue
+
+        local_path = _resolve_local_image(placeholder["raw_path"], image_base_dir)
+        if local_path is None:
+            print(
+                f"[경고] 로컬 이미지 없음 ({placeholder['raw_path']}) "
+                "— 이 자리는 텍스트로 유지"
+            )
+            continue
+        meta_by_idx[idx] = {
+            "kind": placeholder["kind"],
+            "source_path": str(local_path),
+        }
+        to_upload.append((idx, str(local_path)))
+        print(f"[정보] 로컬 이미지 {idx + 1}: {local_path}")
 
     if to_upload:
         try:
@@ -432,12 +506,14 @@ def prepare_image_results(body_text: str) -> list:
             uploads = [None] * len(to_upload)
         for (idx, _), up in zip(to_upload, uploads):
             if up and up.get("path"):
-                results[idx] = (items_by_idx[idx], up)
+                result = dict(meta_by_idx[idx])
+                result["upload"] = up
+                results[idx] = result
             else:
                 print(f"[경고] 업로드 실패 — 사진 {idx + 1}은 텍스트로 유지")
 
     ok = sum(1 for r in results if r)
-    print(f"[정보] 이미지 {ok}/{len(keywords)}장 준비 완료")
+    print(f"[정보] 이미지 {ok}/{len(placeholders)}장 준비 완료")
     return results
 
 
@@ -475,6 +551,7 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
     para_buffer: list[dict] = []
     represent_used = False
     img_idx = 0
+    next_quote_is_experience = False
 
     def flush_paragraphs():
         if para_buffer:
@@ -484,19 +561,33 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
     i, n = 0, len(lines)
     while i < n:
         line = lines[i]
+        if EXPERIENCE_DIRECTIVE_RE.match(line.strip()):
+            next_quote_is_experience = True
+            i += 1
+            continue
         m = IMAGE_PLACEHOLDER_RE.match(line)
-        if m:
+        local_m = LOCAL_IMAGE_PLACEHOLDER_RE.match(line)
+        if m or local_m:
             result = image_results[img_idx] if img_idx < len(image_results) else None
             img_idx += 1
             if result:
-                item, upload = result
+                if isinstance(result, tuple):  # 과거 호출 형식 호환
+                    item, upload = result
+                    kind = "tour"
+                else:
+                    kind = result["kind"]
+                    item = result.get("item")
+                    upload = result["upload"]
                 flush_paragraphs()
                 components.append(image_component(upload, represent=not represent_used))
                 represent_used = True
-                photographer = item["photographer"] or "포토코리아"
-                para_buffer.append(make_para(f"(ⓒ한국관광공사 {photographer})"))
+                if kind == "tour":
+                    photographer = item["photographer"] or "포토코리아"
+                    para_buffer.append(make_para(f"(ⓒ한국관광공사 {photographer})"))
+                elif kind in LOCAL_IMAGE_DISCLOSURES:
+                    para_buffer.append(make_para(f"({LOCAL_IMAGE_DISCLOSURES[kind]})"))
                 i += 1
-                if i < n and ATTRIBUTION_RE.match(lines[i]):
+                if i < n and (ATTRIBUTION_RE.match(lines[i]) or DISCLOSURE_RE.match(lines[i])):
                     i += 1
                 continue
         if line.strip().startswith("|") and i + 1 < n and is_table_separator(lines[i + 1]):
@@ -528,7 +619,10 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
                     qlines.append(QUOTE_RE.match(lines[i]).group(1))
                     i += 1
                 flush_paragraphs()
-                components.append(quotation_component(qlines, profile))
+                components.append(quotation_component(
+                    qlines, profile, experience=next_quote_is_experience
+                ))
+                next_quote_is_experience = False
                 continue
         para_buffer.append(make_para(line))
         i += 1
@@ -583,8 +677,11 @@ def build_population_params(category_id: int, editor_source: str, auto_save_no: 
 
 
 def save_draft(session, blog_id, title, body_text, category_id, editor_source, debug=False,
-               with_images=False) -> bool:
-    image_results = prepare_image_results(body_text) if with_images else None
+               with_images=False, image_base_dir: str | Path | None = None) -> bool:
+    image_results = (
+        prepare_image_results(body_text, image_base_dir=image_base_dir)
+        if with_images else None
+    )
     data = {
         "blogId": blog_id,
         "documentModel": build_document_model(title, body_text, image_results=image_results),
@@ -637,9 +734,17 @@ def save_draft(session, blog_id, title, body_text, category_id, editor_source, d
 
 def main():
     ap = argparse.ArgumentParser(description="네이버 블로그 임시저장")
-    ap.add_argument("title", help="글 제목")
+    ap.add_argument("title", nargs="?", help="글 제목")
     ap.add_argument("body", nargs="?", default=None, help="본문 텍스트 (또는 --body-file)")
     ap.add_argument("--body-file", help="본문을 읽어올 텍스트 파일 경로 (UTF-8)")
+    ap.add_argument(
+        "--markdown-file",
+        help="첫 '# 제목'과 본문이 함께 있는 Markdown 원고 경로 (UTF-8)",
+    )
+    ap.add_argument(
+        "--image-base-dir",
+        help="상대 이미지 경로 기준 폴더 (기본: 원고 폴더와 프로젝트 루트에서 자동 탐색)",
+    )
     ap.add_argument("--blog-id", default=DEFAULT_BLOG_ID, help=f"blogId (기본 {DEFAULT_BLOG_ID})")
     ap.add_argument("--category", type=int, default=DEFAULT_CATEGORY_ID,
                     help=f"categoryId (기본 {DEFAULT_CATEGORY_ID})")
@@ -648,20 +753,37 @@ def main():
     ap.add_argument("--cookies", help="cookies.json 경로 (기본: 자동 탐색)")
     ap.add_argument("--debug", action="store_true", help="전송 payload 출력")
     ap.add_argument("--with-images", action="store_true",
-                    help="사진 자동 검색·업로드 활성화 (기본: 꺼짐, placeholder 텍스트 유지)")
+                    help="관광사진 검색 및 로컬 이미지 업로드 활성화 (기본: 꺼짐)")
     args = ap.parse_args()
 
-    if args.body_file:
+    image_base_dir = args.image_base_dir
+    if args.markdown_file:
+        source_path = Path(args.markdown_file).resolve()
+        source = source_path.read_text(encoding="utf-8")
+        lines = source.splitlines()
+        if not lines or not lines[0].startswith("# "):
+            ap.error("--markdown-file 원고의 첫 줄은 '# 제목'이어야 합니다.")
+        title = lines[0][2:].strip()
+        body_text = "\n".join(lines[1:]).lstrip("\n")
+        image_base_dir = image_base_dir or str(source_path.parent)
+    elif args.body_file:
+        if not args.title:
+            ap.error("--body-file 사용 시 제목 인자가 필요합니다.")
+        title = args.title
         body_text = Path(args.body_file).read_text(encoding="utf-8")
+        image_base_dir = image_base_dir or str(Path(args.body_file).resolve().parent)
     elif args.body is not None:
+        if not args.title:
+            ap.error("본문 인자 사용 시 제목 인자가 필요합니다.")
+        title = args.title
         body_text = args.body
     else:
-        ap.error("본문을 body 인자 또는 --body-file 로 제공하세요.")
+        ap.error("본문을 body 인자, --body-file 또는 --markdown-file 로 제공하세요.")
 
     session = load_session(find_cookies_path(args.cookies), args.blog_id, args.category)
     success = save_draft(
-        session, args.blog_id, args.title, body_text, args.category, args.editor_source,
-        debug=args.debug, with_images=args.with_images,
+        session, args.blog_id, title, body_text, args.category, args.editor_source,
+        debug=args.debug, with_images=args.with_images, image_base_dir=image_base_dir,
     )
     sys.exit(0 if success else 1)
 

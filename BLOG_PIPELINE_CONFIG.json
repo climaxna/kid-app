@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "blog": {
+    "blog_id": "climaxna",
+    "default_category_id": 18,
+    "publish_policy": "manual_only"
+  },
+  "paths": {
+    "image_output_root": "assets/posts",
+    "private_photo_root": "private_media",
+    "parenting_drafts": "parenting",
+    "general_drafts": "drafts"
+  },
+  "workflow": {
+    "naver_save_condition": "article_and_required_images_pass_quality_gate",
+    "on_image_failure": "keep_local_only_and_report",
+   "generate_all_images_without_followup_keyword": true,
+   "remove_internal_image_material_from_naver_body": true,
+    "visual_review_before_publish": true,
+    "show_generated_images_in_chat": false,
+    "image_review_surface": "naver_draft",
+    "never_serialize_image_bytes_to_chat": true
+  },
+  "naver_editor": {
+    "image_alignment": "center",
+    "image_content_mode": "fit",
+    "image_width_percentage": 100,
+    "image_size_option": "document_width"
+  },
+  "privacy": {
+    "actual_baby_photo_default": "reference_only",
+    "front_face_default": "do_not_use",
+    "reuse_actual_photo_across_posts": false,
+    "reference_library_reuse": "only_explicitly_authorized_files",
+    "remove_identifiers": true
+  },
+  "image_disclosures": {
+    "generated": null,
+    "edited_actual": "실제 사진을 바탕으로 배경·색감을 보정한 이미지입니다."
+  },
+  "image_generation": {
+    "default_people_style": "1980s_korean_everyday",
+    "applies_to": [
+      "GENERATED_SCENE",
+      "REAL_PHOTO_REFERENCE"
+    ],
+    "preserve_current_environment_information_and_safety": true,
+    "actual_photo_edit_restyle": "explicit_request_only"
+  },
+  "image_personas": {
+    "ferry_island_host": {
+      "enabled": true,
+      "reference_file": "private_media/personas/ferry-island-host-face-reference-v2.png",
+      "approved_generated_references": [
+        "private_media/personas/ferry-island-host-approved-overview-2026.png",
+        "private_media/personas/ferry-island-host-approved-final-2026.png"
+      ],
+      "reference_selection_order": [
+        "reference_file_for_primary_face_structure",
+        "approved_generated_references_for_visual_continuity_and_makeup_finish"
+      ],
+      "continuity_goal": "match_the_user_approved_jeju_lodging_article_host_while_avoiding_identity_drift",
+      "approved_reference_scope": [
+        "facial_structure_and_core_feature_relationships",
+        "glamorous_1980s_korean_broadcast_makeup_strength",
+        "polished_travel_presenter_finish"
+      ],
+      "approved_reference_exclusions": [
+        "wardrobe",
+        "accessories",
+        "pose",
+        "hairstyle",
+        "card_layout",
+        "background",
+        "effect"
+      ],
+      "reference_reuse_authorization": "user_authorized_for_future_ferry_and_island_blog_images",
+      "identity_mode": "preserve_facial_structure_and_core_features_only",
+      "reference_scope": "face_only",
+      "preserve_features": [
+        "overall_face_shape",
+        "eye_shape_and_spacing",
+        "eyebrow_structure",
+        "nose_structure",
+        "lip_shape",
+        "cheekbone_jaw_and_chin_structure"
+      ],
+      "exclude_reference_elements": [
+        "wardrobe",
+        "accessories",
+        "pose",
+        "hairstyle",
+        "background",
+        "urban_mood",
+        "scene_lighting"
+      ],
+      "makeup_reference": "apply_project_glamorous_1980s_broadcast_makeup_without_changing_facial_structure",
+      "makeup_priority": "high",
+      "makeup_details": [
+        "defined_eyebrows",
+        "strong_eyeliner_and_lashes",
+        "rose_or_berry_lip",
+        "visible_blush_and_contour",
+        "polished_broadcast_finish"
+      ],
+      "makeup_avoid": [
+        "natural_no_makeup_look",
+        "pale_lips",
+        "modern_minimal_makeup",
+        "face_shape_or_skin_tone_change"
+      ],
+      "wardrobe": "changeable_1980s_korean_travel_presenter",
+      "use_for": [
+        "ferry_info",
+        "island_introduction"
+      ],
+      "preferred_roles": [
+        "quick_choice_overview",
+        "comparison_overview",
+        "island_summary_overview",
+        "final_choice_summary"
+      ],
+      "presentation_mode": "small_host_beside_blog_summary_cards",
+      "maximum_frame_area_percentage": 30,
+      "avoid_location_background_host_scene": true,
+      "default_frequency": "two_presenter_images_per_article_for_ferry_and_jeju_series",
+      "effect_rotation": [
+        "soft_cutout_outline",
+        "retro_broadcast_frame",
+        "paper_card_layering",
+        "subtle_halftone_edge",
+        "diagonal_title_ribbon",
+        "map_pointer_overlay"
+      ],
+      "avoid_repeating_effect_within_article": true,
+      "exclude_from": [
+        "parenting_info",
+        "parenting_diary",
+        "product_review"
+      ],
+      "sample_file": "assets/personas/ferry-island-host/overview-test-v1.png"
+    }
+  },
+  "content_types": {
+    "island_compare": {
+      "draft_directory": "drafts",
+      "style_directive": "travel",
+      "image_preset": "ISLAND_COMPARE_PRO_V1",
+      "minimum_images": 4,
+      "maximum_images": 4,
+      "image_ratio": "1:1",
+      "target_size": "1080x1080",
+      "comparison_overview_mode": "condensed_blog_summary",
+      "comparison_overview_items": "4-6",
+     "image_roles": [
+       "thumbnail",
+       "comparison_overview",
+       "attractions",
+       "final_recommendation"
+      ],
+      "category_id": 18
+    },
+    "ferry_info": {
+      "draft_directory": "drafts",
+      "style_directive": "info",
+      "image_preset": "FERRY_INFO_PRO_V1",
+      "minimum_images": 4,
+      "maximum_images": 6,
+      "layout_mode": "mobile_scan_first",
+      "intro_max_sentences": 3,
+      "prefer_compact_tables": true,
+      "minimum_visual_tables": 2,
+      "vehicle_loading_visual_table_when_applicable": true,
+      "move_source_details_to_footer": true,
+      "image_roles": [
+        "thumbnail",
+        "quick_choice_overview",
+        "schedule_and_fare_summary",
+        "vehicle_loading_comparison_chart",
+        "booking_vehicle_and_departure_checklist",
+        "final_choice_summary"
+      ],
+      "category_id": 18
+    },
+    "parenting_info": {
+      "draft_directory": "parenting",
+      "style_directive": "parenting",
+      "image_preset": "PARENTING_PRO_V1",
+      "minimum_images": 4,
+      "maximum_images": 4,
+      "image_roles": [
+        "thumbnail",
+        "opening_scene",
+        "key_information",
+        "summary_recommendation"
+      ],
+      "category_id": 18
+    },
+    "parenting_diary": {
+      "draft_directory": "parenting",
+      "style_directive": "momblog",
+      "image_preset": "PARENTING_PRO_V1",
+      "minimum_images": 2,
+      "maximum_images": 4,
+      "category_id": 18
+    },
+    "product_review": {
+      "draft_directory": "baby",
+      "style_directive": "momblog",
+      "image_preset": "PRODUCT_REVIEW_PRO_V1",
+      "minimum_images": 4,
+      "maximum_images": 7,
+      "category_id": 18,
+      "requires_actual_product_photos": true
+    }
+  }
+}

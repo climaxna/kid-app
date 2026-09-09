@@ -7,6 +7,10 @@ package.json
 package-lock.json
 scripts/*.mjs
 
+# 생성 이미지와 실제 가족 사진은 로컬 전용이며 저장소에 올리지 않는다.
+/assets/posts/
+/private_media/
+
 # 블로그 원고는 로컬에서만 보관한다. 이미 추적 중인 과거 원고에는 영향 없음.
 /baby/*.md
 /ferrycast/*.md
