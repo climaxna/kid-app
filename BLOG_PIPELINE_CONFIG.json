@@ -12,6 +12,12 @@
     "general_drafts": "drafts"
   },
   "workflow": {
+    "staged_approval": true,
+    "draft_review_before_image_generation": true,
+    "image_generation_requires_draft_approval": true,
+    "naver_draft_requires_image_qa": true,
+    "regenerate_only_affected_images_after_copy_change": true,
+    "decorative_title_punctuation_default": false,
     "naver_save_condition": "article_and_required_images_pass_quality_gate",
     "on_image_failure": "keep_local_only_and_report",
    "generate_all_images_without_followup_keyword": true,

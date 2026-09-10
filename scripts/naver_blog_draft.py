@@ -256,6 +256,7 @@ QUOTE_RE = re.compile(r"^>\s?(.*)$")
 DIVIDER_RE = re.compile(r"^[\-─—]{3,}$")
 DIRECTIVE_RE = re.compile(r"^<!--\s*(momblog|parenting|travel|info)\s*-->$")
 EXPERIENCE_DIRECTIVE_RE = re.compile(r"^<!--\s*experience\s*-->$")
+INTERNAL_IMAGE_PLAN_RE = re.compile(r"^<!--\s*image-plan\b.*-->$", re.IGNORECASE)
 
 # 콘텐츠 타입별 스타일 프로파일. `.md` 본문 최상단에 <!-- 이름 --> 지시자를 넣으면 적용.
 # 값의 근거는 모두 실제 네이버 에디터/레퍼런스 블로그에서 캡처해 확인한 것.
@@ -561,6 +562,9 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
     i, n = 0, len(lines)
     while i < n:
         line = lines[i]
+        if INTERNAL_IMAGE_PLAN_RE.match(line.strip()):
+            i += 1
+            continue
         if EXPERIENCE_DIRECTIVE_RE.match(line.strip()):
             next_quote_is_experience = True
             i += 1
