@@ -144,26 +144,43 @@ def load_session(cookies_path: Path, blog_id: str, category_id: int) -> requests
 
 
 URL_RE = re.compile(r"(https?://[^\s]+)")
-BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
+# 인라인 강조 문법(스타일 지시자가 있을 때만 동작):
+#   ***굵은 기울임***  **굵게**  ==형광펜 배경==  !!손글씨 포인트!!
+INLINE_RE = re.compile(r"\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|==(.+?)==|!!(.+?)!!")
+INLINE_MARK_RE = re.compile(r"\*\*\*|\*\*|==|!!")
 # 스타일 스키마(실제 캡처로 확인):
 #   textNode.style  = {"bold":true, "fontSizeCode":"fs24", "fontColor":"#rrggbb", "@ctype":"nodeStyle"}
 #   paragraph.style = {"align":"center", "@ctype":"paragraphStyle"}
 #   인용구 = @ctype:"quotation", 구분선 = @ctype:"horizontalLine"
+# 서체 코드(에디터 JS 확인, 2026-09-24): nanumgothic, nanummyeongjo, nanumbarungothic,
+#   nanumsquare, nanummaruburi, nanumdasisijaghae, nanumbareunhipi, nanumuriddalsongeulssi
+# italic·backgroundColor 키는 2026-09-24 테스트 임시글로 검증.
+
+# 프로파일에 값이 없을 때 쓰는 기본 강조 스타일(레퍼런스: 연분홍 형광펜 + 자주색 손글씨)
+DEFAULT_HIGHLIGHT_BACKGROUND = "#fde2f0"
+DEFAULT_ACCENT_COLOR = "#8b1a5c"
+DEFAULT_ACCENT_FONT = "nanumdasisijaghae"
+DEFAULT_ACCENT_SIZE = "fs19"
 
 
 def text_node(value: str, link: str | None = None, bold: bool = False,
               font_size: str | None = None, font_color: str | None = None,
-              font_family: str | None = None) -> dict:
+              font_family: str | None = None, italic: bool = False,
+              background_color: str | None = None) -> dict:
     node = {"id": se_id(), "value": value}
     if link:
         node["link"] = {"url": link, "@ctype": "urlLink"}
     style = {}
     if bold:
         style["bold"] = True
+    if italic:
+        style["italic"] = True
     if font_size:
         style["fontSizeCode"] = font_size
     if font_color:
         style["fontColor"] = font_color
+    if background_color:
+        style["backgroundColor"] = background_color
     if font_family:
         style["fontFamily"] = font_family
     if style:
@@ -173,36 +190,59 @@ def text_node(value: str, link: str | None = None, bold: bool = False,
     return node
 
 
-def _linkify_segment(seg: str, bold: bool, font_size, font_color, font_family, out: list):
+def _linkify_segment(seg: str, style: dict, out: list):
     """한 텍스트 조각 안의 URL을 링크 노드로 분리해 out에 추가."""
     pos = 0
     for m in URL_RE.finditer(seg):
         if m.start() > pos:
-            out.append(text_node(seg[pos:m.start()], bold=bold, font_size=font_size, font_color=font_color, font_family=font_family))
+            out.append(text_node(seg[pos:m.start()], **style))
         url = m.group(1)
-        out.append(text_node(url, link=url, bold=bold, font_size=font_size, font_color=font_color, font_family=font_family))
+        out.append(text_node(url, link=url, **style))
         pos = m.end()
     if pos < len(seg):
-        out.append(text_node(seg[pos:], bold=bold, font_size=font_size, font_color=font_color, font_family=font_family))
+        out.append(text_node(seg[pos:], **style))
+
+
+def _emphasis_style(m: re.Match, base: dict, emphasis: dict) -> dict:
+    style = dict(base)
+    if m.group(1) is not None:
+        style.update(bold=True, italic=True)
+    elif m.group(2) is not None:
+        style["bold"] = True
+    elif m.group(3) is not None:
+        style["background_color"] = emphasis.get(
+            "highlight_background", DEFAULT_HIGHLIGHT_BACKGROUND)
+    else:
+        style.update(
+            font_color=emphasis.get("accent_color", DEFAULT_ACCENT_COLOR),
+            font_family=emphasis.get("accent_font", DEFAULT_ACCENT_FONT),
+            font_size=emphasis.get("accent_size", DEFAULT_ACCENT_SIZE),
+        )
+    return style
 
 
 def inline_nodes(text: str, bold: bool = False, font_size=None, font_color=None,
-                 font_family=None, parse_bold: bool = False) -> list[dict]:
-    """줄을 textNode 리스트로. URL은 항상 링크로, parse_bold면 `**...**`도 굵게 처리."""
+                 font_family=None, parse_bold: bool = False,
+                 emphasis: dict | None = None) -> list[dict]:
+    """줄을 textNode 리스트로. URL은 항상 링크로, parse_bold면 강조 문법도 처리."""
+    base = {"bold": bold, "font_size": font_size, "font_color": font_color,
+            "font_family": font_family}
     nodes: list[dict] = []
-    if parse_bold and "**" in text:
+    if parse_bold and INLINE_MARK_RE.search(text):
+        emphasis = emphasis or {}
         pos = 0
-        for m in BOLD_RE.finditer(text):
+        for m in INLINE_RE.finditer(text):
             if m.start() > pos:
-                _linkify_segment(text[pos:m.start()], bold, font_size, font_color, font_family, nodes)
-            _linkify_segment(m.group(1), True, font_size, font_color, font_family, nodes)
+                _linkify_segment(text[pos:m.start()], base, nodes)
+            inner = next(g for g in m.groups() if g is not None)
+            _linkify_segment(inner, _emphasis_style(m, base, emphasis), nodes)
             pos = m.end()
         if pos < len(text):
-            _linkify_segment(text[pos:], bold, font_size, font_color, font_family, nodes)
+            _linkify_segment(text[pos:], base, nodes)
     else:
-        _linkify_segment(text, bold, font_size, font_color, font_family, nodes)
+        _linkify_segment(text, base, nodes)
     if not nodes:
-        nodes.append(text_node("", bold=bold, font_size=font_size, font_color=font_color, font_family=font_family))
+        nodes.append(text_node("", **base))
     return nodes
 
 
@@ -213,11 +253,13 @@ def linkify_nodes(text: str) -> list[dict]:
 
 def paragraph(text: str, align: str | None = None, bold: bool = False,
               font_size: str | None = None, font_color: str | None = None,
-              font_family: str | None = None, parse_bold: bool = False) -> dict:
+              font_family: str | None = None, parse_bold: bool = False,
+              emphasis: dict | None = None) -> dict:
     para = {
         "id": se_id(),
         "nodes": inline_nodes(text, bold=bold, font_size=font_size, font_color=font_color,
-                              font_family=font_family, parse_bold=parse_bold),
+                              font_family=font_family, parse_bold=parse_bold,
+                              emphasis=emphasis),
         "@ctype": "paragraph",
     }
     if align:
@@ -240,7 +282,7 @@ def quotation_component(lines: list[str], profile: dict | None = None,
     quote_align = p.get("quote_align", p.get("align", "center"))
     paras = [paragraph(l, align=quote_align, font_family=p.get("quote_font", p.get("body_font")),
                        font_size=p.get("quote_size", p.get("body_size")),
-                       font_color=quote_color, parse_bold=True) for l in lines] or [paragraph("")]
+                       font_color=quote_color, parse_bold=True, emphasis=p) for l in lines] or [paragraph("")]
     return {
         "id": se_id(), "layout": "default", "value": paras,
         "source": None, "align": quote_align, "@ctype": "quotation",
@@ -310,7 +352,7 @@ def is_table_separator(line: str) -> bool:
 
 def parse_table_row(line: str) -> list[str]:
     cells = [c.strip() for c in line.strip().strip("|").split("|")]
-    return [c.replace("**", "") for c in cells]
+    return [INLINE_MARK_RE.sub("", c) for c in cells]
 
 
 def table_cell(text: str, width: float, profile: dict | None = None, header: bool = False) -> dict:
@@ -546,7 +588,7 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
     def make_para(text: str) -> dict:
         return paragraph(text, align=base_align, font_family=p.get("body_font"),
                          font_size=p.get("body_size"), font_color=p.get("body_color"),
-                         parse_bold=styled)
+                         parse_bold=styled, emphasis=p)
 
     components: list[dict] = []
     para_buffer: list[dict] = []
@@ -609,7 +651,7 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
                 para_buffer.append(paragraph(
                     hm.group(1), align=p.get("heading_align", "center"), bold=p.get("heading_bold", True),
                     font_size=p.get("heading_size", "fs19"), font_color=p.get("heading_color"),
-                    font_family=p.get("heading_font"), parse_bold=True))
+                    font_family=p.get("heading_font"), parse_bold=True, emphasis=p))
                 i += 1
                 continue
             if DIVIDER_RE.match(line.strip()):
