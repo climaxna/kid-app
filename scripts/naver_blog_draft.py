@@ -218,6 +218,8 @@ def _emphasis_style(m: re.Match, base: dict, emphasis: dict) -> dict:
             font_family=emphasis.get("accent_font", DEFAULT_ACCENT_FONT),
             font_size=emphasis.get("accent_size", DEFAULT_ACCENT_SIZE),
         )
+        if emphasis.get("accent_bold"):
+            style["bold"] = True
     return style
 
 
@@ -348,18 +350,26 @@ STYLE_PROFILES = {
         "table_header_color": "#3f6654", "table_header_size": "fs15",
         "table_body_color": "#333333", "table_body_size": "fs15",
     },
-    # 여행 감성(starkimpt 스타일): 가운데정렬, 본문 마루부리 회색, 소제목 바른히피 초록
+    # 여행·섬 소개(감성, 설렘): 본문 마루부리 회색, 소제목 바른히피 바다색 + 밑줄 인용구,
+    # 형광펜 연민트, 포인트는 청록 손글씨 (2026-09-24 컨셉)
     "travel": {
         "align": "center",
         "body_font": "nanummaruburi", "body_color": "#666666",
-        "heading_font": "nanumbareunhipi", "heading_color": "#00a350", "heading_size": "fs19", "heading_bold": False,
+        "heading_font": "nanumbareunhipi", "heading_color": "#0b7285", "heading_size": "fs19", "heading_bold": False,
+        "heading_layout": "quotation_underline",
+        "highlight_background": "#d3f5ec",
+        "accent_color": "#0b7285", "accent_font": "nanumdasisijaghae", "accent_size": "fs19",
         "table_header_background": "#c2f4db", "table_header_color": "#007433",
     },
-    # 정보/전문: 가운데정렬, 읽기 좋은 고딕 본문, 소제목은 굵은 남색 강조(신뢰감)
+    # 배편·교통 정보(신뢰, 빠른 확인): 기본 고딕, 굵은 남색 소제목 + 밑줄 인용구,
+    # 형광펜 연노랑, 포인트는 손글씨 대신 주황 굵은 글씨(마감·결항 경고) (2026-09-24 컨셉)
     "info": {
         "align": "center",
         "body_font": None, "body_color": None,
         "heading_font": None, "heading_color": "#1f4e79", "heading_size": "fs19", "heading_bold": True,
+        "heading_layout": "quotation_underline",
+        "highlight_background": "#fff3b0",
+        "accent_color": "#d9480f", "accent_font": None, "accent_size": None, "accent_bold": True,
         "table_header_background": "#b0f1ff", "table_header_color": "#004e82",
     },
 }
