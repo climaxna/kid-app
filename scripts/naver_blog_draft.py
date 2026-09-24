@@ -282,7 +282,7 @@ def heading_quotation_component(text: str, layout: str, profile: dict | None = N
 
 
 def quotation_component(lines: list[str], profile: dict | None = None,
-                        experience: bool = False) -> dict:
+                        experience: bool = False, layout: str = "default") -> dict:
     p = profile or {}
     quote_color = p.get("quote_color", p.get("body_color"))
     if experience:
@@ -298,7 +298,7 @@ def quotation_component(lines: list[str], profile: dict | None = None,
                        font_size=p.get("quote_size", p.get("body_size")),
                        font_color=quote_color, parse_bold=True, emphasis=p) for l in lines] or [paragraph("")]
     return {
-        "id": se_id(), "layout": "default", "value": paras,
+        "id": se_id(), "layout": layout, "value": paras,
         "source": None, "align": quote_align, "@ctype": "quotation",
     }
 
@@ -319,6 +319,8 @@ INTERNAL_IMAGE_PLAN_RE = re.compile(r"^<!--\s*image-plan\b.*-->$", re.IGNORECASE
 HEADING_LAYOUTS = ("default", "quotation_line", "quotation_bubble",
                    "quotation_underline", "quotation_postit", "quotation_corner")
 HEADING_LAYOUT_RE = re.compile(r"^<!--\s*heading:\s*([a-z_]+)\s*-->$")
+# 바로 다음 `>` 인용구 하나에만 인용구 스타일을 적용한다 (예: 요약 박스에 quotation_postit).
+BOX_LAYOUT_RE = re.compile(r"^<!--\s*box:\s*([a-z_]+)\s*-->$")
 
 # 콘텐츠 타입별 스타일 프로파일. `.md` 본문 최상단에 <!-- 이름 --> 지시자를 넣으면 적용.
 # 값의 근거는 모두 실제 네이버 에디터/레퍼런스 블로그에서 캡처해 확인한 것.
@@ -337,6 +339,8 @@ STYLE_PROFILES = {
         "body_font": None, "body_color": "#333333", "body_size": None,
         "heading_align": "center",
         "heading_font": None, "heading_color": "#3f6654", "heading_size": "fs19", "heading_bold": True,
+        # 소제목은 네이버 인용구 '밑줄' 스타일(2026-09-24 사용자 선택)
+        "heading_layout": "quotation_underline",
         "quote_align": "center", "quote_font": None, "quote_size": None, "quote_color": "#3f6654",
         "experience_color": "#6b5a45", "warning_color": "#a14f3f",
         "table_align": "center", "table_header_bold": True,
@@ -616,6 +620,7 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
     img_idx = 0
     next_quote_is_experience = False
     heading_layout = p.get("heading_layout")
+    next_box_layout = "default"
 
     def flush_paragraphs():
         if para_buffer:
@@ -641,6 +646,14 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
                 heading_layout = None
             else:
                 print(f"[경고] 알 수 없는 소제목 스타일 '{value}' — 무시")
+            i += 1
+            continue
+        bm = BOX_LAYOUT_RE.match(line.strip())
+        if bm:
+            if bm.group(1) in HEADING_LAYOUTS:
+                next_box_layout = bm.group(1)
+            else:
+                print(f"[경고] 알 수 없는 박스 스타일 '{bm.group(1)}' — 무시")
             i += 1
             continue
         m = IMAGE_PLACEHOLDER_RE.match(line)
@@ -703,9 +716,11 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
                     i += 1
                 flush_paragraphs()
                 components.append(quotation_component(
-                    qlines, profile, experience=next_quote_is_experience
+                    qlines, profile, experience=next_quote_is_experience,
+                    layout=next_box_layout,
                 ))
                 next_quote_is_experience = False
+                next_box_layout = "default"
                 continue
         para_buffer.append(make_para(line))
         i += 1
