@@ -8,6 +8,14 @@ description: 네이버 블로그 주제를 조사해 글을 작성하고, 섬 �
 사용자의 주제 요청으로 먼저 로컬 원고를 완성해 검토받고, 승인된 원고를 기준으로 이미지를
 제작한 뒤 네이버 임시저장까지 진행한다. 최종 발행은 사용자에게 남긴다.
 
+## 육아 글 기본 방식 (2026-09-24~)
+
+`parenting_info`, `parenting_diary`는 이미지 단계를 건너뛴다. 원고, 별도
+`<slug>.image-plan.md`, `blog_pipeline_check.py --stage local` 통과 순서로 진행하고 사용자
+확인을 받는다. 그다음 `naver_blog_draft.py --markdown-file <원고>`로 `--with-images` 없이
+글만 임시저장한다. 결과는 `parenting/_auto_topic_log.md`에 한 줄로 기록한다. 이미지는
+사용자가 따로 요청할 때만 만든다.
+
 ## 승인 단계와 사용량 절약
 
 기본 작업은 다음 세 단계로 나눈다.
