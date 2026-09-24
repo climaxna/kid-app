@@ -267,6 +267,20 @@ def paragraph(text: str, align: str | None = None, bold: bool = False,
     return para
 
 
+def heading_quotation_component(text: str, layout: str, profile: dict | None = None) -> dict:
+    """소제목을 네이버 인용구 스타일(layout) 박스로 만든다."""
+    p = profile or {}
+    align = p.get("heading_align", "center")
+    para = paragraph(
+        text, align=align, bold=p.get("heading_bold", True),
+        font_size=p.get("heading_size", "fs19"), font_color=p.get("heading_color"),
+        font_family=p.get("heading_font"), parse_bold=True, emphasis=p)
+    return {
+        "id": se_id(), "layout": layout, "value": [para],
+        "source": None, "align": align, "@ctype": "quotation",
+    }
+
+
 def quotation_component(lines: list[str], profile: dict | None = None,
                         experience: bool = False) -> dict:
     p = profile or {}
@@ -299,6 +313,12 @@ DIVIDER_RE = re.compile(r"^[\-─—]{3,}$")
 DIRECTIVE_RE = re.compile(r"^<!--\s*(momblog|parenting|travel|info)\s*-->$")
 EXPERIENCE_DIRECTIVE_RE = re.compile(r"^<!--\s*experience\s*-->$")
 INTERNAL_IMAGE_PLAN_RE = re.compile(r"^<!--\s*image-plan\b.*-->$", re.IGNORECASE)
+# 소제목 인용구 스타일 지시자. 이후의 `## 소제목`에 적용되며 `none`이면 일반 소제목으로 돌아간다.
+# layout 값은 에디터 자동저장 캡처로 확인(2026-09-24):
+#   default, quotation_line, quotation_bubble, quotation_underline, quotation_postit, quotation_corner
+HEADING_LAYOUTS = ("default", "quotation_line", "quotation_bubble",
+                   "quotation_underline", "quotation_postit", "quotation_corner")
+HEADING_LAYOUT_RE = re.compile(r"^<!--\s*heading:\s*([a-z_]+)\s*-->$")
 
 # 콘텐츠 타입별 스타일 프로파일. `.md` 본문 최상단에 <!-- 이름 --> 지시자를 넣으면 적용.
 # 값의 근거는 모두 실제 네이버 에디터/레퍼런스 블로그에서 캡처해 확인한 것.
@@ -595,6 +615,7 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
     represent_used = False
     img_idx = 0
     next_quote_is_experience = False
+    heading_layout = p.get("heading_layout")
 
     def flush_paragraphs():
         if para_buffer:
@@ -609,6 +630,17 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
             continue
         if EXPERIENCE_DIRECTIVE_RE.match(line.strip()):
             next_quote_is_experience = True
+            i += 1
+            continue
+        lm = HEADING_LAYOUT_RE.match(line.strip())
+        if lm:
+            value = lm.group(1)
+            if value in HEADING_LAYOUTS:
+                heading_layout = value
+            elif value == "none":
+                heading_layout = None
+            else:
+                print(f"[경고] 알 수 없는 소제목 스타일 '{value}' — 무시")
             i += 1
             continue
         m = IMAGE_PLACEHOLDER_RE.match(line)
@@ -647,6 +679,11 @@ def body_to_components(body_text: str, image_results: list | None = None) -> lis
             continue
         if styled:
             hm = HEADING_RE.match(line.strip())
+            if hm and heading_layout:
+                flush_paragraphs()
+                components.append(heading_quotation_component(hm.group(1), heading_layout, p))
+                i += 1
+                continue
             if hm:
                 para_buffer.append(paragraph(
                     hm.group(1), align=p.get("heading_align", "center"), bold=p.get("heading_bold", True),
