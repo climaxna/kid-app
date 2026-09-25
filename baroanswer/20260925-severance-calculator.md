@@ -81,11 +81,15 @@
 퇴직 전 1년 동안 받은 상여금이 있다면
 빠뜨리지 말고 넣어야 해요.
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-severance/03-compare-average-wage.png`
+
 ## 하루 더 다니면 얼마나 늘까
 
 월급 300만 원이면
 하루 더 다닐 때마다 퇴직금이
 **약 8,000원씩** 늘어나요.
+
+📷 [실제사진 2] 파일: `assets/posts/baroanswer-severance/02-compare-tenure.png`
 
 ***퇴사일을 며칠 조정할 여유가 있다면 계산해 볼 만해요.***
 상여금이 1년에 한 번 나온다면
@@ -116,7 +120,7 @@
 1년을 못 채웠다면
 며칠 더 다녀야 받을 수 있는지도 알려줘요.
 
-📷 [실제사진 1] 파일: `assets/posts/baroanswer-severance/01-calculator.png`
+📷 [실제사진 3] 파일: `assets/posts/baroanswer-severance/01-calculator.png`
 
 퇴직금 계산기
 https://u-jeverse.com/work/severance

@@ -8,6 +8,24 @@
         "퇴직 전 3개월 임금 합계": "9000000",
         "퇴직 전 1년 상여금": "0"
       }
+    },
+    {
+      "file": "02-compare-tenure.png",
+      "url": "https://u-jeverse.com/work/severance",
+      "fill": {
+        "퇴직 전 3개월 임금 합계": "9000000",
+        "퇴직 전 1년 상여금": "0"
+      },
+      "figure": "근속이 길어지면"
+    },
+    {
+      "file": "03-compare-average-wage.png",
+      "url": "https://u-jeverse.com/work/severance",
+      "fill": {
+        "퇴직 전 3개월 임금 합계": "9000000",
+        "퇴직 전 1년 상여금": "3000000"
+      },
+      "figure": "평균임금은 이 세 가지를"
     }
   ]
 }
