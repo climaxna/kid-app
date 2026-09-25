@@ -50,6 +50,8 @@
 
 !!결국 대부분의 사람이 거의 같은 금액을 받아요.!!
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-unemployment-benefit/02-compare-floor.png`
+
 ## 하한액은 최저임금으로 정해져요
 
 하한액은 이렇게 계산해요.
@@ -90,6 +92,8 @@
 
 !!하루 금액은 같아도 오래 일할수록 받는 기간이 두 배까지 늘어나요.!!
 
+📷 [실제사진 2] 파일: `assets/posts/baroanswer-unemployment-benefit/03-compare-period.png`
+
 ## 신청은 퇴사 후 바로 하세요
 
 실업급여는 **퇴사 다음 날부터 12개월 안에**
@@ -123,6 +127,8 @@
 하한이나 상한에 걸렸는지,
 퇴직 전 월급의 몇 % 수준인지까지 보여줘서
 **실업 기간 생활비 계획**을 세우기 좋아요.
+
+📷 [실제사진 3] 파일: `assets/posts/baroanswer-unemployment-benefit/01-calculator.png`
 
 실업급여 계산기
 https://u-jeverse.com/work/unemployment-benefit

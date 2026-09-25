@@ -1,0 +1,13 @@
+{
+  "outDir": "assets/posts/baroanswer-unemployment-benefit",
+  "captures": [
+    { "file": "01-calculator.png", "url": "https://u-jeverse.com/work/unemployment-benefit",
+      "fill": { "퇴직 전 3개월 임금 합계": "9000000", "산정기간 달력일수": "91", "이직 당시 나이": "35", "하루 소정근로시간": "8" } },
+    { "file": "02-compare-floor.png", "url": "https://u-jeverse.com/work/unemployment-benefit",
+      "fill": { "퇴직 전 3개월 임금 합계": "9000000", "산정기간 달력일수": "91", "이직 당시 나이": "35", "하루 소정근로시간": "8" },
+      "figure": "평균임금의 60%와" },
+    { "file": "03-compare-period.png", "url": "https://u-jeverse.com/work/unemployment-benefit",
+      "fill": { "퇴직 전 3개월 임금 합계": "9000000", "산정기간 달력일수": "91", "이직 당시 나이": "35", "하루 소정근로시간": "8" },
+      "figure": "가입기간이 길수록" }
+  ]
+}

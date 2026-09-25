@@ -1,0 +1,10 @@
+{
+  "outDir": "assets/posts/baroanswer-net-salary",
+  "captures": [
+    { "file": "01-calculator.png", "url": "https://u-jeverse.com/tax/net-salary",
+      "fill": { "세전 연봉": "50000000", "월 보험·세금 제외액": "200000", "기본공제 인원": "1" } },
+    { "file": "02-compare-breakdown.png", "url": "https://u-jeverse.com/tax/net-salary",
+      "fill": { "세전 연봉": "50000000", "월 보험·세금 제외액": "200000", "기본공제 인원": "1" },
+      "figure": "월급 100%가 나뉘는" }
+  ]
+}

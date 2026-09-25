@@ -1,0 +1,14 @@
+{
+  "outDir": "assets/posts/baroanswer-parental-leave",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/work/parental-leave",
+      "fill": {
+        "통상임금(월)": "2000000",
+        "육아휴직 기간": "12"
+      },
+      "bottomSelector": "table"
+    }
+  ]
+}

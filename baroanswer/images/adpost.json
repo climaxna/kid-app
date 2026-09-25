@@ -1,0 +1,24 @@
+{
+  "outDir": "assets/posts/baroanswer-adpost",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/blog/adpost",
+      "fill": {
+        "하루 평균 방문자": "1000",
+        "블로그 주제": "맛집·여행",
+        "방문자당 페이지뷰": "1.1"
+      }
+    },
+    {
+      "file": "02-compare-topic.png",
+      "url": "https://u-jeverse.com/blog/adpost",
+      "fill": {
+        "하루 평균 방문자": "1000",
+        "블로그 주제": "맛집·여행",
+        "방문자당 페이지뷰": "1.3"
+      },
+      "figure": "주제를 바꾸면"
+    }
+  ]
+}

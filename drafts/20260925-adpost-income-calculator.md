@@ -94,6 +94,8 @@
 제 블로그는 섬과 배편 이야기라
 맛집 여행 쪽에 들어가요.
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-adpost/02-compare-topic.png`
+
 ## 계산기에 제 블로그를 넣어 봤어요
 
 제가 만든 무료 계산기 사이트 **바로답**에는
@@ -111,6 +113,8 @@
 제 블로그의 방문자당 페이지뷰 **약 1.1회**를 넣었어요.
 계산기가 알려준 한 달 예상은
 **약 49,500원**이었어요.
+
+📷 [실제사진 2] 파일: `assets/posts/baroanswer-adpost/01-calculator.png`
 
 애드포스트 수익 계산기 바로가기
 https://u-jeverse.com/blog/adpost

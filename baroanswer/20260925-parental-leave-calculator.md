@@ -100,6 +100,8 @@
 > 2단계 육아휴직 기간 넣기 (최대 18개월)
 > 결과 구간별 월 지급액과 총 수령액이 한 번에 나와요
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-parental-leave/01-calculator.png`
+
 육아휴직급여 계산기
 https://u-jeverse.com/work/parental-leave
 

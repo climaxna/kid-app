@@ -60,6 +60,8 @@
 | 고용보험 | 0.9% | 35,700원 |
 | 소득세와 지방소득세 | 소득에 따라 다름 | 약 227,490원 |
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-net-salary/02-compare-breakdown.png`
+
 !!국민연금은 올해부터 매년 조금씩 올라요.!!
 2025년 연금개혁으로 전체 보험료율이
 9%에서 **2026년 9.5%**가 됐고
@@ -128,6 +130,8 @@
 항목별로 얼마씩 빠지는지,
 연봉이 5% 오르면 얼마나 달라지는지,
 회사가 쓰는 총비용까지 한 번에 보여줘요.
+
+📷 [실제사진 2] 파일: `assets/posts/baroanswer-net-salary/01-calculator.png`
 
 연봉 실수령액 계산기
 https://u-jeverse.com/tax/net-salary
