@@ -1,17 +1,8 @@
 {
   "outDir": "assets/posts/baroanswer-severance",
-  "thumbnail": {
-    "file": "01-thumbnail.png",
-    "lines": ["1년에서 4일 모자라면", "퇴직금 0원"],
-    "display": "8,812,388",
-    "sub": "월급 300만 원 3년 다니면 이만큼",
-    "badge": "바로답 퇴직금 계산기",
-    "stamp": "'26 9 25",
-    "background": null
-  },
   "captures": [
     {
-      "file": "02-calculator.png",
+      "file": "01-calculator.png",
       "url": "https://u-jeverse.com/work/severance",
       "fill": {
         "퇴직 전 3개월 임금 합계": "9000000",

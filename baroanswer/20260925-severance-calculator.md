@@ -1,8 +1,6 @@
 # 퇴직금 계산 방법 2026 월급 300만 원 3년 다니면 얼마 받을까
 
 <!-- info -->
-📷 [생성이미지 1] 파일: `assets/posts/baroanswer-severance/01-thumbnail.png`
-
 퇴사를 앞두면 가장 먼저 계산해 보는 게
 **"내 퇴직금 얼마 나오지?"**예요.
 
@@ -118,7 +116,7 @@
 1년을 못 채웠다면
 며칠 더 다녀야 받을 수 있는지도 알려줘요.
 
-📷 [실제사진 1] 파일: `assets/posts/baroanswer-severance/02-calculator.png`
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-severance/01-calculator.png`
 
 퇴직금 계산기
 https://u-jeverse.com/work/severance
