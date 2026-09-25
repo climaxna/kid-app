@@ -1,0 +1,14 @@
+{
+  "outDir": "assets/posts/baroanswer-eitc",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/tax/eitc",
+      "fill": {
+        "가구원 총소득": "40000000",
+        "가구원 재산 합계": "100000000",
+        "자녀장려금 대상 자녀 수": "1"
+      }
+    }
+  ]
+}

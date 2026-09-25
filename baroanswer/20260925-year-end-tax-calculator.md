@@ -162,6 +162,8 @@
 표준세액공제와 특별세액공제 중
 어느 쪽이 적용됐는지까지 보여줘요.
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-year-end-tax/01-calculator.png`
+
 연말정산 환급금 계산기
 https://u-jeverse.com/tax/year-end
 

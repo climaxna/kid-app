@@ -150,6 +150,8 @@
 근로장려금 기준을 넘었어도
 자녀장려금은 받을 수 있는지까지 알려줘요.
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-eitc/01-calculator.png`
+
 근로장려금 자녀장려금 계산기
 https://u-jeverse.com/tax/eitc
 
