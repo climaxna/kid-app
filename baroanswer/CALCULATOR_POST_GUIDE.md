@@ -54,10 +54,28 @@ cd /c/portal && npx --yes tsx <스크래치 경로>/example.ts
 - 계산기 없이 읽어도 쓸모 있는 글이어야 한다. 제도 설명이 주인공이고 계산기는 도구다.
 - 도입 첫 문장과 마무리 문장은 글마다 다르게 쓴다. 같은 틀이 매일 반복되면 네이버가 도배로 볼 수 있다.
 
-## 5. 저장
+## 5. 이미지 (AI 이미지 없이 자동)
+
+계산기 글에는 썸네일 1장과 실제 계산기 화면 캡처 1장을 넣는다. 한글은 코드로 넣어서 틀리지 않게 한다.
+
+1. `baroanswer/images/{도구 slug}.json`에 spec을 만든다. 형식은 `scripts/baroanswer_images.example.json`을 따른다.
+   - `outDir`: `assets/posts/baroanswer-{도구 slug}`
+   - `thumbnail.lines`: 제목의 궁금증을 2줄로 쓴다. 한 줄에 12자 안팎으로 한다. 예: `["1년에서 4일 모자라면", "퇴직금 0원"]`
+   - `thumbnail.display`: 계산기 액정에 띄울 대표 숫자. **사이트 함수로 뽑은 값과 똑같이** 쓴다. 예: `"8,812,388"`
+   - `thumbnail.sub`: 액정 숫자를 설명하는 한 줄. 20자 안팎으로 쓴다. 예: `"월급 300만 원 3년 다니면 이만큼"`
+   - `thumbnail.badge`: `"바로답 {계산기 이름}"`
+   - `thumbnail.stamp`: 작성일을 `"'26 9 25"` 형식으로 쓴다.
+   - `captures[0]`: 계산기 URL과 `fill`(입력칸 라벨과 값). 라벨은 계산기 코드의 `label="..."`와 정확히 같게 쓴다. 캡처 결과가 글의 예시 숫자와 같아지도록 값을 넣는다.
+2. `node scripts/baroanswer_images.mjs baroanswer/images/{도구 slug}.json`을 실행한다.
+3. 만든 두 이미지를 **반드시 직접 열어 확인**한다. 글자가 깨지지 않았는지, 액정 숫자와 캡처 결과 숫자가 글의 숫자와 같은지 본다. 다르면 spec을 고쳐 다시 만든다.
+4. 원고에 표시를 넣는다.
+   - 썸네일: `<!-- info -->` 바로 다음 줄에 `📷 [생성이미지 1] 파일: \`assets/posts/baroanswer-{slug}/01-thumbnail.png\``를 넣는다. 첫 이미지가 대표 이미지가 된다.
+   - 캡처: 계산기 소개 부분에서 `<!-- box: quotation_postit -->` 박스 설명이 끝나고 계산기 링크가 나오기 전에 `📷 [실제사진 1] 파일: \`assets/posts/baroanswer-{slug}/02-calculator.png\``를 넣는다.
+
+## 6. 저장
 
 1. `python -X utf8 scripts/blog_pipeline_check.py baroanswer/<파일>.md --content-type ferry_info --stage local`
-2. `python -X utf8 scripts/naver_blog_draft.py --markdown-file baroanswer/<파일>.md` (이미지 없이, 한 번만)
+2. `python -X utf8 scripts/naver_blog_draft.py --markdown-file baroanswer/<파일>.md --with-images` (한 번만)
 3. 카테고리는 사용자가 네이버에서 "생활계산기"로 직접 옮긴다.
 4. `CALCULATOR_CATALOG.md`의 상태를 `임시저장`으로 바꾸고 원고 파일명을 적는다.
 5. 발행은 하지 않는다.
