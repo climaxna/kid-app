@@ -9,7 +9,7 @@
 |---|---|---|---|---|---|
 | 1 | 애드포스트 수익 계산기 | /blog/adpost | 온라인 수익 1편, 임시저장 완료 | 임시저장 | drafts/20260925-adpost-income-calculator.md |
 | 2 | 연봉 실수령액 계산기 | /tax/net-salary | 검색 수요 최상위, 직장인 전반 | 대기 |  |
-| 3 | 육아휴직급여 계산기 | /work/parental-leave | 육아 독자와 겹침, 육아 글에서 링크 | 원고 (사이트 7개월 이후 80%·하한 70만 원 수정 후 저장) | baroanswer/20260925-parental-leave-calculator.md |
+| 3 | 육아휴직급여 계산기 | /work/parental-leave | 육아 독자와 겹침, 육아 글에서 링크 | 임시저장 (사이트 수정 배포 후) | baroanswer/20260925-parental-leave-calculator.md |
 | 4 | 퇴직금 계산기 | /work/severance | 퇴사 시즌 상시 수요 | 대기 |  |
 | 5 | 실업급여 계산기 | /work/unemployment-benefit | 상시 수요, 제도 변경 잦음 | 대기 |  |
 | 6 | 아기 개월수·백일·돌 계산기 | /date/baby-days | 육아 독자와 겹침, 백일 돌 준비 | 대기 |  |
