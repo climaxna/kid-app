@@ -15,9 +15,9 @@
 
 | 순위 | 계산기 | 경로 | 대표 검색어 | 관심도 | 네이버 자체 계산기 | 시즌 | 글 각도 | 상태 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 연봉 실수령액 계산기 | /tax/net-salary | 연봉 실수령액, 연봉 4000 실수령액 | 최상 | 있음 | 연중 | 연봉별 실수령액 표로 롱테일 검색어를 한 번에 잡기 | 원고 (사이트 수정 배포 후 저장) baroanswer/20260925-net-salary-calculator.md |
-| 2 | 실업급여 계산기 | /work/unemployment-benefit | 실업급여 계산, 실업급여 조건 | 최상 | 없음 | 연중 | 조건과 신청 절차가 주인공, 계산기는 도구 | 원고 (사이트 수정 배포 후 저장) baroanswer/20260925-unemployment-benefit-calculator.md |
-| 3 | 퇴직금 계산기 | /work/severance | 퇴직금 계산기, 퇴직금 계산 | 최상 | 없음 | 연중 | 근속·평균임금 예시, 퇴직소득세까지 연결 | 원고 (사이트 수정 배포 후 저장) baroanswer/20260925-severance-calculator.md |
+| 1 | 연봉 실수령액 계산기 | /tax/net-salary | 연봉 실수령액, 연봉 4000 실수령액 | 최상 | 있음 | 연중 | 연봉별 실수령액 표로 롱테일 검색어를 한 번에 잡기 | 임시저장 baroanswer/20260925-net-salary-calculator.md |
+| 2 | 실업급여 계산기 | /work/unemployment-benefit | 실업급여 계산, 실업급여 조건 | 최상 | 없음 | 연중 | 조건과 신청 절차가 주인공, 계산기는 도구 | 임시저장 baroanswer/20260925-unemployment-benefit-calculator.md |
+| 3 | 퇴직금 계산기 | /work/severance | 퇴직금 계산기, 퇴직금 계산 | 최상 | 없음 | 연중 | 근속·평균임금 예시, 퇴직소득세까지 연결 | 임시저장 baroanswer/20260925-severance-calculator.md |
 | 4 | 근로장려금·자녀장려금 계산기 | /tax/eitc | 근로장려금 자녀장려금 | 최상 | 없음 | 5월, 9월, 기한 후 11월 | 육아 독자와 겹침, 신청 기한 강조 | 대기 |
 | 5 | 연말정산 환급금 계산기 | /tax/year-end | 연말정산 환급금 계산 | 최상 | 없음 | 10월 말~2월 | 11월 미리보기 서비스 시기에 맞춰 발행 | 대기 |
 | 6 | 주휴수당 계산기 | /work/weekly-holiday-pay | 주휴수당 계산 | 상 | 없음 | 연중 | 아르바이트 대상, 조건 15시간 기준 | 대기 |
