@@ -1,0 +1,13 @@
+{
+  "outDir": "assets/posts/baroanswer-weekly-holiday-pay",
+  "captures": [
+    { "file": "01-calculator.png", "url": "https://u-jeverse.com/work/weekly-holiday-pay",
+      "fill": { "시급": "10320", "하루 근무시간": "5", "주 근무일": "4" } },
+    { "file": "02-compare-hours.png", "url": "https://u-jeverse.com/work/weekly-holiday-pay",
+      "fill": { "시급": "10320", "하루 근무시간": "5", "주 근무일": "4" },
+      "figure": "주 근로시간에 따른 주급" },
+    { "file": "03-compare-breakdown.png", "url": "https://u-jeverse.com/work/weekly-holiday-pay",
+      "fill": { "시급": "10320", "하루 근무시간": "5", "주 근무일": "4" },
+      "figure": "한 주 임금은 이렇게" }
+  ]
+}
