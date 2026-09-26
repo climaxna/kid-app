@@ -7,3 +7,4 @@
 - 2026-09-26 | 차박 캠핑 차량용품 | 알피쿨 MK35, 에어르 베놈, 벤딕트 차박매트 | affiliate/posts/20260926-car-ferry-camping-gear.md | 임시저장 logNo 224423403030
 - 2026-09-26 | 이유식 준비물 하이체어 액세서리 | 루넬 트레이 커버, 푸드캐처, 이지업 하네스, 바맘 야채 큐브 | affiliate/posts/20260926-weaning-tripp-trapp-gear.md | 임시저장 logNo 224423403046
 - 2026-09-26 | 섬 여행 패키지 | 홍도 흑산도 3종, 울릉도 2종 | affiliate/posts/20260926-island-tour-package-vs-diy.md | 임시저장 logNo 224423403056
+- 2026-09-26 | 음식물처리기 | 린클 그래비티W, 미닉스 더플렌더 MAX, 쿠쿠 에코웨일 2L | affiliate/posts/20260926-food-waste-processor-guide.md | 임시저장 logNo 224423431901
