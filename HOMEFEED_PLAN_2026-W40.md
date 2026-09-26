@@ -30,3 +30,16 @@
 ## 다음 주 점검
 
 10/5에 통계 API로 이번 주 홈판 유입과 글별 첫날 조회를 뽑아 `HOMEFEED_ANALYSIS`에 이어 적는다.
+
+## 진행 상황 (2026-09-26)
+
+| 날짜 | 원고 | 네이버 임시저장 |
+|---|---|---|
+| 9/28 | drafts/20260928-island-travel-subsidy-claim.md | logNo 224423134059 |
+| 9/29 | parenting/baby-ferry-boarding-age-fare-2026.md | logNo 224423134069 |
+| 9/30 | drafts/20260930-october-long-weekend-island-2n3d.md | logNo 224423134074 |
+| 10/1 | parenting/baby-4month-weaning-start-timing-2026.md | logNo 224423134083 |
+| 10/2 | drafts/20261002-october-seafood-island-trip.md | logNo 224423134094 |
+| 10/3 | 실사용기: 사용자 경험과 사진을 받은 뒤 작성 | 미작성 |
+
+모두 이미지 없이 글만 저장했다. 썸네일과 본문 이미지는 사용자가 만든다.
