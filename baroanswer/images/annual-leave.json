@@ -1,0 +1,22 @@
+{
+  "outDir": "assets/posts/baroanswer-annual-leave",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/date/annual-leave",
+      "fill": {
+        "입사일": "2025-10-01",
+        "기준일": "2026-09-01"
+      }
+    },
+    {
+      "file": "02-compare-fiscal.png",
+      "url": "https://u-jeverse.com/date/annual-leave",
+      "fill": {
+        "입사일": "2025-07-01",
+        "기준일": "2025-12-31"
+      },
+      "figure": "입사일 기준 vs 회계연도 기준"
+    }
+  ]
+}
