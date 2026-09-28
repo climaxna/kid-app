@@ -23,10 +23,10 @@
 표와 예시의 숫자는 머리로 계산하지 않는다. 사이트의 계산 함수를 그대로 호출해서 뽑는다. 그래야 글과 계산기 결과가 어긋나지 않는다.
 
 ```bash
-cd /c/portal && npx --yes tsx <스크래치 경로>/example.ts
+npx --yes tsx --tsconfig C:/portal/tsconfig.json <스크래치 경로>/example.ts
 ```
 
-`example.ts`에서는 `C:/portal/src/lib/...`를 import한다. 경로 별칭(`@/`) 때문에 반드시 `C:\portal`에서 실행한다.
+`example.ts`에서는 `C:/portal/src/lib/...`를 import한다. `--tsconfig` 옵션이 경로 별칭(`@/`)을 풀어 주므로 `cd /c/portal`을 쓰지 않는다. 폴더 이동과 명령을 함께 쓰면 자동 작업이 매번 승인 창에서 멈춘다.
 
 ## 3. 글 구조
 
