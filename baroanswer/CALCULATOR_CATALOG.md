@@ -21,7 +21,7 @@
 | 4 | 근로장려금·자녀장려금 계산기 | /tax/eitc | 근로장려금 자녀장려금 | 최상 | 없음 | 5월, 9월, 기한 후 11월 | 육아 독자와 겹침, 신청 기한 강조 | 임시저장 baroanswer/20260925-eitc-calculator.md |
 | 5 | 연말정산 환급금 계산기 | /tax/year-end | 연말정산 환급금 계산 | 최상 | 없음 | 10월 말~2월 | 11월 미리보기 서비스 시기에 맞춰 발행 | 임시저장 baroanswer/20260925-year-end-tax-calculator.md |
 | 6 | 주휴수당 계산기 | /work/weekly-holiday-pay | 주휴수당 계산 | 상 | 없음 | 연중 | 아르바이트 대상, 조건 15시간 기준 | 임시저장 baroanswer/20260926-weekly-holiday-pay-calculator.md |
-| 7 | 연차 발생일수 계산기 | /date/annual-leave | 연차 계산, 연차 발생 | 상 | 없음 | 연중 | 입사 1년 미만과 이후 구분 | 원고 (사이트 수정 커밋 0750253, push 후 캡처·임시저장) baroanswer/20260927-annual-leave-calculator.md |
+| 7 | 연차 발생일수 계산기 | /date/annual-leave | 연차 계산, 연차 발생 | 상 | 없음 | 연중 | 입사 1년 미만과 이후 구분 | 임시저장 baroanswer/20260927-annual-leave-calculator.md |
 | 8 | 연차수당 계산기 | /work/annual-leave-pay | 연차수당 계산 | 상 | 없음 | 연말 | 퇴사·연말 미사용 연차 | 대기 |
 | 9 | 국민연금 예상수령액 계산기 | /pension/national | 국민연금 예상수령액 | 상 | 없음 | 연중 | 중장년 홈판 반응 좋음 | 대기 |
 | 10 | 부동산 중개보수 계산기 | /estate/brokerage-fee | 부동산 복비 계산, 중개수수료 | 상 | 없음 | 이사철 3월 9월 | 이사 시즌 발행 | 대기 |
