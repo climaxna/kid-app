@@ -1,0 +1,39 @@
+{
+  "outDir": "assets/posts/baroanswer-annual-leave-pay",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/work/annual-leave-pay",
+      "fill": {
+        "계속근로 연수": "3",
+        "1년간 출근율": "100",
+        "이미 쓴 연차": "5",
+        "월 통상임금": "3000000",
+        "월 통상임금 산정시간": "209",
+        "하루 소정근로시간": "8"
+      }
+    },
+    {
+      "file": "02-compare-wage.png",
+      "url": "https://u-jeverse.com/work/annual-leave-pay",
+      "fill": {
+        "계속근로 연수": "3",
+        "1년간 출근율": "100",
+        "이미 쓴 연차": "5",
+        "월 통상임금": "3000000"
+      },
+      "figure": "같은 일수라도 통상임금에 따라"
+    },
+    {
+      "file": "03-compare-tenure.png",
+      "url": "https://u-jeverse.com/work/annual-leave-pay",
+      "fill": {
+        "계속근로 연수": "3",
+        "1년간 출근율": "100",
+        "이미 쓴 연차": "5",
+        "월 통상임금": "3000000"
+      },
+      "figure": "근속이 쌓이면 연차는"
+    }
+  ]
+}
