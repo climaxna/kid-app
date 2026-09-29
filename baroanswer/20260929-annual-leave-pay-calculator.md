@@ -82,6 +82,8 @@
 월 500만 원은 약 211만 원이에요.
 ==같은 11일이라도 두 배 차이==가 나요.
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-annual-leave-pay/02-compare-wage.png`
+
 ## 근속이 길수록 연차도 수당도 늘어요
 
 1년을 채우면 15일이 생기고
@@ -101,6 +103,8 @@
 
 **25일이 상한**이라 21년차 뒤로는
 더 다녀도 연차와 수당이 늘지 않아요.
+
+📷 [실제사진 2] 파일: `assets/posts/baroanswer-annual-leave-pay/03-compare-tenure.png`
 
 ***퇴사일 하루로 172만 원이 갈리기도 해요.***
 연차 15일은 1년을 마친 다음 날 생겨요.
@@ -189,6 +193,8 @@
 개근한 달을 넣는 칸이 따로 나와요.
 통상임금만 바꿨을 때 달라지는 금액도
 막대그래프로 함께 보여줘요.
+
+📷 [실제사진 3] 파일: `assets/posts/baroanswer-annual-leave-pay/01-calculator.png`
 
 연차수당 계산기
 https://u-jeverse.com/work/annual-leave-pay
