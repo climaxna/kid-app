@@ -11,3 +11,4 @@
 - 2026-09-27 | 김치냉장고 | 삼성 김치플러스 뚜껑형 221L RP22C3111Z1, 비스포크 키친핏 3도어 313L RQ33DB74C1AP, 비스포크 AI 4도어 490L RK70F49M2ZD | affiliate/posts/20260927-kimchi-refrigerator-guide.md | 임시저장 logNo 224424128833
 - 2026-09-28 | 로봇청소기 | 삼성 비스포크 AI 스팀 울트라 VR90F01AAG, 스팀 울트라 자동 급배수 VR90F01SAG, 로보락 Qrevo Curv 2 Flow | affiliate/posts/20260928-robot-vacuum-guide.md | 임시저장 logNo 224424797554
 - 2026-09-29 | 대형 TV 75 85인치 | 삼성 Mini LED 75인치 KU75MH75AFXKR, LG QNED 75QNED75AEA 사운드바 포함, 삼성 Mini LED 85인치 KU85MH75AFXKR | affiliate/posts/20260929-living-room-tv-size-guide.md | 임시저장 logNo 224425906976
+- 2026-09-30 | 탄소매트 전기매트 | 뜨숨 1인용 탄소매트 싱글, 가디브 탄소매트 SS, 귀뚜라미 카본매트 KDM-98 싱글 | affiliate/posts/20260930-carbon-mat-electricity-guide.md | 임시저장 logNo 224427058415
