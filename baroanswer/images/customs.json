@@ -1,0 +1,26 @@
+{
+  "outDir": "assets/posts/baroanswer-customs",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/tax/customs",
+      "fill": {
+        "물품가격": "160",
+        "국제배송비": "15",
+        "원달러 환율": "1400",
+        "관세율": "0"
+      }
+    },
+    {
+      "file": "02-compare-tax.png",
+      "url": "https://u-jeverse.com/tax/customs",
+      "fill": {
+        "물품가격": "160",
+        "국제배송비": "15",
+        "원달러 환율": "1400",
+        "관세율": "0"
+      },
+      "figure": "과세가격 대비 세금"
+    }
+  ]
+}

@@ -26,11 +26,11 @@
 | 9 | 국민연금 예상수령액 계산기 | /pension/national | 국민연금 예상수령액 | 상 | 없음 | 연중 | 중장년 홈판 반응 좋음 | 임시저장 baroanswer/20260930-national-pension-calculator.md |
 | 10 | 부동산 중개보수 계산기 | /estate/brokerage-fee | 부동산 복비 계산, 중개수수료 | 상 | 없음 | 이사철 3월 9월 | 이사 시즌 발행 | 대기 |
 | 11 | 주택청약 가점 계산기 | /estate/subscription-score | 청약 가점 계산 | 상 | 없음 | 분양 시즌 | 가점표 항목별 설명 | 대기 |
-| 12 | 해외직구 관세·부가세 계산기 | /tax/customs | 해외직구 관세 계산 | 상 | 없음 | 11월 블랙프라이데이 | 면세 한도 150달러 200달러 구분 | 원고 (사이트 수정 커밋 82d5a7a, push 후 캡처·임시저장) baroanswer/20260930-formula-direct-purchase-customs-calculator.md |
+| 12 | 해외직구 관세·부가세 계산기 | /tax/customs | 해외직구 관세 계산 | 상 | 없음 | 11월 블랙프라이데이 | 면세 한도 150달러 200달러 구분 | 임시저장 baroanswer/20260930-formula-direct-purchase-customs-calculator.md |
 | 13 | 자동차세 계산기 | /auto/car-tax | 자동차세 연납 할인 | 상 | 없음 | 12월 말~1월 | 연납 할인율과 신청 기간 | 대기 |
 | 14 | 출산 예정일 계산기 | /health/due-date | 출산 예정일 계산 | 상 | 있음 | 연중 | 육아 독자와 겹침, 임신 주수표 | 대기 |
 | 15 | 배란일·가임기 계산기 | /health/ovulation | 배란일 계산기 | 상 | 있음 | 연중 | 임신 준비, 건강 정보라 공식 근거 필수 | 대기 |
-| 16 | 아기 개월수·백일·돌 계산기 | /date/baby-days | 아기 개월수 계산, 백일 계산 | 상 | 없음 | 연중 | 육아 독자와 겹침, 백일 돌 준비 | 원고 (사이트 수정 커밋 22fcf28, push 후 캡처·임시저장) baroanswer/20260930-baby-100days-calculator.md |
+| 16 | 아기 개월수·백일·돌 계산기 | /date/baby-days | 아기 개월수 계산, 백일 계산 | 상 | 없음 | 연중 | 육아 독자와 겹침, 백일 돌 준비 | 임시저장 baroanswer/20260930-baby-100days-calculator.md |
 | 17 | 육아휴직급여 계산기 | /work/parental-leave | 육아휴직급여 계산 | 상 | 없음 | 연중 | 완료 | 임시저장 |
 | 18 | 종합소득세 계산기 | /tax/income-tax | 종합소득세 계산 | 상 | 없음 | 5월 | 4월 말 발행 | 대기 |
 | 19 | 시급·월급 변환기 | /work/wage | 시급 월급 계산, 최저임금 월급 | 상 | 있음 | 8월 최저임금 결정 후 | 2027 최저임금 월급 환산 | 대기 |
