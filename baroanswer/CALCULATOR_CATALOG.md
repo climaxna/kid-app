@@ -26,11 +26,11 @@
 | 9 | 국민연금 예상수령액 계산기 | /pension/national | 국민연금 예상수령액 | 상 | 없음 | 연중 | 중장년 홈판 반응 좋음 | 임시저장 baroanswer/20260930-national-pension-calculator.md |
 | 10 | 부동산 중개보수 계산기 | /estate/brokerage-fee | 부동산 복비 계산, 중개수수료 | 상 | 없음 | 이사철 3월 9월 | 이사 시즌 발행 | 대기 |
 | 11 | 주택청약 가점 계산기 | /estate/subscription-score | 청약 가점 계산 | 상 | 없음 | 분양 시즌 | 가점표 항목별 설명 | 대기 |
-| 12 | 해외직구 관세·부가세 계산기 | /tax/customs | 해외직구 관세 계산 | 상 | 없음 | 11월 블랙프라이데이 | 면세 한도 150달러 200달러 구분 | 대기 |
+| 12 | 해외직구 관세·부가세 계산기 | /tax/customs | 해외직구 관세 계산 | 상 | 없음 | 11월 블랙프라이데이 | 면세 한도 150달러 200달러 구분 | 원고 (사이트 수정 커밋 82d5a7a, push 후 캡처·임시저장) baroanswer/20260930-formula-direct-purchase-customs-calculator.md |
 | 13 | 자동차세 계산기 | /auto/car-tax | 자동차세 연납 할인 | 상 | 없음 | 12월 말~1월 | 연납 할인율과 신청 기간 | 대기 |
 | 14 | 출산 예정일 계산기 | /health/due-date | 출산 예정일 계산 | 상 | 있음 | 연중 | 육아 독자와 겹침, 임신 주수표 | 대기 |
 | 15 | 배란일·가임기 계산기 | /health/ovulation | 배란일 계산기 | 상 | 있음 | 연중 | 임신 준비, 건강 정보라 공식 근거 필수 | 대기 |
-| 16 | 아기 개월수·백일·돌 계산기 | /date/baby-days | 아기 개월수 계산, 백일 계산 | 상 | 없음 | 연중 | 육아 독자와 겹침, 백일 돌 준비 | 대기 |
+| 16 | 아기 개월수·백일·돌 계산기 | /date/baby-days | 아기 개월수 계산, 백일 계산 | 상 | 없음 | 연중 | 육아 독자와 겹침, 백일 돌 준비 | 원고 (사이트 수정 커밋 22fcf28, push 후 캡처·임시저장) baroanswer/20260930-baby-100days-calculator.md |
 | 17 | 육아휴직급여 계산기 | /work/parental-leave | 육아휴직급여 계산 | 상 | 없음 | 연중 | 완료 | 임시저장 |
 | 18 | 종합소득세 계산기 | /tax/income-tax | 종합소득세 계산 | 상 | 없음 | 5월 | 4월 말 발행 | 대기 |
 | 19 | 시급·월급 변환기 | /work/wage | 시급 월급 계산, 최저임금 월급 | 상 | 있음 | 8월 최저임금 결정 후 | 2027 최저임금 월급 환산 | 대기 |
@@ -45,10 +45,10 @@
 | 28 | 내 연봉은 상위 몇 %? | /rank/salary | 내 연봉 상위 몇 퍼센트 | 중 | 없음 | 연중 | 홈판용 궁금증형 | 대기 |
 | 29 | 내 순자산은 상위 몇 %? | /rank/net-worth | 순자산 상위 몇 퍼센트 | 중 | 없음 | 연중 | 홈판용 궁금증형 | 대기 |
 | 30 | 주식 평단가 계산기 | /stock/average-price | 주식 평단가 계산 | 중 | 없음 | 연중 | 물타기 계산기와 묶어서 | 대기 |
-| 31 | 고속도로 통행료·유류비 계산기 | /auto/toll | 고속도로 통행료 유류비 | 중 | 없음 | 명절 휴가철 | 배편 글과 서로 연결 | 대기 |
+| 31 | 고속도로 통행료·유류비 계산기 | /auto/toll | 고속도로 통행료 유류비 | 중 | 없음 | 명절 휴가철 | 배편 글과 서로 연결 | 임시저장 baroanswer/20260930-jeju-port-road-cost-calculator.md, 20260930-ulleung-trip-cost-calculator.md |
 | 32 | 통상임금·평균임금 계산기 | /work/ordinary-wage | 통상임금 계산 | 중 | 없음 | 연중 | 육아휴직 퇴직금 글과 연결 | 대기 |
 | 33 | 출산전후휴가급여 계산기 | /work/maternity-leave | 출산휴가급여 | 중 | 없음 | 연중 | 미숙아 선택지 추가 후 작성 | 대기 |
-| 34 | 분유량 계산기 | /health/baby-feeding | 분유량 계산 | 중 | 없음 | 연중 | 육아 독자와 겹침, 건강 근거 필수 | 대기 |
+| 34 | 분유량 계산기 | /health/baby-feeding | 분유량 계산 | 중 | 없음 | 연중 | 육아 독자와 겹침, 건강 근거 필수 | 임시저장 baroanswer/20260930-baby-formula-amount-calculator.md |
 | 35 | 애드포스트 수익 계산기 | /blog/adpost | 애드포스트 수익 | 중 | 없음 | 연중 | 완료 | 임시저장 |
 
 ## 발행 달력 (시즌이 순위보다 우선)
@@ -195,7 +195,7 @@
 | 표준체중 계산기 | /health/ideal-weight | 대기 |
 | 허리-키 비율 계산기 | /health/waist-height | 대기 |
 | 목표 심박수 계산기 | /health/heart-rate | 대기 |
-| 만 나이·세는나이 계산기 | /date/age | 대기 |
+| 만 나이·세는나이 계산기 | /date/age | 임시저장 baroanswer/20260930-age-based-child-benefits-calculator.md |
 | 날짜 차이·며칠째 계산기 | /date/date-difference | 대기 |
 | 디데이 계산기 | /date/d-day | 대기 |
 | 근무일수 계산기 | /date/workdays | 대기 |

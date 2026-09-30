@@ -1,0 +1,14 @@
+{
+  "outDir": "assets/posts/baroanswer-age",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/date/age",
+      "selector": "section[aria-label=\"날짜 계산 입력과 결과\"]",
+      "fill": {
+        "생년월일": "2025-05-20",
+        "기준일": "2026-09-30"
+      }
+    }
+  ]
+}

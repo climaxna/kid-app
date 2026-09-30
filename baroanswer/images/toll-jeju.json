@@ -1,0 +1,31 @@
+{
+  "outDir": "assets/posts/baroanswer-toll-jeju",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/auto/toll",
+      "selector": "section[aria-label=\"자동차 계산 입력과 결과\"]",
+      "fill": {
+        "편도 고속도로 거리": "300",
+        "편도 일반도로 거리": "20",
+        "차량 실연비": "12",
+        "연료 1L 가격": "1856",
+        "여정": "왕복",
+        "나눠 낼 인원": "4"
+      }
+    },
+    {
+      "file": "02-compare-split.png",
+      "url": "https://u-jeverse.com/auto/toll",
+      "fill": {
+        "편도 고속도로 거리": "300",
+        "편도 일반도로 거리": "20",
+        "차량 실연비": "12",
+        "연료 1L 가격": "1856",
+        "여정": "왕복",
+        "나눠 낼 인원": "4"
+      },
+      "figure": "몇 명이 나눠 타느냐"
+    }
+  ]
+}
