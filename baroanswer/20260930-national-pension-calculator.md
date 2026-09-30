@@ -98,6 +98,8 @@
 가입기간을 늘리는 게
 연금을 키우는 가장 확실한 방법이에요.
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-national-pension/02-compare-years.png`
+
 ## 소득이 2배면 연금도 2배일까
 
 30년 가입으로 두고
@@ -116,6 +118,8 @@
 A값이 모두에게 똑같이 들어가기 때문이에요.
 소득이 적을수록 낸 것에 비해 많이 받는
 **소득 재분배** 구조예요.
+
+📷 [실제사진 2] 파일: `assets/posts/baroanswer-national-pension/03-compare-income.png`
 
 !!월 800만 원을 벌어도 659만 원과 같아요.!!
 기준소득월액에는 상한이 있어서
@@ -196,6 +200,8 @@ A값이 모두에게 똑같이 들어가기 때문이에요.
 가입기간을 늘리거나 소득이 다를 때
 연금이 어떻게 바뀌는지도
 그래프로 함께 보여줘요.
+
+📷 [실제사진 3] 파일: `assets/posts/baroanswer-national-pension/01-calculator.png`
 
 국민연금 예상수령액 계산기
 https://u-jeverse.com/pension/national
