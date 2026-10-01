@@ -52,8 +52,9 @@ def load_plan(plan_path: Path, body_lines: list[str]) -> dict:
         if insert != "top" and insert not in stripped:
             raise ValueError(f"원고에 없는 삽입 위치: {insert}")
         item["insert"] = insert
-    if not (ROOT / plan["reference"]).is_file():
-        raise ValueError(f"레퍼런스 이미지 없음: {plan['reference']}")
+    for raw in [plan["reference"], *plan.get("host_references", [])]:
+        if not (ROOT / raw).is_file():
+            raise ValueError(f"레퍼런스 이미지 없음: {raw}")
     return plan
 
 
@@ -72,6 +73,7 @@ CODEX_PROMPT = """이 폴더에서 블로그 이미지를 만든다. 사용자�
 2. plan.json과 manuscript.md(내용 참고용)를 읽는다.
 3. plan.json의 images를 순서대로 하나씩 내장 이미지 생성 도구로 만든다. 각 항목의 prompt와 text를 정확히 따른다.
    첨부한 이미지(reference 파일)는 컨셉 레퍼런스다. 분위기, 색, 질감만 참고하고 베끼지 않는다.
+   host-로 시작하는 첨부 이미지는 진행자 얼굴 기준이다. 항목 prompt에 진행자가 나오면 이 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)을 유지하고, 옷과 포즈와 배경은 그 이미지 컨셉에 맞게 새로 그린다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
 4. 생성된 PNG를 이 폴더에 각 항목의 file 이름으로 복사해 저장한다. 다른 파일은 만들거나 고치지 않는다.
 5. 파이썬 이미지 라이브러리, 외부 API, API 키를 쓰지 않는다. 내장 이미지 생성 도구와 파일 복사만 쓴다.
 6. 한 장이 실패하면 한 번만 다시 시도하고, 그래도 안 되면 건너뛴다.
@@ -88,16 +90,23 @@ def prepare_job(md_path: Path, plan: dict, todo: list[dict]) -> Path:
     shutil.copy2(md_path, job / "manuscript.md")
     reference = ROOT / plan["reference"]
     shutil.copy2(reference, job / f"reference{reference.suffix}")
+    hosts = []
+    for i, raw in enumerate(plan.get("host_references", []), 1):
+        src = ROOT / raw
+        name = f"host-{i}{src.suffix}"
+        shutil.copy2(src, job / name)
+        hosts.append(name)
     local_plan = {
         "concept": plan.get("concept"),
         "reference": f"reference{reference.suffix}",
+        "host_references": hosts,
         "images": [{**item, "file": Path(item["file"]).name} for item in todo],
     }
     (job / "plan.json").write_text(json.dumps(local_plan, ensure_ascii=False, indent=2), encoding="utf-8")
     return job
 
 
-def run_codex(job: Path, reference_name: str, count: int) -> tuple[int, float, str]:
+def run_codex(job: Path, reference_names: list[str], count: int) -> tuple[int, float, str]:
     CODEX_LOG_DIR.mkdir(parents=True, exist_ok=True)
     log_path = CODEX_LOG_DIR / f"{job.name}.log"
     env = {k: v for k, v in os.environ.items() if k not in SECRET_ENV}
@@ -107,7 +116,7 @@ def run_codex(job: Path, reference_name: str, count: int) -> tuple[int, float, s
         "--sandbox", "workspace-write",
         "-C", str(job),
         "-o", str(job / "last.txt"),
-        "-i", str(job / reference_name),
+        "-i", *[str(job / name) for name in reference_names],
     ]
     timeout = min(600 + 300 * count, 3600)
     start = time.time()
@@ -271,11 +280,12 @@ def main() -> int:
     todo = [it for it in images if args.force or not is_image(ROOT / it["file"])]
     if todo:
         job = prepare_job(md_path, plan, todo)
-        reference_name = f"reference{Path(plan['reference']).suffix}"
-        code, seconds, codex_log = run_codex(job, reference_name, len(todo))
+        local_plan = json.loads((job / "plan.json").read_text(encoding="utf-8"))
+        reference_names = [local_plan["reference"], *local_plan["host_references"]]
+        code, seconds, codex_log = run_codex(job, reference_names, len(todo))
         moved = collect(job, todo)
         if moved == 0:
-            code, more, codex_log = run_codex(job, reference_name, len(todo))
+            code, more, codex_log = run_codex(job, reference_names, len(todo))
             seconds += more
             moved = collect(job, todo)
         receipt.update(codex_exit=code, codex_seconds=seconds, codex_log=codex_log, codex_job=str(job))
