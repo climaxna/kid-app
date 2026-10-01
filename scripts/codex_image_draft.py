@@ -7,7 +7,9 @@
 import argparse
 import json
 import os
+import shutil
 import subprocess
+import tempfile
 import sys
 import time
 from datetime import datetime
@@ -21,6 +23,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RULES = "design/IMAGE_RULES.md"
 LOG = ROOT / "logs" / "auto_image_drafts.log"
 CODEX_LOG_DIR = ROOT / "logs" / "codex"
+JOB_ROOT = Path(tempfile.gettempdir()) / "codex_image_jobs"
 TEMP_LIST_URL = "https://blog.naver.com/TempPostList.naver"
 TEMP_READ_URL = "https://blog.naver.com/RabbitTempPostRead.naver"
 SECRET_ENV = ("OPENAI_API_KEY", "CODEX_API_KEY", "OPENAI_BASE_URL")
@@ -63,50 +66,74 @@ def is_image(path: Path) -> bool:
         return False
 
 
-def codex_prompt(md_path: Path, plan_path: Path, todo: list[dict]) -> str:
-    files = "\n".join(f"   - {item['file']}" for item in todo)
-    return f"""이 실행은 사용자가 승인한 블로그 자동 이미지 단계다. 원고는 이미 승인됐다.
-AGENTS.md의 '원고 확인 전 이미지 생성 금지'와 '이미지 검수 뒤 임시저장' 단계는 이번 실행에 적용하지 않는다.
-네이버 임시저장은 하지 않는다. 저장은 실행한 스크립트가 맡는다.
+CODEX_PROMPT = """이 폴더에서 블로그 이미지를 만든다. 사용자가 미리 승인한 자동 작업이므로 확인을 기다리지 않는다.
 
-1. {RULES} 규칙을 읽는다.
-2. 이미지 계획 {rel(plan_path)} 과 원고 {rel(md_path)} 를 읽는다.
-3. 아래 파일을 계획 순서대로 하나씩 내장 이미지 생성 도구로 만든다. 각 항목의 prompt와 text를 정확히 따른다.
-   첨부한 이미지는 컨셉 레퍼런스다. 분위기, 색, 질감만 참고하고 베끼지 않는다.
-{files}
-4. 생성된 PNG를 각 경로에 복사해 저장한다. 폴더가 없으면 만든다. 다른 파일은 만들거나 고치지 않는다.
+1. IMAGE_RULES.md 규칙을 읽는다. 이 폴더에서는 계획의 file 값이 이 폴더 안의 파일 이름이다.
+2. plan.json과 manuscript.md(내용 참고용)를 읽는다.
+3. plan.json의 images를 순서대로 하나씩 내장 이미지 생성 도구로 만든다. 각 항목의 prompt와 text를 정확히 따른다.
+   첨부한 이미지(reference 파일)는 컨셉 레퍼런스다. 분위기, 색, 질감만 참고하고 베끼지 않는다.
+4. 생성된 PNG를 이 폴더에 각 항목의 file 이름으로 복사해 저장한다. 다른 파일은 만들거나 고치지 않는다.
 5. 파이썬 이미지 라이브러리, 외부 API, API 키를 쓰지 않는다. 내장 이미지 생성 도구와 파일 복사만 쓴다.
 6. 한 장이 실패하면 한 번만 다시 시도하고, 그래도 안 되면 건너뛴다.
-7. 마지막 답은 JSON 한 줄로 한다: {{"saved": [경로들], "failed": [경로들]}}
+7. 마지막 답은 JSON 한 줄로 한다: {"saved": [파일 이름들], "failed": [파일 이름들]}
 """
 
 
-def run_codex(prompt: str, reference: Path, stem: str, count: int) -> tuple[int, float, str]:
-    CODEX_LOG_DIR.mkdir(parents=True, exist_ok=True)
+def prepare_job(md_path: Path, plan: dict, todo: list[dict]) -> Path:
+    """Codex는 블로그 폴더 전체에서 샌드박스 초기화에 실패하므로 작은 작업 폴더에서 돌린다."""
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    log_path = CODEX_LOG_DIR / f"{stem}-{stamp}.log"
-    last_path = CODEX_LOG_DIR / f"{stem}-{stamp}.last.txt"
+    job = JOB_ROOT / f"{md_path.stem}-{stamp}"
+    job.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(ROOT / RULES, job / "IMAGE_RULES.md")
+    shutil.copy2(md_path, job / "manuscript.md")
+    reference = ROOT / plan["reference"]
+    shutil.copy2(reference, job / f"reference{reference.suffix}")
+    local_plan = {
+        "concept": plan.get("concept"),
+        "reference": f"reference{reference.suffix}",
+        "images": [{**item, "file": Path(item["file"]).name} for item in todo],
+    }
+    (job / "plan.json").write_text(json.dumps(local_plan, ensure_ascii=False, indent=2), encoding="utf-8")
+    return job
+
+
+def run_codex(job: Path, reference_name: str, count: int) -> tuple[int, float, str]:
+    CODEX_LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_path = CODEX_LOG_DIR / f"{job.name}.log"
     env = {k: v for k, v in os.environ.items() if k not in SECRET_ENV}
     cmd = [
         str(find_codex()), "exec",
+        "--skip-git-repo-check",
         "--sandbox", "workspace-write",
-        "-C", str(ROOT),
-        "-o", str(last_path),
-        "-i", str(reference),
+        "-C", str(job),
+        "-o", str(job / "last.txt"),
+        "-i", str(job / reference_name),
     ]
     timeout = min(600 + 300 * count, 3600)
     start = time.time()
-    with open(log_path, "w", encoding="utf-8") as log:
+    with open(log_path, "a", encoding="utf-8") as log:
         try:
             proc = subprocess.run(
-                cmd, input=prompt, text=True, encoding="utf-8",
-                stdout=log, stderr=subprocess.STDOUT, env=env, cwd=str(ROOT), timeout=timeout,
+                cmd, input=CODEX_PROMPT, text=True, encoding="utf-8",
+                stdout=log, stderr=subprocess.STDOUT, env=env, cwd=str(job), timeout=timeout,
             )
             code = proc.returncode
         except subprocess.TimeoutExpired:
             code = -1
             log.write(f"\n[timeout] {timeout}s\n")
     return code, round(time.time() - start), rel(log_path)
+
+
+def collect(job: Path, todo: list[dict]) -> int:
+    moved = 0
+    for item in todo:
+        src = job / Path(item["file"]).name
+        if is_image(src):
+            dest = ROOT / item["file"]
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dest)
+            moved += 1
+    return moved
 
 
 def insert_image_lines(lines: list[str], images: list[dict]) -> list[str]:
@@ -243,9 +270,15 @@ def main() -> int:
     }
     todo = [it for it in images if args.force or not is_image(ROOT / it["file"])]
     if todo:
-        prompt = codex_prompt(md_path, plan_path, todo)
-        code, seconds, codex_log = run_codex(prompt, ROOT / plan["reference"], md_path.stem, len(todo))
-        receipt.update(codex_exit=code, codex_seconds=seconds, codex_log=codex_log)
+        job = prepare_job(md_path, plan, todo)
+        reference_name = f"reference{Path(plan['reference']).suffix}"
+        code, seconds, codex_log = run_codex(job, reference_name, len(todo))
+        moved = collect(job, todo)
+        if moved == 0:
+            code, more, codex_log = run_codex(job, reference_name, len(todo))
+            seconds += more
+            moved = collect(job, todo)
+        receipt.update(codex_exit=code, codex_seconds=seconds, codex_log=codex_log, codex_job=str(job))
 
     ready = [it for it in images if is_image(ROOT / it["file"])]
     receipt["images_ready"] = len(ready)
