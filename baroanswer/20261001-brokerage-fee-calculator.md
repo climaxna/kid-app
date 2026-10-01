@@ -152,6 +152,8 @@
 협의해 볼 만한 자리예요.
 경계 근처라면 계산부터 해 보세요.
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-brokerage-fee/02-compare-boundary.png`
+
 ## 요율은 깎을 수 있어요
 
 표의 요율은 모두 **상한**이에요.
@@ -171,6 +173,8 @@
 계약서를 쓰기 전이에요.
 잔금 날 꺼내면 이미 정한 걸
 뒤집는 모양이 돼서 서로 불편해져요.
+
+📷 [실제사진 2] 파일: `assets/posts/baroanswer-brokerage-fee/03-compare-negotiated.png`
 
 ## 오피스텔과 상가는 요율이 달라요
 
@@ -214,6 +218,8 @@
 
 월세는 보증금과 월세만 넣으면
 100배, 70배 환산까지 대신 해 줘요.
+
+📷 [실제사진 3] 파일: `assets/posts/baroanswer-brokerage-fee/01-calculator.png`
 
 부동산 중개보수 계산기
 https://u-jeverse.com/estate/brokerage-fee

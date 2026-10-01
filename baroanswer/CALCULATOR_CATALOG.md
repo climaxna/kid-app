@@ -24,7 +24,7 @@
 | 7 | 연차 발생일수 계산기 | /date/annual-leave | 연차 계산, 연차 발생 | 상 | 없음 | 연중 | 입사 1년 미만과 이후 구분 | 임시저장 baroanswer/20260927-annual-leave-calculator.md |
 | 8 | 연차수당 계산기 | /work/annual-leave-pay | 연차수당 계산 | 상 | 없음 | 연말 | 퇴사·연말 미사용 연차 | 임시저장 baroanswer/20260929-annual-leave-pay-calculator.md |
 | 9 | 국민연금 예상수령액 계산기 | /pension/national | 국민연금 예상수령액 | 상 | 없음 | 연중 | 중장년 홈판 반응 좋음 | 임시저장 baroanswer/20260930-national-pension-calculator.md |
-| 10 | 부동산 중개보수 계산기 | /estate/brokerage-fee | 부동산 복비 계산, 중개수수료 | 상 | 없음 | 이사철 3월 9월 | 이사 시즌 발행 | 원고 (사이트 수정 커밋 fc57572, push 후 캡처·임시저장) baroanswer/20261001-brokerage-fee-calculator.md |
+| 10 | 부동산 중개보수 계산기 | /estate/brokerage-fee | 부동산 복비 계산, 중개수수료 | 상 | 없음 | 이사철 3월 9월 | 이사 시즌 발행 | 임시저장 baroanswer/20261001-brokerage-fee-calculator.md |
 | 11 | 주택청약 가점 계산기 | /estate/subscription-score | 청약 가점 계산 | 상 | 없음 | 분양 시즌 | 가점표 항목별 설명 | 대기 |
 | 12 | 해외직구 관세·부가세 계산기 | /tax/customs | 해외직구 관세 계산 | 상 | 없음 | 11월 블랙프라이데이 | 면세 한도 150달러 200달러 구분 | 임시저장 baroanswer/20260930-formula-direct-purchase-customs-calculator.md |
 | 13 | 자동차세 계산기 | /auto/car-tax | 자동차세 연납 할인 | 상 | 없음 | 12월 말~1월 | 연납 할인율과 신청 기간 | 대기 |
