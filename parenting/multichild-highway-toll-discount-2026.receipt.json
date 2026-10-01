@@ -2,22 +2,16 @@
   "manuscript": "parenting/multichild-highway-toll-discount-2026.md",
   "plan": "parenting/multichild-highway-toll-discount-2026.images.json",
   "title": "다자녀 고속도로 통행료 할인 신청 방법 2자녀 10% 3자녀 20% 연휴 전 확인할 조건 5가지",
-  "started": "2026-10-01T16:49:18",
+  "started": "2026-10-01T16:51:21",
   "images_planned": 4,
   "codex_exit": 0,
-  "codex_seconds": 50,
-  "codex_log": "logs/codex/multichild-highway-toll-discount-2026-20261001-164918.log",
-  "images_ready": 0,
+  "codex_seconds": 348,
+  "codex_log": "logs/codex/multichild-highway-toll-discount-2026-20261001-165121.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\multichild-highway-toll-discount-2026-20261001-165121",
+  "images_ready": 3,
   "missing": [
-    "assets/posts/multichild-highway-toll-discount-2026/01-thumbnail.png",
-    "assets/posts/multichild-highway-toll-discount-2026/02-family-car.png",
-    "assets/posts/multichild-highway-toll-discount-2026/03-five-conditions.png",
-    "assets/posts/multichild-highway-toll-discount-2026/04-before-trip-checklist.png"
+    "assets/posts/multichild-highway-toll-discount-2026/02-family-car.png"
   ],
-  "status": "saved_text_only",
-  "logNo": 224428425626,
-  "images_uploaded": 0,
-  "images_in_draft": 0,
-  "title_verified": true,
-  "finished": "2026-10-01T16:50:08"
+  "status": "images_only",
+  "finished": "2026-10-01T16:57:09"
 }
