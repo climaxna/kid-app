@@ -1,0 +1,29 @@
+{
+  "outDir": "assets/posts/baroanswer-brokerage-fee",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/estate/brokerage-fee",
+      "fill": {
+        "매매가격": "600000000"
+      }
+    },
+    {
+      "file": "02-compare-boundary.png",
+      "url": "https://u-jeverse.com/estate/brokerage-fee",
+      "fill": {
+        "매매가격": "890000000"
+      },
+      "figure": "9억원 경계에서"
+    },
+    {
+      "file": "03-compare-negotiated.png",
+      "url": "https://u-jeverse.com/estate/brokerage-fee",
+      "fill": {
+        "매매가격": "600000000",
+        "협의한 요율": "0.3"
+      },
+      "figure": "한쪽이 내는 돈"
+    }
+  ]
+}
