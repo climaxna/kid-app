@@ -288,7 +288,8 @@ def main() -> int:
     if args.no_save:
         receipt["status"] = "images_only"
     else:
-        receipt.update(save_to_naver(title, body, hashtags(body_lines), args.category, bool(ready)))
+        has_local = any(n.LOCAL_IMAGE_PLACEHOLDER_RE.match(line) for line in body.split("\n"))
+        receipt.update(save_to_naver(title, body, hashtags(body_lines), args.category, has_local))
         if receipt["status"] == "saved" and receipt["missing"]:
             receipt["status"] = "saved_partial" if ready else "saved_text_only"
 
