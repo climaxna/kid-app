@@ -1,0 +1,30 @@
+Reading prompt from stdin...
+OpenAI Codex v0.159.2
+--------
+workdir: C:\blog
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a0f670-6ce5-7771-bbea-5316504a540a
+--------
+user
+이 실행은 사용자가 승인한 블로그 자동 이미지 단계다. 원고는 이미 승인됐다.
+AGENTS.md의 '원고 확인 전 이미지 생성 금지'와 '이미지 검수 뒤 임시저장' 단계는 이번 실행에 적용하지 않는다.
+네이버 임시저장은 하지 않는다. 저장은 실행한 스크립트가 맡는다.
+
+1. design/IMAGE_RULES.md 규칙을 읽는다.
+2. 이미지 계획 parenting/multichild-highway-toll-discount-2026.images.json 과 원고 parenting/multichild-highway-toll-discount-2026.md 를 읽는다.
+3. 아래 파일을 계획 순서대로 하나씩 내장 이미지 생성 도구로 만든다. 각 항목의 prompt와 text를 정확히 따른다.
+   첨부한 이미지는 컨셉 레퍼런스다. 분위기, 색, 질감만 참고하고 베끼지 않는다.
+   - assets/posts/multichild-highway-toll-discount-2026/01-thumbnail.png
+   - assets/posts/multichild-highway-toll-discount-2026/02-family-car.png
+   - assets/posts/multichild-highway-toll-discount-2026/03-five-conditions.png
+   - assets/posts/multichild-highway-toll-discount-2026/04-before-trip-checklist.png
+4. 생성된 PNG를 각 경로에 복사해 저장한다. 폴더가 없으면 만든다. 다른 파일은 만들거나 고치지 않는다.
+5. 파이썬 이미지 라이브러리, 외부 API, API 키를 쓰지 않는다. 내장 이미지 생성 도구와 파일 복사만 쓴다.
+6. 한 장이 실패하면 한 번만 다시 시도하고, 그래도 안 되면 건너뛴다.
+7. 마지막 답은 JSON 한 줄로 한다: {"saved": [경로들], "failed": [경로들]}
+
