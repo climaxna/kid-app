@@ -1,0 +1,19 @@
+{
+  "manuscript": "islands/20261002-baengnyeongdo-ferry-schedule-october.md",
+  "plan": "islands/20261002-baengnyeongdo-ferry-schedule-october.images.json",
+  "title": "백령도 배편 시간표와 요금 2026년 10월 기준 인천에서 가는 법과 결항 대비",
+  "started": "2026-10-02T02:56:42",
+  "images_planned": 5,
+  "codex_exit": 0,
+  "codex_seconds": 418,
+  "codex_log": "logs/codex/20261002-baengnyeongdo-ferry-schedule-october-20261002-025642.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261002-baengnyeongdo-ferry-schedule-october-20261002-025642",
+  "images_ready": 5,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224428912523,
+  "images_uploaded": 5,
+  "images_in_draft": 5,
+  "title_verified": true,
+  "finished": "2026-10-02T03:04:01"
+}
