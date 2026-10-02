@@ -1,0 +1,19 @@
+{
+  "manuscript": "baroanswer/20261002-subscription-score-calculator.md",
+  "plan": "baroanswer/20261002-subscription-score-calculator.images.json",
+  "title": "청약 가점 계산 2026 4인 가족 무주택 10년이면 몇 점일까",
+  "started": "2026-10-02T10:57:37",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 261,
+  "codex_log": "logs/codex/20261002-subscription-score-calculator-20261002-105737.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261002-subscription-score-calculator-20261002-105737",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224429183641,
+  "images_uploaded": 5,
+  "images_in_draft": 5,
+  "title_verified": true,
+  "finished": "2026-10-02T11:02:20"
+}
