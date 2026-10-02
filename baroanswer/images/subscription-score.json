@@ -1,0 +1,26 @@
+{
+  "outDir": "assets/posts/baroanswer-subscription-score",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/estate/subscription-score",
+      "fill": {
+        "무주택기간": "10",
+        "부양가족 수": "3",
+        "청약통장 가입기간": "10",
+        "배우자 청약통장 가입기간": "0"
+      }
+    },
+    {
+      "file": "02-compare-breakdown.png",
+      "url": "https://u-jeverse.com/estate/subscription-score",
+      "fill": {
+        "무주택기간": "10",
+        "부양가족 수": "3",
+        "청약통장 가입기간": "10",
+        "배우자 청약통장 가입기간": "2"
+      },
+      "figure": "가점 구성"
+    }
+  ]
+}
