@@ -1,0 +1,20 @@
+{
+  "outDir": "assets/posts/baroanswer-buying-a-600m-home",
+  "captures": [
+    {
+      "file": "01-receipt.png",
+      "url": "https://u-jeverse.com/living/housing/buying-a-600m-home",
+      "fill": {},
+      "selector": ".living-hero"
+    },
+    {
+      "file": "02-calculator.png",
+      "url": "https://u-jeverse.com/estate/acquisition-tax",
+      "fill": {
+        "주택 취득가액": "600000000",
+        "중개보수 예상액": "2640000",
+        "법무·채권할인 등 기타": "1500000"
+      }
+    }
+  ]
+}
