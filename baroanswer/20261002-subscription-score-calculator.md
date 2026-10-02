@@ -159,6 +159,8 @@
 아직 배우자 통장이 없다면
 지금 만들어 두는 게 가장 쉬운 3점이에요.
 
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-subscription-score/02-compare-breakdown.png`
+
 ## 가점이 같으면 누가 되나요
 
 같은 점수가 나오면
@@ -200,6 +202,8 @@
 
 세 항목 중 어디서 점수를
 더 얻을 수 있는지도 함께 보여줘요.
+
+📷 [실제사진 2] 파일: `assets/posts/baroanswer-subscription-score/01-calculator.png`
 
 주택청약 가점 계산기
 https://u-jeverse.com/estate/subscription-score
