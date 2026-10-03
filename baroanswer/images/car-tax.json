@@ -1,0 +1,31 @@
+{
+  "outDir": "assets/posts/baroanswer-car-tax",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/auto/car-tax",
+      "fill": {
+        "배기량": "1598",
+        "차령": "4"
+      }
+    },
+    {
+      "file": "02-compare-prepay.png",
+      "url": "https://u-jeverse.com/auto/car-tax",
+      "fill": {
+        "배기량": "1598",
+        "차령": "4"
+      },
+      "figure": "언제 연납하느냐로"
+    },
+    {
+      "file": "03-compare-age.png",
+      "url": "https://u-jeverse.com/auto/car-tax",
+      "fill": {
+        "배기량": "1598",
+        "차령": "4"
+      },
+      "figure": "차령이 쌓이면"
+    }
+  ]
+}
