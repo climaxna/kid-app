@@ -1,0 +1,24 @@
+{
+  "outDir": "assets/posts/baroanswer-due-date",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/health/due-date",
+      "fill": {
+        "마지막 생리 시작일": "2026-06-01",
+        "평균 생리 주기": "28",
+        "기준일(오늘)": "2026-10-04"
+      }
+    },
+    {
+      "file": "02-compare-trimester.png",
+      "url": "https://u-jeverse.com/health/due-date",
+      "fill": {
+        "마지막 생리 시작일": "2026-06-01",
+        "평균 생리 주기": "28",
+        "기준일(오늘)": "2026-10-04"
+      },
+      "figure": "삼분기가 이렇게 나뉩니다"
+    }
+  ]
+}
