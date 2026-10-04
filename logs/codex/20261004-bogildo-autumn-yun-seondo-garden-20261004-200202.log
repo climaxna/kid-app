@@ -1,0 +1,1051 @@
+Reading prompt from stdin...
+OpenAI Codex v0.159.0-alpha.12.1
+--------
+workdir: C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261004-bogildo-autumn-yun-seondo-garden-20261004-200202
+model: gpt-6.1-sol
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a10693-f7bc-7ce3-ba8e-5e9f725e8f5a
+--------
+user
+이 폴더에서 블로그 이미지를 만든다. 사용자가 미리 승인한 자동 작업이므로 확인을 기다리지 않는다.
+
+1. IMAGE_RULES.md 규칙을 읽는다. 이 폴더에서는 계획의 file 값이 이 폴더 안의 파일 이름이다.
+2. plan.json과 manuscript.md(내용 참고용)를 읽는다.
+3. plan.json의 images를 순서대로 하나씩 내장 이미지 생성 도구로 만든다. 각 항목의 prompt와 text를 정확히 따른다.
+   첨부한 이미지(reference 파일)는 컨셉 레퍼런스다. 분위기, 색, 질감만 참고하고 베끼지 않는다.
+   host-로 시작하는 첨부 이미지는 진행자 얼굴 기준이다. 항목 prompt에 진행자가 나오면 이 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)을 유지하고, 옷과 포즈와 배경은 그 이미지 컨셉에 맞게 새로 그린다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
+4. 생성된 PNG를 이 폴더에 각 항목의 file 이름으로 복사해 저장한다. 다른 파일은 만들거나 고치지 않는다.
+5. 파이썬 이미지 라이브러리, 외부 API, API 키를 쓰지 않는다. 내장 이미지 생성 도구와 파일 복사만 쓴다.
+6. 한 장이 실패하면 한 번만 다시 시도하고, 그래도 안 되면 건너뛴다.
+7. 마지막 답은 JSON 한 줄로 한다: {"saved": [파일 이름들], "failed": [파일 이름들]}
+
+codex
+이미지 생성 스킬과 폴더의 규칙·계획을 읽고, 계획 순서대로 생성해 지정된 PNG 파일명으로 저장하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'C:/Users/kim/.codex/skills/.system/imagegen/SKILL.md'; Get-Content -LiteralPath 'IMAGE_RULES.md'; Get-Content -LiteralPath 'plan.json'; Get-Content -LiteralPath 'manuscript.md'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261004-bogildo-autumn-yun-seondo-garden-20261004-200202
+ succeeded in 124ms:
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural ??candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup ??product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup ??app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram ??diagrams/infographics with structured layout and text.
+- scientific-educational ??classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing ??campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual ??slide, chart, workflow, and data-heavy business visuals.
+- logo-brand ??logo/mark exploration, vector-friendly.
+- illustration-story ??comics, children?셲 book art, narrative scenes.
+- stylized-concept ??style-driven concept art, 3D/stylized renders.
+- historical-scene ??period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization ??translate/replace in-image text, preserve layout.
+- identity-preserve ??try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit ??remove/replace a specific element (including interior swaps).
+- lighting-weather ??time-of-day/season/atmosphere changes only.
+- background-extraction ??transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer ??apply reference style while changing subject/scene.
+- compositing ??multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render ??drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+# 釉붾줈洹??대?吏 ?앹꽦 洹쒖튃 (Codex ?먮룞 ?ㅽ뻾??
+
+`scripts/codex_image_draft.py`媛 Codex瑜?遺瑜??????뚯씪???쏀엺??
+Codex???대?吏 怨꾪쉷 JSON????ぉ???섎굹??洹몃?濡?洹몃┛?? ?대?吏???ㅼ뼱媛?湲?먮뒗 怨꾪쉷???곹엺 臾멸뎄媛 ?꾨???
+
+## 而⑥뀎
+
+| concept | ?ㅽ???| ?곕뒗 湲 | ?덊띁?곗뒪 |
+|---|---|---|---|
+| halftone | ?섑봽???몄뇙 ?ъ쭊. ?먯깋 ?⑥깋 諛곌꼍, ?먯쑝濡?李랁엺 ?ъ쭊 吏덇컧, ?덊듃濡??≪? ?먮굦 | ?≪븘 ?뺤콉쨌?뺣낫, 諛붾줈??| design/thumbnail-references/halftone/00~03.png |
+| travel-poster | 鍮덊떚吏 ?ы뻾 ?ъ뒪?? ?됰㈃ ?꾪삎, 珥섏킌???띻꼍, ?쒗븳???? ??愿愿??ъ뒪???먮굦 | ???ы뻾 | design/thumbnail-references/travel-poster/00~03.png |
+| photo-doodle | ?ъ쭊 ???숈꽌. ?ㅼ젣 ?ъ쭊 ?꾩뿉 ?먭렇由??? ?덊꽣留? ?묒? 罹먮┃??| ?쒗뭹 ?뚭컻 | design/thumbnail-references/photo-doodle/00~03.png |
+
+- ?덊띁?곗뒪??遺꾩쐞湲? ?? 吏덇컧, 援щ룄留?李멸퀬?쒕떎. 洹몃┝??洹몃?濡?踰좊겮吏 ?딅뒗??
+- ???먭퀬???대?吏??媛숈? 而⑥뀎怨?媛숈? ??議고빀?쇰줈 ?듭씪?쒕떎.
+
+## ?몃꽕???먯튃
+
+- ?몃꽕?쇱? 寃??寃곌낵?먯꽌 ?뚮윭蹂닿퀬 ?띔쾶 留뚮뱶??寃껋씠 紐⑹쟻?대떎. ?멸린?? ??? 湲댁옣媛먯쿂???대뒓 ?뺣룄 ?먭레???덈뒗 ?곸떊?곸씤 ?λ㈃怨?臾멸뎄瑜??대떎. ?뷀븳 ?뺣낫 移대뱶泥섎읆 留뚮뱾吏 ?딅뒗??
+- AI ?먮굦??以꾩씤?? 諛섏쭩?대뒗 愿묓깮 ?쇰?, ?꾩씠??媛숈? 紐⑤뜽, ?꾨꼍?섍쾶 ?뺣룉???λ㈃ ????ㅼ젣 ?ъ쭊 媛숈? 吏덇컧, ?앺솢媛? 而⑥뀎???몄뇙쨌?먭렇由?吏덇컧???대┛??
+- ?먭레?곸씠?붾씪???ъ떎怨??ㅻⅨ 怨쇱옣? ?섏? ?딅뒗?? 臾멸뎄? ?レ옄???먭퀬???덈뒗 寃껊쭔 ?대떎.
+- **?묎쾶 遊먮룄 ?쏀????쒕떎.** ?몃꽕?쇱? ?대???寃??寃곌낵?먯꽌 ?먰넲留????ш린濡?蹂댁씤?? 洹??ш린?먯꽌 ?쒕ぉ??諛붾줈 ?쏀엳?꾨줉 ?쒕ぉ? 8~12???덊뙉?쇰줈 吏㏐쾶, ?붾㈃ ??쓽 ?遺遺꾩쓣 李⑥???留뚰겮 ?ш쾶 ?대떎. 諛곌꼍怨?湲?먯쓽 紐낆븫 ?鍮꾨? 媛뺥븯寃??섍퀬, ?묒? 蹂댁“ 臾멸뎄???ｌ? ?딅뒗??
+- **?レ옄 ?섎굹瑜?媛???ш쾶.** ?먭퀬?먯꽌 媛??沅곴툑利앹쓣 遺瑜대뒗 援ъ껜?곸씤 ?レ옄 ?섎굹(?? 理쒕? 20%, ??200留뚯썝, 3,460留뚯썝)瑜?怨⑤씪 ?쒕ぉ蹂대떎 ?ш굅??媛숈? ?ш린濡??ｋ뒗?? ?レ옄媛 ?щ윭 媛쒕㈃ ?섎굹留?怨좊Ⅸ?? ?먭퀬??留덈븙???レ옄媛 ?놁쑝硫??ｌ? ?딅뒗??
+
+## 湲???대?吏 ??
+?몃꽕??1??+ 蹂몃Ц ?대?吏 ?μ닔.
+
+| 湲 | ?몃꽕??| 蹂몃Ц ?대?吏 | ?⑷퀎 |
+|---|---|---|---|
+| ?≪븘 | 1 | 3 | 4 |
+| 而ㅻ꽖??| 1 | 2 | 3 |
+| 諛붾줈??| 1 | 2 (?ㅼ젣 怨꾩궛湲?罹≪쿂??蹂꾨룄) | 3 |
+| ???ы뻾 | 1 | 4 (?섏쨷???곸슜) | 5 |
+
+## 湲??
+- 怨꾪쉷??`text`???곹엺 臾멸뎄留?泥좎옄 洹몃?濡??ｋ뒗?? 怨꾪쉷???녿뒗 湲?? ?곷Ц, ?レ옄瑜?吏?대궡吏 ?딅뒗?? `text`媛 鍮꾩뼱 ?덉쑝硫?湲?먮? ?ｌ? ?딅뒗??
+- ?몃꽕?쇱? ?쒕ぉ ??以꾧낵 ?レ옄 ?섎굹 ?뺣룄. ?뺣낫 ?대?吏???쒕ぉ ??以꾧낵 吏㏃? ??ぉ 5媛쒓퉴吏.
+- 湲?먮뒗 ?ш퀬 援듭? ?쒓? 怨좊뵓 怨꾩뿴濡? 紐⑤컮?쇱뿉???쏀엳寃??붾㈃ 媛?μ옄由ъ뿉???⑥뼱?⑤┛??
+- ?곗? ?딅뒗 寃? ?뚮몢由??먮Ⅸ 湲?? ?뚯빟 諛곗?, 留먰뭾?? ?섑듃, 蹂? 諛섏쭩?? 媛?대럠??쨌), VS, ?μ떇 愿꾪샇, ?묒? 媛곸＜, 鍮쎈뭣???? 媛吏?濡쒓퀬.
+- 洹몃┝???붾㈃??70% ?댁긽??李⑥??쒕떎.
+
+## 吏꾪뻾??(??湲)
+
+- ???쒕━利덉뿉??吏꾪뻾?먭? ?섏삩?? ?쇨뎬 湲곗?? `private_media/personas/island-host/` ???ъ꽦(female-01~03)怨??⑥꽦(male-01~03) ?ъ쭊?대떎. 怨꾪쉷??`host_references`?????щ엺???ъ쭊 2~3?μ쓣 ?ｋ뒗??
+- ?쇨뎬(?쇨뎬?? ?? 肄? ?? ?ㅼ뼱 ?먮굦)? ?좎??섍퀬, ?룰낵 ?ъ쫰? 諛곌꼍? 洹??대?吏??而⑥뀎怨?怨꾩젅??留욊쾶 諛붽씔?? 李멸퀬 ?ъ쭊???댁쇅 諛곌꼍? ?곗? ?딄퀬 洹?湲???ㅼ젣 ???띻꼍???붾떎.
+- 洹몃┝泥대룄 而⑥뀎???곕Ⅸ?? 鍮덊떚吏 ?ы뻾 ?ъ뒪??而⑥뀎?대㈃ 吏꾪뻾?먮룄 ?ъ뒪??洹몃┝泥대줈 洹몃┛??
+- 吏꾪뻾?먭? ?섏삤????ぉ? prompt??"吏꾪뻾???쇨퀬 ?곷뒗?? 吏꾪뻾?먭? ?녿뒗 ??ぉ?먮뒗 ?щ엺 ?쇨뎬???ｌ? ?딅뒗??
+
+## ?ъ떎怨??덉쟾
+
+- ?ㅼ젣 ?μ냼, ?쒗뭹, ?쒕룄? ?ㅻⅨ 紐⑥뼇??洹몃━吏 ?딅뒗?? ?ㅻⅨ ?ъ쓽 ?쒕뱶留덊겕, ?ㅼ젣 ?뚯궗 濡쒓퀬, 議댁옱?섏? ?딅뒗 ?쒖??먭낵 ?쒖꽕???ｌ? ?딅뒗??
+- ?꾩씠 ?쇨뎬? 怨꾪쉷???곹엺 寃쎌슦?먮쭔 蹂댁씠寃??쒕떎. ?ㅼ젣 ?꾩씠 ?ъ쭊??蹂듭젣?섏? ?딅뒗??
+- ?섎せ???덉쟾 ?λ㈃??洹몃━吏 ?딅뒗?? ?댁쟾 以??대??꾪솕 議곗옉, ?섎せ??移댁떆???μ갑, ?롫뱶???ъ슦湲? ?꾩씠 ?쇱옄 臾쇨? ??
+- 留ㅻ걟??AI 愿묓깮, 怨쇳븳 HDR, ?먰?吏 ?붿냼瑜??곗? ?딅뒗??
+
+## ?ъ뼇
+
+- ?뺤궗媛곹삎 1:1, 媛?ν븯硫?1254횞1254.
+- PNG濡?怨꾪쉷??`file` 寃쎈줈????ν븳??
+
+## ?대?吏 怨꾪쉷 JSON (Claude媛 ?묒꽦)
+
+?먭퀬 ?놁뿉 `<?먭퀬?대쫫>.images.json`?쇰줈 ??ν븳??
+
+```json
+{
+  "concept": "halftone",
+  "reference": "design/thumbnail-references/halftone/01.png",
+  "images": [
+    {
+      "file": "assets/posts/<slug>/01-thumbnail.png",
+      "insert": "top",
+      "text": ["?ㅼ옄? ?듯뻾猷??좎씤", "理쒕? 20%"],
+      "prompt": "?λ㈃, 援щ룄, ?? 湲???꾩튂瑜?援ъ껜?곸쑝濡?
+    },
+    {
+      "file": "assets/posts/<slug>/02-?λ㈃.png",
+      "insert": "## ?먭퀬???뚯젣紐?洹몃?濡?,
+      "text": [],
+      "prompt": "..."
+    }
+  ]
+}
+```
+
+- `insert`: `top`? 蹂몃Ц 留???泥??대?吏媛 ????대?吏), `## ?뚯젣紐?? 洹??뚯젣紐?諛붾줈 ?꾨옒.
+- `reference`: ??而⑥뀎 ?쒖쓽 ?덊띁?곗뒪 以??섎굹. 湲留덈떎 踰덊샇瑜?諛붽퓭 蹂?붾? 以??
+- `prompt`: 臾댁뾿???대뵒???대뼡 ?됱쑝濡?洹몃┫吏, `text`瑜??대뵒???대뼡 ?ш린濡??섏?源뚯? ?곷뒗?? ?뺤씤?섏? ?딆? 媛寃? ?좎쭨, ?꾪솕踰덊샇???ｌ? ?딅뒗??
+{
+  "concept": "travel-poster",
+  "reference": "reference.png",
+  "host_references": [
+    "host-1.webp",
+    "host-2.webp"
+  ],
+  "images": [
+    {
+      "file": "01-thumbnail.png",
+      "insert": "top",
+      "text": [
+        "?붿슂?쇱? ?レ븘??,
+        "3,000??
+      ],
+      "prompt": "鍮덊떚吏 ?ы뻾 ?ъ뒪???ㅽ??쇱쓽 ?뺤궗媛곹삎 ?몃꽕?? ?됰㈃ ?꾪삎怨??쒗븳????吏숈? 珥덈줉 ?? ?щ┝?? 二쇳솉 ?⑦뭾, ?몃? ?ъ씤?? ?⑥깋 諛붾떎). 諛곌꼍? ?꾨궓 ?꾨룄 蹂닿만???몄뿰?? ?곕せ ?꾩뿉 ?볦씤 湲곗? ?뺤옄? ?볦쟻???덈윮諛붿쐞, ?곕せ媛???뚮굹臾댁? ?⑦뭾 ???섎Т, 硫由???? ?곗옄?? ?붾㈃ ?쇱そ ?욎そ??吏꾪뻾?먭? ?ш쾶(?붾㈃ ?믪씠????60%) ?쒖꽌 ?뺤옄瑜?媛由ы궎硫??뚭컻?섎뒗 紐⑥뒿. 吏꾪뻾?먮뒗 李멸퀬 ?ъ쭊???쇨뎬(?쇨뎬?? ?? 肄? ?? ?ㅼ뼱 ?먮굦)???좎??섎릺 ?ъ뒪??洹몃┝泥대줈 洹몃┛?? ?룹? 10??媛?꾩뿉 留욌뒗 寃⑥옄??諛붾엺留됱씠? 踰좎씠吏 ?꾨뱶, 泥?컮吏. ?쒖젙? ?? ??諛앷쾶. ?붾㈃ ?꾩そ???꾩＜ ?ш퀬 援듭? ?щ┝???쒓? ?쒕ぉ '?붿슂?쇱? ?レ븘??瑜???以꾨줈, 洹??꾨옒 ?쒕ぉ蹂대떎 ???ш쾶 ?몃????レ옄 '3,000?????붾떎. 湲?먮뒗 吏꾪븳 珥덈줉 諛뷀깢 ?꾩뿉 媛뺥븳 ?鍮꾨줈, 媛?μ옄由ъ뿉??異⑸텇???⑥뼱?⑤┛?? ?ㅻⅨ ?ъ쓽 ?쒕뱶留덊겕, ?ㅼ젣 ?좎궗 濡쒓퀬, ?쒖??? ?쒓컙???レ옄, ?묒? 蹂댁“ 臾멸뎄???ｌ? ?딅뒗??"
+    },
+    {
+      "file": "02-seyeonjeong.png",
+      "insert": "## ?몄뿰?뺤뿉?쒕뒗 臾쇨????ㅻ옒 癒몃Ъ?ъ슂",
+      "text": [],
+      "prompt": "媛숈? 鍮덊떚吏 ?ы뻾 ?ъ뒪???ㅽ??쇨낵 媛숈? 珥덈줉, ?щ┝, 二쇳솉, ?몃옉, ?⑥깋 ??議고빀. 蹂닿만???몄뿰?뺤쓽 ?곕せ怨?湲곗? ?뺤옄, ?곕せ??鍮꾩튇 ?뺤옄??諛섏쁺, ?곕せ 二쇰? 諛붿쐞? ?뚮굹臾? 媛???ㅼ쟾??留묒? 鍮? 湲?먮뒗 ?ｌ? ?딅뒗?? ?щ엺 ?쇨뎬, ?ㅻⅨ 吏??쓽 嫄대Ъ, ?쒖??? 濡쒓퀬???ｌ? ?딅뒗??"
+    },
+    {
+      "file": "03-route-diagram.png",
+      "insert": "## 蹂닿만??媛??湲?諛곕뒗 ?명솕?꾧퉴吏",
+      "text": [
+        "?뷀씎?ы빆",
+        "?명솕??,
+        "蹂닿만??
+      ],
+      "prompt": "媛숈? 鍮덊떚吏 ?ы뻾 ?ъ뒪???ㅽ??쇱쓽 ?⑥닚???댄빐??媛쒕뀗?? ?щ┝??醫낆씠 諛뷀깢???⑥깋 諛붾떎 硫? ?붾㈃ ?ㅻⅨ履??꾩뿉 ?≪? ?⑹뼱由ъ? '?뷀씎?ы빆', 媛?대뜲???묒? ??'?명솕??, ?쇱そ ?꾨옒???묒? ??'蹂닿만??. ?뷀씎?ы빆?먯꽌 ?명솕?꾧퉴吏??二쇳솉???먯꽑怨??묒? ???ш컼??洹몃┝, ?명솕?꾩뿉??蹂닿만?꾧퉴吏??吏㏃? ?ㅻ━ 紐⑥뼇 ???섎굹. ???대쫫? ?ш퀬 援듭? ?쒓? 怨좊뵓. ?뺣? 吏?? ?꾧꼍?? 嫄곕━, ?쒓컙, ?붽툑 ?レ옄, ?섏묠諛??μ떇, ?ㅻⅨ ???대쫫, ?좎궗 濡쒓퀬???ｌ? ?딅뒗?? ??紐⑥뼇? ?⑥닚???꾪삎?쇰줈."
+    },
+    {
+      "file": "04-yesongri-pebble-beach.png",
+      "insert": "## ?덉넚由??대?怨?留앸걹?꾨쭩?",
+      "text": [],
+      "prompt": "媛숈? 鍮덊떚吏 ?ы뻾 ?ъ뒪???ㅽ??쇨낵 ??議고빀. 蹂닿만???덉넚由?媛?룎?대?: 紐⑤옒 ????κ렐 ?묒? 媛?룎??湲멸쾶 ?댁뼱吏?珥덉듅??紐⑥뼇 ?대?, ?대? ?ㅽ렪?쇰줈 ???몃Ⅸ ?곷줉?섎┝ ?? 諛붾떎 履쎌뿉 ?묒? 諛붿쐞?щ뱾, ??吏?臾대졄 ??쾶 嫄몃┛ ?몄쓣怨??붿옍???뚮룄. 湲?먮뒗 ?ｌ? ?딅뒗?? ?щ엺 ?쇨뎬, ?ㅻⅨ 吏??쓽 ?대?, 嫄대Ъ, ?쒖??? 濡쒓퀬???ｌ? ?딅뒗??"
+    },
+    {
+      "file": "05-before-departure-check.png",
+      "insert": "## 異쒕컻 ??留덉?留??뺤씤",
+      "text": [
+        "異쒕컻 ??泥댄겕",
+        "?붿슂???닿? ?뺤씤",
+        "?뷀씎?ы빆 異쒕컻 ?뺤씤",
+        "?뚯븘?ㅻ뒗 諛?癒쇱?",
+        "?뱀씪 ?댄빆 ?뺤씤"
+      ],
+      "prompt": "媛숈? 鍮덊떚吏 ?ы뻾 ?ъ뒪???ㅽ??쇨낵 ??議고빀??留덈Т由?泥댄겕 ?대?吏. 諛곌꼍? ?대Ⅸ ?꾩묠 ?묒? ???좎갑???띻꼍???⑥닚???됰㈃ ?꾪삎?쇰줈(嫄대Ъ 媛꾪뙋 湲?먯? 濡쒓퀬 ?놁쓬). ?붾㈃ ?쇱そ 70%???щ┝????泥댄겕由ъ뒪??醫낆씠 ???? 留??꾩뿉 ?ш퀬 援듭? ?쒕ぉ '異쒕컻 ??泥댄겕', 洹??꾨옒 二쇳솉 泥댄겕 ?쒖떆? ?④퍡 ??以? '?붿슂???닿? ?뺤씤', '?뷀씎?ы빆 異쒕컻 ?뺤씤', '?뚯븘?ㅻ뒗 諛?癒쇱?', '?뱀씪 ?댄빆 ?뺤씤'. ?붾㈃ ?ㅻⅨ履?30% ?덉そ??吏꾪뻾?먮? ?덈━ ?꾧퉴吏留??묎쾶: ?몃꽕?쇨낵 ?ㅻⅨ ?룹쑝濡??⑥깋 ?⑤뵫 議곕겮? ?뚯깋 癒명뵆?? ?묒? 諛곕궘 ?? ???먯뿉 ?뱀꽑沅?遊됲닾瑜??ㅺ퀬 ?꾩?瑜??몄슫 李⑤텇??誘몄냼. 吏꾪뻾?먮뒗 李멸퀬 ?ъ쭊???쇨뎬???좎??섎릺 ?ъ뒪??洹몃┝泥? ?쒓컙, ?붽툑, ?좎쭨 ?レ옄, ?좎궗 濡쒓퀬, 媛吏??쒖??먯? ?ｌ? ?딅뒗??"
+    }
+  ]
+}
+# 蹂닿만??媛蹂쇰쭔?쒓납 2026??10???몄뿰???숈쿇?앹떎 ?덉넚由?媛???섎（ 肄붿뒪
+<!-- travel -->
+
+蹂닿만?꾨뒗 ?꾨룄 ?뷀씎?ы빆?먯꽌 諛곕? ?怨??명솕???숈쿇??뿉 ?대┛ ??蹂닿만?援먮? 嫄대꼫 ?ㅼ뼱媛???ъ씠?먯슂.
+媛?꾩뿉???몄뿰?뺢낵 ?숈쿇?앹떎, ?덉넚由??대????섎（??臾띠뼱 蹂닿린 醫뗭븘??
+
+諛??쒓컙? ?좎쭨留덈떎 ?щ씪??異쒕컻 ?꾩뿉 [FerryCast ?꾨룄 諛고렪](https://ferrycast.kr)?먯꽌
+?댄빆 ?щ?瑜?癒쇱? ?뺤씤?섏꽭??
+
+<!-- box: quotation_postit -->
+> 쨌 ?뷀씎?ы빆?먯꽌 諛곕? ?怨??명솕???숈쿇??뿉 ?대젮??> 쨌 ?숈쿇??뿉??蹂닿만?援먮? 嫄대꼫硫?蹂닿만?꾩삁??> 쨌 ?몄뿰?뺢낵 ?숈쿇?앹떎? ?ㅼ꽑???먮┝ ?덉뿉 ?덉뼱??> 쨌 ?먮┝? ?붿슂???닿?, ?ㅽ썑 5??30遺꾧퉴吏 ?낆옣
+> 쨌 10?붿? ?숈젅湲??쒓컙???쒓린??諛??쒓컙 ?뺤씤??癒쇱?
+
+## 蹂닿만??媛??湲?諛곕뒗 ?명솕?꾧퉴吏
+
+蹂닿만?꾨줈 諛붾줈 媛??諛곕뒗 ?놁뼱??
+FerryCast ?덈궡?먮뒗 ?명솕???숈쿇??뿉???대젮
+蹂닿만?援먮? 嫄대꼫 ?ㅼ뼱媛꾨떎怨??섏???
+李④? ?놁쑝硫??숈냼 ?쎌뾽?대굹 ?앹떆瑜?誘몃━ ?뚯븘遊먯빞 留덉쓬???명빐??
+
+| 援щ텇 | ?댁슜 |
+|---|---|
+| 異쒕컻 | ?꾨룄???곕??먯씠 ?꾨땶 ?뷀씎?ы빆 |
+| ?대━??怨?| ?명솕???숈쿇??|
+| ?????대룞 | 蹂닿만?援먮? 嫄대꼫 李⑤굹 踰꾩뒪濡?|
+| ?댄빆 | ?뚯븞?랁삊 ?댁쁺 ?몄꽑, ?몄닔??怨꾩젅蹂꾨줈 ?щ씪??|
+
+!!?꾨룄???곕??먭낵 ?뷀씎?ы빆???룰컝由ш린 ?ъ썙??!!
+?대퉬寃뚯씠?섏뿉 ?뷀씎?ы빆?대씪怨??낅젰?댁빞 ?됰슧??怨녹쑝濡?媛吏 ?딆븘??
+
+FerryCast ?덈궡 湲곗??쇰줈
+3??1?쇰???9??30?쇨퉴吏???섎（ 12~13??
+寃⑥슱?먮뒗 12???댄빆?쇰줈 ?뚭컻?쇱슂.
+10?붿? 寃⑥슱 ?쒓컙?쒕줈 諛붾뚮뒗 ?쒓린??!!紐???諛곕씪怨??몄썙 媛吏 留먭퀬!!
+媛???좎쭨???쒓컙?쒕? 吏곸젒 蹂댁꽭??
+?뺤씤?섏? 紐삵븳 ?쒓컙怨??붽툑? ?レ옄濡??곸? ?딆븯?댁슂.
+
+## ?ㅼ꽑???먮┝ 援ъ뿭???섎닠??嫄몄뼱??
+蹂닿만???ㅼ꽑???먮┝?
+??援ъ뿭?쇰줈 ?섎돇??蹂꾩꽌?뺤썝?댁뿉??
+?몄뿰??二쇰?? ???怨듦컙,
+?숈꽌??二쇰?? 嫄곗쿂,
+?숈쿇?앹떎 二쇰?? ?곗쨷 ?댁떇 怨듦컙?댁뿉??
+
+愿???뺣낫???꾨룄援?臾명솕愿愿??덈궡 湲곗??쇰줈 ?뺣━?덉뼱??
+
+| ??ぉ | ?댁슜 |
+|---|---|
+| 愿?뚮즺 | ?깆씤 3,000?? 泥?냼?꽷룰뎔??2,500?? ?대┛??2,000??|
+| ?댁쁺 | 09:00遺??18:00源뚯?, ?낆옣? 17:30源뚯? |
+| ?닿? | ?붿슂?? 1??1?? ?ㅺ낵 異붿꽍 ?뱀씪 |
+| 臾대즺 | ?꾨룄援곕?, 65???댁긽, 蹂댄샇???숇컲 6??誘몃쭔 ??|
+| 臾몄쓽 | ?몄뿰??留ㅽ몴??061-550-6637 |
+
+==?붿슂?쇱뿉 ?ル뒗?ㅻ뒗 ?먯씠== ?쒖씪 以묒슂?댁슂.
+諛곕? ?怨??ㅼ뼱媛붾뒗??臾몄씠 ?ロ? ?덉쑝硫??섎（媛 ?듭㎏濡?鍮꾩뼱??
+?붿슂?쇱쓣 ?쇳빐???쇱젙???≪쑝?몄슂.
+
+<!-- experience -->
+> ?꾨룄?먯꽌 ?먮씪 蹂닿만?꾨뒗 ?대┫ ?뚮????대쫫???듭닕???ъ씠?먯슂. 洹몃옒?쒖씤吏 媛??뚮쭏??蹂쇨굅由щ? ?섎━湲곕낫???쒕몢 怨녹쓣 泥쒖쿇??蹂닿퀬 ?섏삤??履쎌씠 ???ㅻ옒 ?⑤뒗?ㅺ퀬 ?먭뺨??
+
+## ?몄뿰?뺤뿉?쒕뒗 臾쇨????ㅻ옒 癒몃Ъ?ъ슂
+
+?몄뿰?뺤? ?먮┝??以묒떖?쇰줈 瑗쏀엳??怨녹씠?먯슂.
+?곕せ怨??뺤옄, ?덈윮諛붿쐞媛
+???λ㈃ ?덉뿉 ?ㅼ뼱???
+怨좎궛 ?ㅼ꽑?꾧? ?닿납?먯꽌
+?대??ъ떆?щ? 吏?덈떎怨??꾪빐?몄슂.
+
+***媛?꾩뿉??臾쇨? ?띻꼍???쒓껐 李⑤텇?댁꽌***
+?ъ쭊??李띻린蹂대떎 ?됱븘???щ뒗 遺꾨룄 留롫???
+?곕せ??鍮꾩튇 ?뺤옄瑜?蹂대젮硫?諛붾엺????? ?쒓컙???쇳빐 蹂댁꽭??
+==?ㅼ쟾 ?대Ⅸ ?쒓컙==???쒖쟻?댁꽌 醫뗭븘??
+
+## ?숈쿇?앹떎? ?ㅻⅤ留됱씠??泥대젰???④꺼??
+?숈쿇?앹떎? ?숈꽌???뺣㈃ ?곗옄?쎌뿉 ?덈뒗
+?ㅼ꽑?꾩쓽 ?곗쨷 ?쒖옱 媛숈? 怨녹씠?먯슂.
+??移??뺤옄? ?앸Ц, ?앸떞, ?앹쿇 媛숈?
+???붿쟻???⑥븘 ?덈떎怨??뚭컻?쇱슂.
+?꾩뿉?쒕뒗 遺?⑸룞 怨⑥쭨湲곌? ?대젮?ㅻ낫?ъ슂.
+
+?ㅻⅤ??湲몄? ?ㅼ냼 媛?뚮Ⅸ ?몄씠?먯슂.
+?꾩씠??遺紐⑤떂怨??④퍡?쇰㈃
+?몄뿰?뺤쓣 癒쇱? 蹂닿퀬
+泥대젰???⑥쓣 ???щ씪媛?몄슂.
+誘몃걚?ъ슫 ?좊컻? ?쇳븯怨??숈뿽???볦씤 ?좎뿉??泥쒖쿇??嫄몄쑝?몄슂.
+
+## ?덉넚由??대?怨?留앸걹?꾨쭩?
+
+?먮┝??蹂닿퀬 ?섎㈃
+???⑥そ ?덉넚由??대??쇰줈 媛蹂댁꽭??
+紐⑤옒 ????묒? 媛?룎????1.4km ?댁뼱吏???대??댁뿉??
+?뚮룄媛 媛?룎??援대━???뚮━媛 ?낇듅?섍퀬
+?ㅽ렪?먮뒗 泥쒖뿰湲곕뀗臾??곷줉?섎┝???덉뼱??
+
+??吏?臾대졄?먮뒗
+???쒖そ 留앸걹?꾨쭩?濡?媛??肄붿뒪???덉뼱??
+?ㅻ룄?닿? ?대젮?ㅻ낫?닿퀬
+?몄쓣 蹂닿린 醫뗭? 怨녹쑝濡??뚭컻?쇱슂.
+?ㅻ쭔 諛??쒓컙????쑝硫??꾨쭩???怨쇨컧?섍쾶 鍮쇰뒗 寃?醫뗭븘??
+
+| ?쒓컙? | 異붿쿇 | 鍮꾧퀬 |
+|---|---|---|
+| ?ㅼ쟾 | ?몄뿰??| ?쒖쟻????癒쇱? |
+| ??| ?숈쿇?앹떎 ?ㅻⅤ湲?| 泥대젰 ?덉쓣 ??|
+| ?ㅽ썑 | ?덉넚由??대? | 媛?룎 ?뚮━ ?ｊ린 |
+| ??? ?ㅽ썑 | 留앸걹?꾨쭩? | ?섏삤??諛곌? ??쓣 ?뚮쭔 |
+
+## ?대윴 遺꾧퍡 ??肄붿뒪媛 留욎븘??
+> 쨌 ?뺤썝怨???궗媛 醫뗫떎硫??몄뿰?뺢낵 ?숈꽌???꾩＜
+> 쨌 嫄룰린瑜?利먭린硫??숈쿇?앹떎源뚯? ?щ씪媛湲?> 쨌 ?꾩씠媛 ?대━硫??몄뿰?뺢낵 ?덉넚由??대?留?> 쨌 遺紐⑤떂怨??④퍡硫??숈쿇?앹떎? ?꾨옒?먯꽌 蹂닿린
+> 쨌 ?뱀씪移섍린???섏삤??留덉?留?諛??쒓컖遺????궛
+
+?띾뫁?닿? ?댁젣 4媛쒖썡???섍릿 ?꾧린?ㅼ씠?????吏묒? ?쒕룞??蹂닿만?꾩쿂??諛곗? ?ㅻ━瑜?嫄대꼫???쇱젙? 誘몃쨪 ?먭퀬 ?덉뼱??
+?꾩씠?ㅼ씠 議곌툑 ?щ㈃
+?몄뿰?뺤뿉???ъ뾼?ъ뾼 嫄룸뒗 ?섎（瑜?瑗??대낫怨??띠뼱??
+
+## 異쒕컻 ??留덉?留??뺤씤
+
+> 쨌 ?붿슂???닿? ?щ?? ?낆옣 留덇컧 ?쒓컖 ?뺤씤
+> 쨌 ?뷀씎?ы빆 異쒕컻?몄? 吏?꾩뿉 ??ν븯湲?> 쨌 ?뚯븘?ㅻ뒗 留덉?留?諛??쒓컖 癒쇱? ?뺥븯湲?> 쨌 李④? ?놁쑝硫??숈쿇??뿉???????대룞 ?섎떒 ?뺤씤
+> 쨌 異쒕컻 ?뱀씪 ?꾩묠 FerryCast ?댄빆 ?뺤씤
+
+媛??諛붾떣諛붾엺? ?앷컖蹂대떎 李④??뚯슂.
+?뉗? 寃됱샆怨?嫄룰린 ?명븳 ?좊컻??梨숆린硫??ㅻⅤ留됯낵 媛?룎 ?대? 紐⑤몢 ?명빐??
+
+????
+
+蹂닿만?꾨뒗 ?섎（????蹂대젮怨??뺤떖?닿린蹂대떎
+?몄뿰???섎굹瑜??쒕?濡?蹂대뒗 履쎌씠 留뚯”?ㅻ윭?뚯슂.
+異쒕컻 ?꾨궇怨??뱀씪 ?꾩묠??[FerryCast ?꾨룄 諛고렪](https://ferrycast.kr)?먯꽌
+寃고빆 ?щ?瑜?瑗??뺤씤?섏꽭??
+
+蹂닿만???ㅻ??ㅼ떊 遺꾩?
+異붿쿇?섎뒗 ?숈꽑???볤?濡??④꺼二쇱꽭??
+
+?먮즺 湲곗???2026??10??4??
+諛고렪? FerryCast ?뷀씎???몄꽑 媛?대뱶(https://ferrycast.kr/guide/wando-soan-bogil-nohwa)?
+FerryCast 蹂닿만??愿愿묒? ?덈궡(https://ferrycast.kr/tour/bogildo),
+愿?뚮즺? ?댁쁺?쒓컙? ?꾨룄臾명솕愿愿?https://www.wando.go.kr/tour/sub.cs?m=30),
+?숈쿇?앹떎? 諛붾떎???ы뻾吏 ?뺣낫(https://www.badaon.or.kr/seantour_map/travel/destination/detail.do?destId=FCID110513)瑜?李멸퀬?덉뼱??
+?쒓컙?쒖? ?붽툑, 愿??議곌굔? 諛붾????덉뼱??
+異쒕컻 ???덈ℓ ?붾㈃怨??꾩? ?덈궡媛 理쒖쥌 湲곗??댁뿉??
+
+#蹂닿만??#蹂닿만?꾩뿬??#蹂닿만?꾧?蹂쇰쭔?쒓납 #蹂닿만?꾨떦?쇱튂湲?#蹂닿만??諛???#蹂닿만?꾧??꾩뿬??#蹂닿만??0??#?몄뿰??#?ㅼ꽑?꾩썝由?#?숈쿇?앹떎 #?숈꽌??#?덉넚由ы빐蹂 #?덉넚由ш갗?뚰빐蹂 #留앸걹?꾨쭩? #蹂닿만?꾨같??#?뷀씎?ы빆 #?명솕?꾨룞泥쒗빆 #蹂닿만?援?#?꾨룄?ъ뿬??#?꾨룄?ы뻾 #媛?꾩꽟?ы뻾 #10?붿꽟?ы뻾 #?⑦빐?덉꽟?ы뻾 #?ъ뿬??#援?궡?ъ뿬??#ferrycast
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Encoding UTF8 -LiteralPath 'IMAGE_RULES.md'; Get-Content -Encoding UTF8 -LiteralPath 'plan.json'; Get-Content -Encoding UTF8 -LiteralPath 'manuscript.md'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261004-bogildo-autumn-yun-seondo-garden-20261004-200202
+ succeeded in 95ms:
+# 블로그 이미지 생성 규칙 (Codex 자동 실행용)
+
+`scripts/codex_image_draft.py`가 Codex를 부를 때 이 파일을 읽힌다.
+Codex는 이미지 계획 JSON의 항목을 하나씩 그대로 그린다. 이미지에 들어갈 글자는 계획에 적힌 문구가 전부다.
+
+## 컨셉
+
+| concept | 스타일 | 쓰는 글 | 레퍼런스 |
+|---|---|---|---|
+| halftone | 하프톤 인쇄 사진. 원색 단색 배경, 점으로 찍힌 사진 질감, 레트로 잡지 느낌 | 육아 정책·정보, 바로답 | design/thumbnail-references/halftone/00~03.png |
+| travel-poster | 빈티지 여행 포스터. 평면 도형, 촘촘한 풍경, 제한된 색, 옛 관광 포스터 느낌 | 섬 여행 | design/thumbnail-references/travel-poster/00~03.png |
+| photo-doodle | 사진 위 낙서. 실제 사진 위에 손그림 선, 레터링, 작은 캐릭터 | 제품 소개 | design/thumbnail-references/photo-doodle/00~03.png |
+
+- 레퍼런스는 분위기, 색, 질감, 구도만 참고한다. 그림을 그대로 베끼지 않는다.
+- 한 원고의 이미지는 같은 컨셉과 같은 색 조합으로 통일한다.
+
+## 썸네일 원칙
+
+- 썸네일은 검색 결과에서 눌러보고 싶게 만드는 것이 목적이다. 호기심, 놀람, 긴장감처럼 어느 정도 자극이 있는 혁신적인 장면과 문구를 쓴다. 흔한 정보 카드처럼 만들지 않는다.
+- AI 느낌을 줄인다. 반짝이는 광택 피부, 아이돌 같은 모델, 완벽하게 정돈된 장면 대신 실제 사진 같은 질감, 생활감, 컨셉의 인쇄·손그림 질감을 살린다.
+- 자극적이더라도 사실과 다른 과장은 하지 않는다. 문구와 숫자는 원고에 있는 것만 쓴다.
+- **작게 봐도 읽혀야 한다.** 썸네일은 휴대폰 검색 결과에서 손톱만 한 크기로 보인다. 그 크기에서 제목이 바로 읽히도록 제목은 8~12자 안팎으로 짧게, 화면 폭의 대부분을 차지할 만큼 크게 쓴다. 배경과 글자의 명암 대비를 강하게 하고, 작은 보조 문구는 넣지 않는다.
+- **숫자 하나를 가장 크게.** 원고에서 가장 궁금증을 부르는 구체적인 숫자 하나(예: 최대 20%, 월 200만원, 3,460만원)를 골라 제목보다 크거나 같은 크기로 넣는다. 숫자가 여러 개면 하나만 고른다. 원고에 마땅한 숫자가 없으면 넣지 않는다.
+
+## 글당 이미지 수
+
+썸네일 1장 + 본문 이미지 장수.
+
+| 글 | 썸네일 | 본문 이미지 | 합계 |
+|---|---|---|---|
+| 육아 | 1 | 3 | 4 |
+| 커넥트 | 1 | 2 | 3 |
+| 바로답 | 1 | 2 (실제 계산기 캡처는 별도) | 3 |
+| 섬 여행 | 1 | 4 (나중에 적용) | 5 |
+
+## 글자
+
+- 계획의 `text`에 적힌 문구만 철자 그대로 넣는다. 계획에 없는 글자, 영문, 숫자를 지어내지 않는다. `text`가 비어 있으면 글자를 넣지 않는다.
+- 썸네일은 제목 한 줄과 숫자 하나 정도. 정보 이미지는 제목 한 줄과 짧은 항목 5개까지.
+- 글자는 크고 굵은 한글 고딕 계열로, 모바일에서 읽히게 화면 가장자리에서 떨어뜨린다.
+- 쓰지 않는 것: 테두리 두른 글자, 알약 배지, 말풍선, 하트, 별, 반짝이, 가운뎃점(·), VS, 장식 괄호, 작은 각주, 빽빽한 표, 가짜 로고.
+- 그림이 화면의 70% 이상을 차지한다.
+
+## 진행자 (섬 글)
+
+- 섬 시리즈에는 진행자가 나온다. 얼굴 기준은 `private_media/personas/island-host/` 의 여성(female-01~03)과 남성(male-01~03) 사진이다. 계획의 `host_references`에 한 사람의 사진 2~3장을 넣는다.
+- 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)은 유지하고, 옷과 포즈와 배경은 그 이미지의 컨셉과 계절에 맞게 바꾼다. 참고 사진의 해외 배경은 쓰지 않고 그 글의 실제 섬 풍경에 둔다.
+- 그림체도 컨셉을 따른다. 빈티지 여행 포스터 컨셉이면 진행자도 포스터 그림체로 그린다.
+- 진행자가 나오는 항목은 prompt에 "진행자"라고 적는다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
+
+## 사실과 안전
+
+- 실제 장소, 제품, 제도와 다른 모양을 그리지 않는다. 다른 섬의 랜드마크, 실제 회사 로고, 존재하지 않는 표지판과 시설을 넣지 않는다.
+- 아이 얼굴은 계획에 적힌 경우에만 보이게 한다. 실제 아이 사진을 복제하지 않는다.
+- 잘못된 안전 장면을 그리지 않는다. 운전 중 휴대전화 조작, 잘못된 카시트 장착, 엎드려 재우기, 아이 혼자 물가 등.
+- 매끈한 AI 광택, 과한 HDR, 판타지 요소를 쓰지 않는다.
+
+## 사양
+
+- 정사각형 1:1, 가능하면 1254×1254.
+- PNG로 계획의 `file` 경로에 저장한다.
+
+## 이미지 계획 JSON (Claude가 작성)
+
+원고 옆에 `<원고이름>.images.json`으로 저장한다.
+
+```json
+{
+  "concept": "halftone",
+  "reference": "design/thumbnail-references/halftone/01.png",
+  "images": [
+    {
+      "file": "assets/posts/<slug>/01-thumbnail.png",
+      "insert": "top",
+      "text": ["다자녀 통행료 할인", "최대 20%"],
+      "prompt": "장면, 구도, 색, 글자 위치를 구체적으로"
+    },
+    {
+      "file": "assets/posts/<slug>/02-장면.png",
+      "insert": "## 원고의 소제목 그대로",
+      "text": [],
+      "prompt": "..."
+    }
+  ]
+}
+```
+
+- `insert`: `top`은 본문 맨 위(첫 이미지가 대표 이미지), `## 소제목`은 그 소제목 바로 아래.
+- `reference`: 위 컨셉 표의 레퍼런스 중 하나. 글마다 번호를 바꿔 변화를 준다.
+- `prompt`: 무엇을 어디에 어떤 색으로 그릴지, `text`를 어디에 어떤 크기로 둘지까지 적는다. 확인되지 않은 가격, 날짜, 전화번호는 넣지 않는다.
+{
+  "concept": "travel-poster",
+  "reference": "reference.png",
+  "host_references": [
+    "host-1.webp",
+    "host-2.webp"
+  ],
+  "images": [
+    {
+      "file": "01-thumbnail.png",
+      "insert": "top",
+      "text": [
+        "월요일은 닫아요",
+        "3,000원"
+      ],
+      "prompt": "빈티지 여행 포스터 스타일의 정사각형 썸네일. 평면 도형과 제한된 색(짙은 초록 숲, 크림색, 주홍 단풍, 노란 포인트, 남색 바다). 배경은 전남 완도 보길도 세연정: 연못 위에 놓인 기와 정자와 넓적한 너럭바위, 연못가의 소나무와 단풍 든 나무, 멀리 낮은 산자락. 화면 왼쪽 앞쪽에 진행자가 크게(화면 높이의 약 60%) 서서 정자를 가리키며 소개하는 모습. 진행자는 참고 사진의 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)을 유지하되 포스터 그림체로 그린다. 옷은 10월 가을에 맞는 겨자색 바람막이와 베이지 후드, 청바지. 표정은 놀란 듯 밝게. 화면 위쪽에 아주 크고 굵은 크림색 한글 제목 '월요일은 닫아요'를 한 줄로, 그 아래 제목보다 더 크게 노란색 숫자 '3,000원'을 둔다. 글자는 진한 초록 바탕 위에 강한 대비로, 가장자리에서 충분히 떨어뜨린다. 다른 섬의 랜드마크, 실제 선사 로고, 표지판, 시간표 숫자, 작은 보조 문구는 넣지 않는다."
+    },
+    {
+      "file": "02-seyeonjeong.png",
+      "insert": "## 세연정에서는 물가에 오래 머물러요",
+      "text": [],
+      "prompt": "같은 빈티지 여행 포스터 스타일과 같은 초록, 크림, 주홍, 노랑, 남색 색 조합. 보길도 세연정의 연못과 기와 정자, 연못에 비친 정자의 반영, 연못 주변 바위와 소나무, 가을 오전의 맑은 빛. 글자는 넣지 않는다. 사람 얼굴, 다른 지역의 건물, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "03-route-diagram.png",
+      "insert": "## 보길도 가는 길 배는 노화도까지",
+      "text": [
+        "화흥포항",
+        "노화도",
+        "보길도"
+      ],
+      "prompt": "같은 빈티지 여행 포스터 스타일의 단순한 이해용 개념도. 크림색 종이 바탕에 남색 바다 면. 화면 오른쪽 위에 육지 덩어리와 '화흥포항', 가운데에 작은 섬 '노화도', 왼쪽 아래에 작은 섬 '보길도'. 화흥포항에서 노화도까지는 주홍색 점선과 작은 흰 여객선 그림, 노화도에서 보길도까지는 짧은 다리 모양 선 하나. 섬 이름은 크고 굵은 한글 고딕. 정밀 지도, 위경도, 거리, 시간, 요금 숫자, 나침반 장식, 다른 섬 이름, 선사 로고는 넣지 않는다. 섬 모양은 단순한 도형으로."
+    },
+    {
+      "file": "04-yesongri-pebble-beach.png",
+      "insert": "## 예송리 해변과 망끝전망대",
+      "text": [],
+      "prompt": "같은 빈티지 여행 포스터 스타일과 색 조합. 보길도 예송리 갯돌해변: 모래 대신 둥근 작은 갯돌이 길게 이어진 초승달 모양 해변, 해변 뒤편으로 늘 푸른 상록수림 띠, 바다 쪽에 작은 바위섬들, 해 질 무렵 낮게 걸린 노을과 잔잔한 파도. 글자는 넣지 않는다. 사람 얼굴, 다른 지역의 해변, 건물, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "05-before-departure-check.png",
+      "insert": "## 출발 전 마지막 확인",
+      "text": [
+        "출발 전 체크",
+        "월요일 휴관 확인",
+        "화흥포항 출발 확인",
+        "돌아오는 배 먼저",
+        "당일 운항 확인"
+      ],
+      "prompt": "같은 빈티지 여행 포스터 스타일과 색 조합의 마무리 체크 이미지. 배경은 이른 아침 작은 섬 선착장 풍경을 단순한 평면 도형으로(건물 간판 글자와 로고 없음). 화면 왼쪽 70%에 크림색 큰 체크리스트 종이 한 장, 맨 위에 크고 굵은 제목 '출발 전 체크', 그 아래 주홍 체크 표시와 함께 네 줄: '월요일 휴관 확인', '화흥포항 출발 확인', '돌아오는 배 먼저', '당일 운항 확인'. 화면 오른쪽 30% 안쪽에 진행자를 허리 위까지만 작게: 썸네일과 다른 옷으로 남색 패딩 조끼와 회색 머플러, 작은 배낭 끈, 한 손에 승선권 봉투를 들고 엄지를 세운 차분한 미소. 진행자는 참고 사진의 얼굴을 유지하되 포스터 그림체. 시간, 요금, 날짜 숫자, 선사 로고, 가짜 표지판은 넣지 않는다."
+    }
+  ]
+}
+# 보길도 가볼만한곳 2026년 10월 세연정 동천석실 예송리 가을 하루 코스
+<!-- travel -->
+
+보길도는 완도 화흥포항에서 배를 타고
+노화도 동천항에 내린 뒤
+보길대교를 건너 들어가는 섬이에요.
+가을에는 세연정과 동천석실, 예송리 해변을
+하루에 묶어 보기 좋아요.
+
+배 시간은 날짜마다 달라서
+출발 전에 [FerryCast 완도 배편](https://ferrycast.kr)에서
+운항 여부를 먼저 확인하세요.
+
+<!-- box: quotation_postit -->
+> · 화흥포항에서 배를 타고 노화도 동천항에 내려요
+> · 동천항에서 보길대교를 건너면 보길도예요
+> · 세연정과 동천석실은 윤선도 원림 안에 있어요
+> · 원림은 월요일 휴관, 오후 5시 30분까지 입장
+> · 10월은 동절기 시간표 시기라 배 시간 확인이 먼저
+
+## 보길도 가는 길 배는 노화도까지
+
+보길도로 바로 가는 배는 없어요.
+FerryCast 안내에는 노화도 동천항에서 내려
+보길대교를 건너 들어간다고 나와요.
+차가 없으면 숙소 픽업이나 택시를
+미리 알아봐야 마음이 편해요.
+
+| 구분 | 내용 |
+|---|---|
+| 출발 | 완도읍 터미널이 아닌 화흥포항 |
+| 내리는 곳 | 노화도 동천항 |
+| 섬 안 이동 | 보길대교를 건너 차나 버스로 |
+| 운항 | 소안농협 운영 노선, 편수는 계절별로 달라요 |
+
+!!완도읍 터미널과 화흥포항을 헷갈리기 쉬워요.!!
+내비게이션에 화흥포항이라고
+입력해야 엉뚱한 곳으로 가지 않아요.
+
+FerryCast 안내 기준으로
+3월 1일부터 9월 30일까지는 하루 12~13회,
+겨울에는 12회 운항으로 소개돼요.
+10월은 겨울 시간표로 바뀌는 시기라
+!!몇 시 배라고 외워 가지 말고!!
+가는 날짜의 시간표를 직접 보세요.
+확인하지 못한 시간과 요금은 숫자로 적지 않았어요.
+
+## 윤선도 원림 구역을 나눠서 걸어요
+
+보길도 윤선도 원림은
+세 구역으로 나뉘는 별서정원이에요.
+세연정 주변은 놀이 공간,
+낙서재 주변은 거처,
+동천석실 주변은 산중 휴식 공간이에요.
+
+관람 정보는 완도군 문화관광 안내 기준으로 정리했어요.
+
+| 항목 | 내용 |
+|---|---|
+| 관람료 | 성인 3,000원, 청소년·군인 2,500원, 어린이 2,000원 |
+| 운영 | 09:00부터 18:00까지, 입장은 17:30까지 |
+| 휴관 | 월요일, 1월 1일, 설과 추석 당일 |
+| 무료 | 완도군민, 65세 이상, 보호자 동반 6세 미만 등 |
+| 문의 | 세연정 매표소 061-550-6637 |
+
+==월요일에 닫는다는 점이== 제일 중요해요.
+배를 타고 들어갔는데 문이 닫혀 있으면
+하루가 통째로 비어요.
+월요일을 피해서 일정을 잡으세요.
+
+<!-- experience -->
+> 완도에서 자라 보길도는 어릴 때부터 이름이 익숙한 섬이에요. 그래서인지 갈 때마다 볼거리를 늘리기보다 한두 곳을 천천히 보고 나오는 쪽이 더 오래 남는다고 느껴요.
+
+## 세연정에서는 물가에 오래 머물러요
+
+세연정은 원림의 중심으로 꼽히는 곳이에요.
+연못과 정자, 너럭바위가
+한 장면 안에 들어와요.
+고산 윤선도가 이곳에서
+어부사시사를 지었다고 전해져요.
+
+***가을에는 물가 풍경이 한결 차분해서***
+사진을 찍기보다 앉아서 쉬는 분도 많대요.
+연못에 비친 정자를 보려면
+바람이 잦은 시간을 피해 보세요.
+==오전 이른 시간==이 한적해서 좋아요.
+
+## 동천석실은 오르막이라 체력을 남겨요
+
+동천석실은 낙서재 정면 산자락에 있는
+윤선도의 산중 서재 같은 곳이에요.
+한 칸 정자와 석문, 석담, 석천 같은
+옛 흔적이 남아 있다고 소개돼요.
+위에서는 부용동 골짜기가 내려다보여요.
+
+오르는 길은 다소 가파른 편이에요.
+아이나 부모님과 함께라면
+세연정을 먼저 보고
+체력이 남을 때 올라가세요.
+미끄러운 신발은 피하고
+낙엽이 쌓인 날에는 천천히 걸으세요.
+
+## 예송리 해변과 망끝전망대
+
+원림을 보고 나면
+섬 남쪽 예송리 해변으로 가보세요.
+모래 대신 작은 갯돌이
+약 1.4km 이어지는 해변이에요.
+파도가 갯돌을 굴리는 소리가 독특하고
+뒤편에는 천연기념물 상록수림이 있어요.
+
+해 질 무렵에는
+섬 서쪽 망끝전망대로 가는 코스도 있어요.
+다도해가 내려다보이고
+노을 보기 좋은 곳으로 소개돼요.
+다만 배 시간이 늦으면
+전망대는 과감하게 빼는 게 좋아요.
+
+| 시간대 | 추천 | 비고 |
+|---|---|---|
+| 오전 | 세연정 | 한적할 때 먼저 |
+| 낮 | 동천석실 오르기 | 체력 있을 때 |
+| 오후 | 예송리 해변 | 갯돌 소리 듣기 |
+| 늦은 오후 | 망끝전망대 | 나오는 배가 늦을 때만 |
+
+## 이런 분께 이 코스가 맞아요
+
+> · 정원과 역사가 좋다면 세연정과 낙서재 위주
+> · 걷기를 즐기면 동천석실까지 올라가기
+> · 아이가 어리면 세연정과 예송리 해변만
+> · 부모님과 함께면 동천석실은 아래에서 보기
+> · 당일치기는 나오는 마지막 배 시각부터 역산
+
+쌍둥이가 이제 4개월을 넘긴 아기들이라
+저희 집은 한동안 보길도처럼
+배와 다리를 건너는 일정은 미뤄 두고 있어요.
+아이들이 조금 크면
+세연정에서 쉬엄쉬엄 걷는 하루를 꼭 해보고 싶어요.
+
+## 출발 전 마지막 확인
+
+> · 월요일 휴관 여부와 입장 마감 시각 확인
+> · 화흥포항 출발인지 지도에 저장하기
+> · 돌아오는 마지막 배 시각 먼저 정하기
+> · 차가 없으면 동천항에서 섬 안 이동 수단 확인
+> · 출발 당일 아침 FerryCast 운항 확인
+
+가을 바닷바람은 생각보다 차가워요.
+얇은 겉옷과 걷기 편한 신발을 챙기면
+오르막과 갯돌 해변 모두 편해요.
+
+────
+
+보길도는 하루에 다 보려고 욕심내기보다
+세연정 하나를 제대로 보는 쪽이 만족스러워요.
+출발 전날과 당일 아침에
+[FerryCast 완도 배편](https://ferrycast.kr)에서
+결항 여부를 꼭 확인하세요.
+
+보길도 다녀오신 분은
+추천하는 동선을 댓글로 남겨주세요.
+
+자료 기준일 2026년 10월 4일.
+배편은 FerryCast 화흥포 노선 가이드(https://ferrycast.kr/guide/wando-soan-bogil-nohwa)와
+FerryCast 보길도 관광지 안내(https://ferrycast.kr/tour/bogildo),
+관람료와 운영시간은 완도문화관광(https://www.wando.go.kr/tour/sub.cs?m=30),
+동천석실은 바다온 여행지 정보(https://www.badaon.or.kr/seantour_map/travel/destination/detail.do?destId=FCID110513)를 참고했어요.
+시간표와 요금, 관람 조건은 바뀔 수 있어요.
+출발 전 예매 화면과 현지 안내가 최종 기준이에요.
+
+#보길도 #보길도여행 #보길도가볼만한곳 #보길도당일치기 #보길도1박2일 #보길도가을여행 #보길도10월 #세연정 #윤선도원림 #동천석실 #낙서재 #예송리해변 #예송리갯돌해변 #망끝전망대 #보길도배편 #화흥포항 #노화도동천항 #보길대교 #완도섬여행 #완도여행 #가을섬여행 #10월섬여행 #남해안섬여행 #섬여행 #국내섬여행 #ferrycast
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -Raw -Encoding UTF8 -LiteralPath 'plan.json'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261004-bogildo-autumn-yun-seondo-garden-20261004-200202
+ succeeded in 68ms:
+{
+  "concept": "travel-poster",
+  "reference": "reference.png",
+  "host_references": [
+    "host-1.webp",
+    "host-2.webp"
+  ],
+  "images": [
+    {
+      "file": "01-thumbnail.png",
+      "insert": "top",
+      "text": [
+        "월요일은 닫아요",
+        "3,000원"
+      ],
+      "prompt": "빈티지 여행 포스터 스타일의 정사각형 썸네일. 평면 도형과 제한된 색(짙은 초록 숲, 크림색, 주홍 단풍, 노란 포인트, 남색 바다). 배경은 전남 완도 보길도 세연정: 연못 위에 놓인 기와 정자와 넓적한 너럭바위, 연못가의 소나무와 단풍 든 나무, 멀리 낮은 산자락. 화면 왼쪽 앞쪽에 진행자가 크게(화면 높이의 약 60%) 서서 정자를 가리키며 소개하는 모습. 진행자는 참고 사진의 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)을 유지하되 포스터 그림체로 그린다. 옷은 10월 가을에 맞는 겨자색 바람막이와 베이지 후드, 청바지. 표정은 놀란 듯 밝게. 화면 위쪽에 아주 크고 굵은 크림색 한글 제목 '월요일은 닫아요'를 한 줄로, 그 아래 제목보다 더 크게 노란색 숫자 '3,000원'을 둔다. 글자는 진한 초록 바탕 위에 강한 대비로, 가장자리에서 충분히 떨어뜨린다. 다른 섬의 랜드마크, 실제 선사 로고, 표지판, 시간표 숫자, 작은 보조 문구는 넣지 않는다."
+    },
+    {
+      "file": "02-seyeonjeong.png",
+      "insert": "## 세연정에서는 물가에 오래 머물러요",
+      "text": [],
+      "prompt": "같은 빈티지 여행 포스터 스타일과 같은 초록, 크림, 주홍, 노랑, 남색 색 조합. 보길도 세연정의 연못과 기와 정자, 연못에 비친 정자의 반영, 연못 주변 바위와 소나무, 가을 오전의 맑은 빛. 글자는 넣지 않는다. 사람 얼굴, 다른 지역의 건물, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "03-route-diagram.png",
+      "insert": "## 보길도 가는 길 배는 노화도까지",
+      "text": [
+        "화흥포항",
+        "노화도",
+        "보길도"
+      ],
+      "prompt": "같은 빈티지 여행 포스터 스타일의 단순한 이해용 개념도. 크림색 종이 바탕에 남색 바다 면. 화면 오른쪽 위에 육지 덩어리와 '화흥포항', 가운데에 작은 섬 '노화도', 왼쪽 아래에 작은 섬 '보길도'. 화흥포항에서 노화도까지는 주홍색 점선과 작은 흰 여객선 그림, 노화도에서 보길도까지는 짧은 다리 모양 선 하나. 섬 이름은 크고 굵은 한글 고딕. 정밀 지도, 위경도, 거리, 시간, 요금 숫자, 나침반 장식, 다른 섬 이름, 선사 로고는 넣지 않는다. 섬 모양은 단순한 도형으로."
+    },
+    {
+      "file": "04-yesongri-pebble-beach.png",
+      "insert": "## 예송리 해변과 망끝전망대",
+      "text": [],
+      "prompt": "같은 빈티지 여행 포스터 스타일과 색 조합. 보길도 예송리 갯돌해변: 모래 대신 둥근 작은 갯돌이 길게 이어진 초승달 모양 해변, 해변 뒤편으로 늘 푸른 상록수림 띠, 바다 쪽에 작은 바위섬들, 해 질 무렵 낮게 걸린 노을과 잔잔한 파도. 글자는 넣지 않는다. 사람 얼굴, 다른 지역의 해변, 건물, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "05-before-departure-check.png",
+      "insert": "## 출발 전 마지막 확인",
+      "text": [
+        "출발 전 체크",
+        "월요일 휴관 확인",
+        "화흥포항 출발 확인",
+        "돌아오는 배 먼저",
+        "당일 운항 확인"
+      ],
+      "prompt": "같은 빈티지 여행 포스터 스타일과 색 조합의 마무리 체크 이미지. 배경은 이른 아침 작은 섬 선착장 풍경을 단순한 평면 도형으로(건물 간판 글자와 로고 없음). 화면 왼쪽 70%에 크림색 큰 체크리스트 종이 한 장, 맨 위에 크고 굵은 제목 '출발 전 체크', 그 아래 주홍 체크 표시와 함께 네 줄: '월요일 휴관 확인', '화흥포항 출발 확인', '돌아오는 배 먼저', '당일 운항 확인'. 화면 오른쪽 30% 안쪽에 진행자를 허리 위까지만 작게: 썸네일과 다른 옷으로 남색 패딩 조끼와 회색 머플러, 작은 배낭 끈, 한 손에 승선권 봉투를 들고 엄지를 세운 차분한 미소. 진행자는 참고 사진의 얼굴을 유지하되 포스터 그림체. 시간, 요금, 날짜 숫자, 선사 로고, 가짜 표지판은 넣지 않는다."
+    }
+  ]
+}
+
+codex
+썸네일 생성이 끝났습니다. 지정된 이름으로 저장하고, 같은 색과 인쇄 질감으로 세연정 풍경을 이어서 생성하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Copy-Item -LiteralPath 'C:\\Users\\kim\\.codex\\generated_images\\01a10693-f7bc-7ce3-ba8e-5e9f725e8f5a\\exec-87b41130-ba60-49b9-a6c5-a408ab5deb1e.png' -Destination '01-thumbnail.png'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261004-bogildo-autumn-yun-seondo-garden-20261004-200202
+ succeeded in 95ms:
+codex
+세연정 풍경에 계획에 없는 높은 암벽이 들어가 한 번 다시 생성하겠습니다. 낮은 산자락과 연못 주변의 넓적한 바위로 수정합니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Copy-Item -LiteralPath 'C:\\Users\\kim\\.codex\\generated_images\\01a10693-f7bc-7ce3-ba8e-5e9f725e8f5a\\exec-b36f9e15-4ba4-4541-8b7d-41b56cdeda6a.png' -Destination '02-seyeonjeong.png'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261004-bogildo-autumn-yun-seondo-garden-20261004-200202
+ succeeded in 67ms:
+codex
+세연정 풍경과 이동 개념도를 생성했습니다. 개념도의 세 지명과 배·다리 연결을 확인했으며, 이제 예송리 갯돌해변과 마지막 체크 이미지를 만들겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Copy-Item -LiteralPath 'C:\\Users\\kim\\.codex\\generated_images\\01a10693-f7bc-7ce3-ba8e-5e9f725e8f5a\\exec-ac14c513-8437-483d-a203-91030cf5abeb.png' -Destination '03-route-diagram.png'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261004-bogildo-autumn-yun-seondo-garden-20261004-200202
+ succeeded in 75ms:
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Copy-Item -LiteralPath 'C:\\Users\\kim\\.codex\\generated_images\\01a10693-f7bc-7ce3-ba8e-5e9f725e8f5a\\exec-9a79d350-f874-4928-ae73-5fb3590d2014.png' -Destination '04-yesongri-pebble-beach.png'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261004-bogildo-autumn-yun-seondo-garden-20261004-200202
+ succeeded in 66ms:
+codex
+마지막 체크 이미지의 문구는 정확하지만, 배경 건물이 해외 항구처럼 표현되어 한 번 다시 생성하겠습니다. 국내 섬 선착장과 낮은 산자락으로 수정합니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Copy-Item -LiteralPath 'C:\\Users\\kim\\.codex\\generated_images\\01a10693-f7bc-7ce3-ba8e-5e9f725e8f5a\\exec-c8c88777-4d32-4b2b-9524-17a7c24067ee.png' -Destination '05-before-departure-check.png'; Get-Item -LiteralPath '01-thumbnail.png','02-seyeonjeong.png','03-route-diagram.png','04-yesongri-pebble-beach.png','05-before-departure-check.png' | Select-Object Name,Length" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261004-bogildo-autumn-yun-seondo-garden-20261004-200202
+ succeeded in 132ms:
+
+Name                           Length
+----                           ------
+01-thumbnail.png              2913993
+02-seyeonjeong.png            3012080
+03-route-diagram.png          2613896
+04-yesongri-pebble-beach.png  2652530
+05-before-departure-check.png 2548461
+
+
+
+codex
+{"saved":["01-thumbnail.png","02-seyeonjeong.png","03-route-diagram.png","04-yesongri-pebble-beach.png","05-before-departure-check.png"],"failed":[]}
+tokens used
+54,379
+{"saved":["01-thumbnail.png","02-seyeonjeong.png","03-route-diagram.png","04-yesongri-pebble-beach.png","05-before-departure-check.png"],"failed":[]}
