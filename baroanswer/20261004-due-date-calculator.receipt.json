@@ -1,0 +1,19 @@
+{
+  "manuscript": "baroanswer/20261004-due-date-calculator.md",
+  "plan": "baroanswer/20261004-due-date-calculator.images.json",
+  "title": "출산 예정일 계산 2026 마지막 생리 시작일이 6월 1일이면 예정일은 며칠일까",
+  "started": "2026-10-04T10:09:34",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 203,
+  "codex_log": "logs/codex/20261004-due-date-calculator-20261004-100934.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261004-due-date-calculator-20261004-100934",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224430913568,
+  "images_uploaded": 5,
+  "images_in_draft": 5,
+  "title_verified": true,
+  "finished": "2026-10-04T10:13:19"
+}
