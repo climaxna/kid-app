@@ -1,0 +1,19 @@
+{
+  "manuscript": "affiliate/posts/20261005-dog-stroller-guide.md",
+  "plan": "affiliate/posts/20261005-dog-stroller-guide.images.json",
+  "title": "강아지 유모차 15kg 넘으면 못 태울까 개모차 고르기 전에 체중부터 따져 봤어요",
+  "started": "2026-10-05T19:38:32",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 300,
+  "codex_log": "logs/codex/20261005-dog-stroller-guide-20261005-193832.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261005-dog-stroller-guide-20261005-193832",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224432166865,
+  "images_uploaded": 3,
+  "images_in_draft": 3,
+  "title_verified": true,
+  "finished": "2026-10-05T19:43:46"
+}

@@ -15,3 +15,4 @@
 - 2026-10-01 | 사무용 인강용 노트북 | 베이직스 베이직북14 8GB 256GB, 베이직북16 16GB 512GB, 삼성 갤럭시북4 NT750XGR-A51A | affiliate/posts/20261001-budget-laptop-cpu-guide.md | 임시저장 logNo 224428232870
 - 2026-10-02 | 단풍 등산 배낭 스틱 | 등산스틱 두랄루민 7075 5단 2개 세트, 제로웨이트 210g 10L, 제로웨이트 590g 22L | affiliate/posts/20261002-autumn-hiking-gear-guide.md | 임시저장 logNo 224429458342 | 이미지 3/3
 - 2026-10-04 | 가정용 전기차 충전기 | EPI 7kW 세로형, 이동형 케이블 13A, 이동형 케이블 16A | affiliate/posts/20261004-ev-home-charger-guide.md | 임시저장 logNo 224430717449 | 이미지 3/3
+- 2026-10-05 | 강아지 유모차 개모차 | 멀리 MW4, 로띠에 뉴바론 플러스, 가르르 도기로버 골드 | affiliate/posts/20261005-dog-stroller-guide.md | 임시저장 logNo 224432166865 | 이미지 3/3
