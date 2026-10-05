@@ -1,0 +1,19 @@
+{
+  "manuscript": "baroanswer/20261005-ovulation-calculator.md",
+  "plan": "baroanswer/20261005-ovulation-calculator.images.json",
+  "title": "배란일 계산 2026 마지막 생리 시작일이 10월 1일이고 주기가 28일이면 가임기는 언제일까",
+  "started": "2026-10-05T10:16:12",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 515,
+  "codex_log": "logs/codex/20261005-ovulation-calculator-20261005-101612.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261005-ovulation-calculator-20261005-101612",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224431724447,
+  "images_uploaded": 4,
+  "images_in_draft": 4,
+  "title_verified": true,
+  "finished": "2026-10-05T10:25:08"
+}
