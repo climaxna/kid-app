@@ -7,7 +7,8 @@
       "fill": {
         "배기량": "1598",
         "차령": "4"
-      }
+      },
+      "selector": "section[aria-label=\"자동차 계산 입력과 결과\"]"
     },
     {
       "file": "02-compare-prepay.png",
