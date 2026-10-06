@@ -1,0 +1,19 @@
+{
+  "manuscript": "baroanswer/20261003-car-tax-calculator.md",
+  "plan": "baroanswer/20261003-car-tax-calculator.images.json",
+  "title": "자동차세 계산 2026 아반떼급 4년 탄 차 1월에 연납하면 얼마 아낄까",
+  "started": "2026-10-06T15:53:31",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 323,
+  "codex_log": "logs/codex/20261003-car-tax-calculator-20261006-155331.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261003-car-tax-calculator-20261006-155331",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224433075008,
+  "images_uploaded": 6,
+  "images_in_draft": 6,
+  "title_verified": true,
+  "finished": "2026-10-06T15:59:17"
+}
