@@ -1,0 +1,937 @@
+Reading prompt from stdin...
+OpenAI Codex v0.160.0
+--------
+workdir: C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261003-car-tax-calculator-20261006-155331
+model: gpt-6.1-sol
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a10ffd-28eb-7ab1-be50-89f7cfc13f3e
+--------
+user
+이 폴더에서 블로그 이미지를 만든다. 사용자가 미리 승인한 자동 작업이므로 확인을 기다리지 않는다.
+
+1. IMAGE_RULES.md 규칙을 읽는다. 이 폴더에서는 계획의 file 값이 이 폴더 안의 파일 이름이다.
+2. plan.json과 manuscript.md(내용 참고용)를 읽는다.
+3. plan.json의 images를 순서대로 하나씩 내장 이미지 생성 도구로 만든다. 각 항목의 prompt와 text를 정확히 따른다.
+   첨부한 이미지(reference 파일)는 컨셉 레퍼런스다. 분위기, 색, 질감만 참고하고 베끼지 않는다.
+   host-로 시작하는 첨부 이미지는 진행자 얼굴 기준이다. 항목 prompt에 진행자가 나오면 이 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)을 유지하고, 옷과 포즈와 배경은 그 이미지 컨셉에 맞게 새로 그린다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
+4. 생성된 PNG를 이 폴더에 각 항목의 file 이름으로 복사해 저장한다. 다른 파일은 만들거나 고치지 않는다.
+5. 파이썬 이미지 라이브러리, 외부 API, API 키를 쓰지 않는다. 내장 이미지 생성 도구와 파일 복사만 쓴다.
+6. 한 장이 실패하면 한 번만 다시 시도하고, 그래도 안 되면 건너뛴다.
+7. 마지막 답은 JSON 한 줄로 한다: {"saved": [파일 이름들], "failed": [파일 이름들]}
+
+codex
+규칙과 계획을 읽고, 내장 이미지 생성 도구로 순서대로 생성해 지정된 PNG 파일명으로 저장하겠습니다. imagegen 스킬을 적용합니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Content -Raw IMAGE_RULES.md; Get-Content -Raw plan.json; Get-Content -Raw manuscript.md; Get-Content -Raw C:/Users/kim/.codex/skills/.system/imagegen/SKILL.md' in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261003-car-tax-calculator-20261006-155331
+ succeeded in 146ms:
+# 釉붾줈洹??대?吏 ?앹꽦 洹쒖튃 (Codex ?먮룞 ?ㅽ뻾??
+
+`scripts/codex_image_draft.py`媛 Codex瑜?遺瑜??????뚯씪???쏀엺??
+Codex???대?吏 怨꾪쉷 JSON????ぉ???섎굹??洹몃?濡?洹몃┛?? ?대?吏???ㅼ뼱媛?湲?먮뒗 怨꾪쉷???곹엺 臾멸뎄媛 ?꾨???
+
+## 而⑥뀎
+
+| concept | ?ㅽ???| ?곕뒗 湲 | ?덊띁?곗뒪 |
+|---|---|---|---|
+| halftone | ?섑봽???몄뇙 ?ъ쭊. ?먯깋 ?⑥깋 諛곌꼍, ?먯쑝濡?李랁엺 ?ъ쭊 吏덇컧, ?덊듃濡??≪? ?먮굦 | ?≪븘 ?뺤콉쨌?뺣낫, 諛붾줈??| design/thumbnail-references/halftone/00~03.png |
+| travel-poster | 鍮덊떚吏 ?ы뻾 ?ъ뒪?? ?됰㈃ ?꾪삎, 珥섏킌???띻꼍, ?쒗븳???? ??愿愿??ъ뒪???먮굦 | ???ы뻾 | design/thumbnail-references/travel-poster/00~03.png |
+| photo-doodle | ?ъ쭊 ???숈꽌. ?ㅼ젣 ?ъ쭊 ?꾩뿉 ?먭렇由??? ?덊꽣留? ?묒? 罹먮┃??| ?쒗뭹 ?뚭컻 | design/thumbnail-references/photo-doodle/00~03.png |
+
+- ?덊띁?곗뒪??遺꾩쐞湲? ?? 吏덇컧, 援щ룄留?李멸퀬?쒕떎. 洹몃┝??洹몃?濡?踰좊겮吏 ?딅뒗??
+- ???먭퀬???대?吏??媛숈? 而⑥뀎怨?媛숈? ??議고빀?쇰줈 ?듭씪?쒕떎.
+
+## ?몃꽕???먯튃
+
+- ?몃꽕?쇱? 寃??寃곌낵?먯꽌 ?뚮윭蹂닿퀬 ?띔쾶 留뚮뱶??寃껋씠 紐⑹쟻?대떎. ?멸린?? ??? 湲댁옣媛먯쿂???대뒓 ?뺣룄 ?먭레???덈뒗 ?곸떊?곸씤 ?λ㈃怨?臾멸뎄瑜??대떎. ?뷀븳 ?뺣낫 移대뱶泥섎읆 留뚮뱾吏 ?딅뒗??
+- AI ?먮굦??以꾩씤?? 諛섏쭩?대뒗 愿묓깮 ?쇰?, ?꾩씠??媛숈? 紐⑤뜽, ?꾨꼍?섍쾶 ?뺣룉???λ㈃ ????ㅼ젣 ?ъ쭊 媛숈? 吏덇컧, ?앺솢媛? 而⑥뀎???몄뇙쨌?먭렇由?吏덇컧???대┛??
+- ?먭레?곸씠?붾씪???ъ떎怨??ㅻⅨ 怨쇱옣? ?섏? ?딅뒗?? 臾멸뎄? ?レ옄???먭퀬???덈뒗 寃껊쭔 ?대떎.
+- **?묎쾶 遊먮룄 ?쏀????쒕떎.** ?몃꽕?쇱? ?대???寃??寃곌낵?먯꽌 ?먰넲留????ш린濡?蹂댁씤?? 洹??ш린?먯꽌 ?쒕ぉ??諛붾줈 ?쏀엳?꾨줉 ?쒕ぉ? 8~12???덊뙉?쇰줈 吏㏐쾶, ?붾㈃ ??쓽 ?遺遺꾩쓣 李⑥???留뚰겮 ?ш쾶 ?대떎. 諛곌꼍怨?湲?먯쓽 紐낆븫 ?鍮꾨? 媛뺥븯寃??섍퀬, ?묒? 蹂댁“ 臾멸뎄???ｌ? ?딅뒗??
+- **?レ옄 ?섎굹瑜?媛???ш쾶.** ?먭퀬?먯꽌 媛??沅곴툑利앹쓣 遺瑜대뒗 援ъ껜?곸씤 ?レ옄 ?섎굹(?? 理쒕? 20%, ??200留뚯썝, 3,460留뚯썝)瑜?怨⑤씪 ?쒕ぉ蹂대떎 ?ш굅??媛숈? ?ш린濡??ｋ뒗?? ?レ옄媛 ?щ윭 媛쒕㈃ ?섎굹留?怨좊Ⅸ?? ?먭퀬??留덈븙???レ옄媛 ?놁쑝硫??ｌ? ?딅뒗??
+
+## 湲???대?吏 ??
+?몃꽕??1??+ 蹂몃Ц ?대?吏 ?μ닔.
+
+| 湲 | ?몃꽕??| 蹂몃Ц ?대?吏 | ?⑷퀎 |
+|---|---|---|---|
+| ?≪븘 | 1 | 3 | 4 |
+| 而ㅻ꽖??| 1 | 2 | 3 |
+| 諛붾줈??| 1 | 2 (?ㅼ젣 怨꾩궛湲?罹≪쿂??蹂꾨룄) | 3 |
+| ???ы뻾 | 1 | 4 (?섏쨷???곸슜) | 5 |
+
+## 湲??
+- 怨꾪쉷??`text`???곹엺 臾멸뎄留?泥좎옄 洹몃?濡??ｋ뒗?? 怨꾪쉷???녿뒗 湲?? ?곷Ц, ?レ옄瑜?吏?대궡吏 ?딅뒗?? `text`媛 鍮꾩뼱 ?덉쑝硫?湲?먮? ?ｌ? ?딅뒗??
+- ?몃꽕?쇱? ?쒕ぉ ??以꾧낵 ?レ옄 ?섎굹 ?뺣룄. ?뺣낫 ?대?吏???쒕ぉ ??以꾧낵 吏㏃? ??ぉ 5媛쒓퉴吏.
+- 湲?먮뒗 ?ш퀬 援듭? ?쒓? 怨좊뵓 怨꾩뿴濡? 紐⑤컮?쇱뿉???쏀엳寃??붾㈃ 媛?μ옄由ъ뿉???⑥뼱?⑤┛??
+- ?곗? ?딅뒗 寃? ?뚮몢由??먮Ⅸ 湲?? ?뚯빟 諛곗?, 留먰뭾?? ?섑듃, 蹂? 諛섏쭩?? 媛?대럠??쨌), VS, ?μ떇 愿꾪샇, ?묒? 媛곸＜, 鍮쎈뭣???? 媛吏?濡쒓퀬.
+- 洹몃┝???붾㈃??70% ?댁긽??李⑥??쒕떎.
+
+## 吏꾪뻾??(??湲)
+
+- ???쒕━利덉뿉??吏꾪뻾?먭? ?섏삩?? ?쇨뎬 湲곗?? `private_media/personas/island-host/` ???ъ꽦(female-01~03)怨??⑥꽦(male-01~03) ?ъ쭊?대떎. 怨꾪쉷??`host_references`?????щ엺???ъ쭊 2~3?μ쓣 ?ｋ뒗??
+- ?쇨뎬(?쇨뎬?? ?? 肄? ?? ?ㅼ뼱 ?먮굦)? ?좎??섍퀬, ?룰낵 ?ъ쫰? 諛곌꼍? 洹??대?吏??而⑥뀎怨?怨꾩젅??留욊쾶 諛붽씔?? 李멸퀬 ?ъ쭊???댁쇅 諛곌꼍? ?곗? ?딄퀬 洹?湲???ㅼ젣 ???띻꼍???붾떎.
+- 洹몃┝泥대룄 而⑥뀎???곕Ⅸ?? 鍮덊떚吏 ?ы뻾 ?ъ뒪??而⑥뀎?대㈃ 吏꾪뻾?먮룄 ?ъ뒪??洹몃┝泥대줈 洹몃┛??
+- 吏꾪뻾?먭? ?섏삤????ぉ? prompt??"吏꾪뻾???쇨퀬 ?곷뒗?? 吏꾪뻾?먭? ?녿뒗 ??ぉ?먮뒗 ?щ엺 ?쇨뎬???ｌ? ?딅뒗??
+
+## ?ъ떎怨??덉쟾
+
+- ?ㅼ젣 ?μ냼, ?쒗뭹, ?쒕룄? ?ㅻⅨ 紐⑥뼇??洹몃━吏 ?딅뒗?? ?ㅻⅨ ?ъ쓽 ?쒕뱶留덊겕, ?ㅼ젣 ?뚯궗 濡쒓퀬, 議댁옱?섏? ?딅뒗 ?쒖??먭낵 ?쒖꽕???ｌ? ?딅뒗??
+- ?꾩씠 ?쇨뎬? 怨꾪쉷???곹엺 寃쎌슦?먮쭔 蹂댁씠寃??쒕떎. ?ㅼ젣 ?꾩씠 ?ъ쭊??蹂듭젣?섏? ?딅뒗??
+- ?섎せ???덉쟾 ?λ㈃??洹몃━吏 ?딅뒗?? ?댁쟾 以??대??꾪솕 議곗옉, ?섎せ??移댁떆???μ갑, ?롫뱶???ъ슦湲? ?꾩씠 ?쇱옄 臾쇨? ??
+- 留ㅻ걟??AI 愿묓깮, 怨쇳븳 HDR, ?먰?吏 ?붿냼瑜??곗? ?딅뒗??
+
+## ?ъ뼇
+
+- ?뺤궗媛곹삎 1:1, 媛?ν븯硫?1254횞1254.
+- PNG濡?怨꾪쉷??`file` 寃쎈줈????ν븳??
+
+## ?대?吏 怨꾪쉷 JSON (Claude媛 ?묒꽦)
+
+?먭퀬 ?놁뿉 `<?먭퀬?대쫫>.images.json`?쇰줈 ??ν븳??
+
+```json
+{
+  "concept": "halftone",
+  "reference": "design/thumbnail-references/halftone/01.png",
+  "images": [
+    {
+      "file": "assets/posts/<slug>/01-thumbnail.png",
+      "insert": "top",
+      "text": ["?ㅼ옄? ?듯뻾猷??좎씤", "理쒕? 20%"],
+      "prompt": "?λ㈃, 援щ룄, ?? 湲???꾩튂瑜?援ъ껜?곸쑝濡?
+    },
+    {
+      "file": "assets/posts/<slug>/02-?λ㈃.png",
+      "insert": "## ?먭퀬???뚯젣紐?洹몃?濡?,
+      "text": [],
+      "prompt": "..."
+    }
+  ]
+}
+```
+
+- `insert`: `top`? 蹂몃Ц 留???泥??대?吏媛 ????대?吏), `## ?뚯젣紐?? 洹??뚯젣紐?諛붾줈 ?꾨옒.
+- `reference`: ??而⑥뀎 ?쒖쓽 ?덊띁?곗뒪 以??섎굹. 湲留덈떎 踰덊샇瑜?諛붽퓭 蹂?붾? 以??
+- `prompt`: 臾댁뾿???대뵒???대뼡 ?됱쑝濡?洹몃┫吏, `text`瑜??대뵒???대뼡 ?ш린濡??섏?源뚯? ?곷뒗?? ?뺤씤?섏? ?딆? 媛寃? ?좎쭨, ?꾪솕踰덊샇???ｌ? ?딅뒗??
+
+{
+  "concept": "halftone",
+  "reference": "reference.png",
+  "host_references": [],
+  "images": [
+    {
+      "file": "g01-thumbnail.png",
+      "insert": "top",
+      "text": [
+        "?먮룞李⑥꽭 1???곕궔",
+        "1留?2泥???
+      ],
+      "prompt": "?섑봽???몄뇙 ?ъ쭊 ?ㅽ??쇱쓽 ?뺤궗媛곹삎 ?몃꽕?? 諛곌꼍? 夷랁븳 二쇳솴鍮④컯 ?⑥깋??嫄곗튇 醫낆씠 吏덇컧. ?붾㈃ ?꾩そ 65%???꾪뙆??吏?섏＜李⑥옣 ?낃뎄?먯꽌 ?고렪?⑥쓽 ?⑸? 怨좎???遊됲닾瑜?爰쇰궡 ???먭낵 洹??ㅼ뿉 ???덈뒗 ?됰쾾??以以묓삎 ?뱀슜李⑥쓽 ?룸え?듭쓣 ?먯쑝濡?李랁엺 ?ъ쭊 吏덇컧?쇰줈 洹몃┛?? ?쇨뎬? 蹂댁씠吏 ?딄퀬 ?먭낵 李??룸?遺꾨쭔. 怨좎??쒖? 李⑤웾?먮뒗 湲?? ?뚯궗 ?대쫫, 濡쒓퀬, 踰덊샇???レ옄瑜??ｌ? ?딅뒗?? ?앺솢媛??덈뒗 ?먰띁 李⑤┝, 寃⑥슱 ?꾩묠 鍮? ?붾㈃ ?꾨옒履?35%???꾩＜ ?ш퀬 援듭? ?곗깋 ?쒓? ?쒕ぉ '?먮룞李⑥꽭 1???곕궔'????以꾨줈, 洹??꾨옒???쒕ぉ蹂대떎 ?????몃???'1留?2泥??????붾떎. 湲???뚮몢由? 諛곗?, 留먰뭾?? 諛섏쭩?? ?묒? 蹂댁“ 臾멸뎄???곗? ?딅뒗??"
+    },
+    {
+      "file": "g02-engine-size.png",
+      "insert": "## 1,600cc? 1,601cc??1?꾩뿉 12留???李⑥씠",
+      "text": [],
+      "prompt": "媛숈? ?섑봽???몄뇙 ?ъ쭊 ?ㅽ??쇨낵 媛숈? 二쇳솴鍮④컯, ?몃옉, ?곗깋 ??議고빀. 以묎퀬李?留ㅼ옣 ?욎뿉???????鍮꾩듂???ш린 ?뱀슜李⑤? ?섎????몄썙 ???λ㈃??鍮꾩뒪?ы엳 蹂몃떎. ??? 蹂대떅 ?꾩뿉 ?먮룞李⑤벑濡앹쬆泥섎읆 蹂댁씠???쒕쪟媛 ?볦뿬 ?덉?留?湲?먯? ?レ옄???쎌쓣 ???녿뒗 ?먮┛ 以꾨Т?щ줈留??쒗쁽?쒕떎. ?쒕쪟 ?놁뿉 蹂쇳렂怨?李??댁뇿 ??媛? ?щ엺 ?쇨뎬? ?ｌ? ?딅뒗?? ?뚯궗 ?대쫫, 濡쒓퀬, 踰덊샇???レ옄, ?ㅼ젣 ?쒖떇 ?대쫫? 洹몃━吏 ?딅뒗?? 湲?먮뒗 ?ｌ? ?딅뒗??"
+    },
+    {
+      "file": "g03-prepay-calendar.png",
+      "insert": "## 1?붿뿉 ?곕궔?섎㈃ ?쇰쭏???꾨굜源?,
+      "text": [],
+      "prompt": "媛숈? ?섑봽???몄뇙 ?ъ쭊 ?ㅽ??쇨낵 媛숈? 二쇳솴鍮④컯, ?몃옉, ?곗깋 ??議고빀. 嫄곗떎 ?앺긽 ?꾩뿉 踰쎄구???щ젰 ????곸긽 ?щ젰 ??沅뚯씠 ?쇱퀜???덇퀬, 洹??놁뿉 ?⑸? 怨좎???遊됲닾? ?대??? 癒멸렇而? 蹂쇳렂???볦뿬 ?덈떎. ?щ젰???좎쭨? 湲?먮뒗 ?쎌쓣 ???녿뒗 ?먮┛ ?먭낵 以꾨Т?щ줈留??쒗쁽?쒕떎. 李쎈컰? 寃⑥슱 ?꾩묠. ?щ엺 ?쇨뎬? ?ｌ? ?딅뒗?? ??? 愿怨듭꽌 ?대쫫, 濡쒓퀬, ?レ옄, 湲?먮뒗 ?ｌ? ?딅뒗??"
+    }
+  ]
+}
+# ?먮룞李⑥꽭 怨꾩궛 2026 ?꾨컲?쇨툒 4????李?1?붿뿉 ?곕궔?섎㈃ ?쇰쭏 ?꾨굜源?
+<!-- info -->
+?먮룞李⑥꽭 怨좎??쒓? ?좎븘???뚮쭏??**"???곕━ 李⑤뒗 ??湲덉븸?댁??"**?띠뿀?????덉짛.
+
+諛곌린?됱씠 ?щ㈃ ?멸툑??留롫떎??嫄??뚯븘??==1,600cc?먯꽌 1cc留??섏뼱??=
+1???멸툑??12留????섍쾶 ?곕뒗 嫄???紐곕씪??
+嫄곌린??李⑤졊, 吏諛⑷탳?≪꽭, ?곕궔源뚯? 寃뱀퀜??
+
+<!-- box: quotation_corner -->
+> 鍮꾩쁺?낆슜 ?뱀슜李??멸툑 = 諛곌린??횞 cc???몄븸
+> 4????1,598cc??1?꾩뿉 ??**26留???*
+> 1?붿뿉 ?곕궔?섎㈃ ??**1留?2泥???*???꾧뺨??
+?곕━ 李?諛곌린?됯낵 李⑤졊?쇰줈 ?뱀옣 ?뺤씤?섍퀬 ?띕떎硫??꾨옒 二쇱냼?????レ옄留??ｌ뼱 蹂댁꽭??
+https://u-jeverse.com/auto/car-tax
+
+## ?먮룞李⑥꽭???대젃寃?怨꾩궛?댁슂
+
+> 諛곌린??횞 cc???몄븸 횞 (1 ??李⑤졊 寃쎄컧)
+> + 吏諛⑷탳?≪꽭(?먮룞李⑥꽭??30%)
+
+**cc???몄븸**? 諛곌린??援ш컙?쇰줈 ?뺥빐?몄슂.
+鍮꾩쁺?낆슜 ?뱀슜李??먭??????대젃寃??섎돇?댁슂.
+
+| 諛곌린??| cc???몄븸 |
+|---|---|
+| 1,000cc ?댄븯 | 80??|
+| 1,600cc ?댄븯 | 140??|
+| 1,600cc 珥덇낵 | 200??|
+
+!!?몄쑉? ?꾩쭊???꾨땲?먯슂.!!
+1,600cc???꾩껜 諛곌린?됱뿉 140?먯쓣 怨깊븯怨?1,601cc??==?꾩껜 諛곌린?됱뿉 200??=??怨깊빐??
+洹몃옒??寃쎄퀎?먯꽌 ?멸툑??猿묒땐 ?곗뼱??
+
+## 1,600cc? 1,601cc??1?꾩뿉 12留???李⑥씠
+
+李⑤졊 寃쎄컧???녿뒗 ?좎감 湲곗??댁뿉??
+吏諛⑷탳?≪꽭瑜??ы븿??1???멸툑?댁뿉??
+
+| 諛곌린??| ?먮룞李⑥꽭 | 吏諛⑷탳?≪꽭 | 1???⑷퀎 |
+|---|---|---|---|
+| 1,600cc | 224,000??| 67,200??| 291,200??|
+| 1,601cc | 320,200??| 96,060??| 416,260??|
+
+***1cc 李⑥씠媛 125,060?먯씠?먯슂.***
+李⑤? 怨좊? ???깅줉利앹쓽 諛곌린?됱쓣
+瑗???踰덉? ?뺤씤??蹂?留뚰빐??
+
+## 諛곌린?됰퀎 1???멸툑 ??
+鍮꾩쁺?낆슜 ?뱀슜李? 吏諛⑷탳?≪꽭 ?ы븿 湲덉븸?댁뿉??
+3??誘몃쭔? ?좎감? 媛숆퀬
+4?꾩감??10%, 12?꾩감 ?댄썑??50%媛 源롮뿬??
+
+| 諛곌린??| ?좎감 | 4?꾩감 | 12?꾩감 ?댄썑 |
+|---|---|---|---|
+| 999cc 寃쎌감湲?| 103,896??| 93,506??| 51,948??|
+| 1,598cc 以以묓삎湲?| 290,836??| 261,752??| 145,418??|
+| 1,998cc 以묓삎湲?| 519,480??| 467,532??| 259,740??|
+| 2,497cc 以??뺢툒 | 649,220??| 584,298??| 324,610??|
+| 3,470cc ???SUV湲?| 902,200??| 811,980??| 451,100??|
+
+?섏씠釉뚮━?쒕뒗 ?꾧린李④? ?꾨땲??**諛곌린??湲곗?**?쇰줈 ?묎컳??怨꾩궛?댁슂.
+?꾧린李⑥? ?섏냼李⑤뒗 諛곌린?됱씠 ?놁뼱???뺥빐吏?湲덉븸???댁슂.
+
+## 李⑤졊???볦씪?섎줉 ?멸툑??以꾩뼱??
+鍮꾩쁺?낆슜 ?뱀슜李⑤뒗 李⑤졊 3?꾨???留ㅻ뀈 5%??源롮씠怨?12?꾩감??50%?먯꽌 硫덉떠??
+
+?꾨컲?쇨툒 1,598cc濡?蹂대㈃ ?대옒??
+
+| 李⑤졊 | 寃쎄컧瑜?| 1???멸툑 |
+|---|---|---|
+| 1?꾩감 | 0% | 290,836??|
+| 3?꾩감 | 5% | 276,294??|
+| 4?꾩감 | 10% | 261,752??|
+| 5?꾩감 | 15% | 247,210??|
+| 7?꾩감 | 25% | 218,127??|
+| 9?꾩감 | 35% | 189,043??|
+| 11?꾩감 | 45% | 159,959??|
+| 12?꾩감 ?댄썑 | 50% | 145,418??|
+
+!!李⑤졊 3?꾩씠 ?섎㈃ 諛붾줈 5%?덉슂.!!
+洹??꾩뿉???좎감? 媛숈? 湲덉븸?댁뿉??
+==12?꾩감遺?곕뒗 ????源롮뿬??==
+?ㅻ옒 ?덉닔濡??멸툑??以꾩뼱?쒕뒗 ???12?꾩씠 吏?섎㈃ 洹??쒗깮??硫덉떠??
+
+?벜 [?ㅼ젣?ъ쭊 1] ?뚯씪: `assets/posts/baroanswer-car-tax/03-compare-age.png`
+
+## 1?붿뿉 ?곕궔?섎㈃ ?쇰쭏???꾨굜源?
+?먮룞李⑥꽭???먮옒 6?붽낵 12?붿뿉
+諛섏뵫 ?섎닠 ?댁슂.
+洹몃윴??1?꾩튂瑜???踰덉뿉 ?대㈃
+?멸툑??源롮븘 以섏슂.
+
+怨듭젣??**?⑥? 湲곌컙???멸툑?먮쭔** 遺숈뼱??
+2026???곗씠?⑥? 5%?덉슂.
+洹몃옒???쇱컢 ?쇱닔濡?留롮씠 ?꾧뺨??
+
+| ?곕궔 ?쒓린 | ?곗꽭???鍮?怨듭젣??| ?덇컧??| ?대뒗 湲덉븸 |
+|---|---|---|---|
+| ?뺢린 ?⑸? | 0% | 0??| 261,752??|
+| 1??| ??4.58% | ??11,980??| ??249,780??|
+| 3??| ??3.77% | ??9,860??| ??251,890??|
+| 6??| ??2.52% | ??6,600??| ??255,160??|
+| 9??| ??1.26% | ??3,300??| ??258,450??|
+
+4????1,598cc 鍮꾩쁺?낆슜 ?뱀슜李?湲곗??댁뿉??
+??李④? 1,998cc?닿굅??7???붾떎硫?媛숈? 怨꾩궛湲곗뿉???レ옄留?諛붽씀硫??щ씪吏?湲덉븸??諛붾줈 ?섏???
+https://u-jeverse.com/auto/car-tax
+
+***5% ?좎씤???꾨땲??4.58%???댁쑀媛 ?덉뼱??***
+1?붿뿉 ?곕궔?섎㈃ 1?붾텇? ?대? 吏?섏꽌
+?⑥? 334?쇱뿉留?5%媛 遺숆린 ?뚮Ц?댁뿉??
+5% 횞 334 첨 365?쇱씠????4.58%?덉슂.
+
+3?붿? ?⑥? 275?? 6?붿? 184?? 9?붿? 92?쇱씠?먯슂.
+==??쾶 ?쇱닔濡?怨듭젣媛 以꾩뼱??==
+1?붽낵 9???ъ씠媛 ??8,700??李⑥씠?덉슂.
+
+?벜 [?ㅼ젣?ъ쭊 2] ?뚯씪: `assets/posts/baroanswer-car-tax/02-compare-prepay.png`
+
+## ?먮룞李⑥꽭 ?????뚯븘????
+- ?곕궔? **1?? 3?? 6?? 9??*???좎껌?댁슂
+  ?좉퀬 湲곌컙? 媛???16?쇰???留먯씪源뚯??덉슂
+- ?곕궔???좎껌?섎㈃ ?뺢린 怨좎??쒕뒗 ?ㅼ? ?딆븘??  ?좎껌???볦튂硫?諛섏뵫 ?섎닠 ?댁빞 ?댁슂
+- ?먮룞李⑥꽭 蹂몄꽭媛 ??**10留????댄븯**硫?  6?붿뿉 1?꾩튂瑜??쒓볼踰덉뿉 遺怨쇳븷 ???덉뼱??  (寃쎌감???꾧린李④? ??곸씠 ?????덉뼱??
+  ==怨좎? 諛⑹떇? 吏?먯껜留덈떎 ?ㅻⅤ??怨좎??쒕? ?뺤씤?섏꽭??==
+- ?μ븷?? 援???좉났????**媛먮㈃ ???*?대㈃
+  ??怨꾩궛蹂대떎 ?멸툑????以꾩뼱??- ?곕룄 以묎컙??李⑤? ?ш굅???붾㈃
+  蹂댁쑀???좎닔留뚰겮留??쇳븷 怨꾩궛?댁슂
+
+!!李⑤졊? 理쒖큹 ?깅줉?쇱씠 湲곗??댁뿉??!!
+?곗떇留?蹂닿퀬 怨꾩궛?섎㈃
+?깅줉?쇱뿉 ?곕씪 1??李⑥씠媛 ?????덉뼱??
+?먮룞李⑤벑濡앹쬆??理쒖큹?깅줉?쇱쓣 蹂댁꽭??
+
+## ??李??먮룞李⑥꽭??怨꾩궛湲곕줈 諛붾줈 ?????덉뼱??
+?쒓? 留뚮뱺 臾대즺 怨꾩궛湲??ъ씠??**諛붾줈??*??==?먮룞李⑥꽭 怨꾩궛湲?=??諛곌린?됯낵 李⑤졊留??ｌ쑝硫??멸툑怨??곕궔 ?덇컧?≪쓣 ??踰덉뿉 蹂댁뿬以섏슂.
+
+<!-- box: quotation_postit -->
+> 1?④퀎 鍮꾩쁺?낆슜 ?먮뒗 ?곸뾽?? ?댁뿰湲곌? ?먮뒗 ?꾧린李?怨좊Ⅴ湲?> 2?④퀎 諛곌린?됯낵 李⑤졊 ?ｊ린
+> 3?④퀎 ?뺢린 ?⑸? ?먮뒗 ?곕궔 ?쒓린 怨좊Ⅴ湲?> 寃곌낵 ?⑸??? ?먮룞李⑥꽭, 吏諛⑷탳?≪꽭, 李⑤졊 寃쎄컧, ?곕궔 ?덇컧??
+?곕궔 ?쒓린蹂?湲덉븸怨?李⑤졊蹂??멸툑 蹂?붾룄 ?④퍡 ?섏???
+
+?벜 [?ㅼ젣?ъ쭊 3] ?뚯씪: `assets/posts/baroanswer-car-tax/01-calculator.png`
+
+?먮룞李⑥꽭 怨꾩궛湲?https://u-jeverse.com/auto/car-tax
+
+李⑤? 援대━?????쒕뒗 湲곕쫫媛믪?
+?곕퉬 ?좊쪟鍮?怨꾩궛湲곕줈 ?댁뼱??蹂????덉뼱??
+https://u-jeverse.com/auto/fuel-cost
+
+????????????????????
+
+湲곗???2026??10??3??異쒖쿂
+吏諛⑹꽭踰???27議??몄쑉 https://www.law.go.kr/LSW/lsLinkProc.do?lsNm=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95&joLnkStr=%EC%A0%9C127%EC%A1%B0&mode=2
+吏諛⑹꽭踰???28議??⑷린? 吏뺤닔諛⑸쾿, ?곗꽭???⑸? 怨듭젣 https://www.law.go.kr/LSW/lsLinkProc.do?lsNm=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95&joLnkStr=%EC%A0%9C128%EC%A1%B0&mode=2
+?쒖큹援ъ껌 ?멸툑?뚯븘蹂닿린 ?먮룞李⑥꽭 ?곕궔 https://www.seocho.go.kr/site/tax/03/10303010000002023050810.jsp
+諛붾줈???먮룞李⑥꽭 怨꾩궛湲?https://u-jeverse.com/auto/car-tax
+?ㅼ젣 ?몄븸? 媛먮㈃ ??? 蹂댁쑀湲곌컙, 吏?먯껜 怨좎? 諛⑹떇???곕씪 ?щ씪吏????덉뼱??
+
+#?먮룞李⑥꽭 #?먮룞李⑥꽭怨꾩궛 #?먮룞李⑥꽭怨꾩궛湲?#?먮룞李⑥꽭2026 #?먮룞李⑥꽭?곕궔 #?먮룞李⑥꽭?곕궔?좎씤 #?먮룞李⑥꽭?곕궔?좎껌 #?먮룞李⑥꽭?⑸? #?먮룞李⑥꽭諛곌린??#?먮룞李⑥꽭李⑤졊 #?먮룞李⑥꽭1??#吏諛⑷탳?≪꽭 #諛곌린?됱꽭湲?#?꾧린李⑥옄?숈감??#?섏씠釉뚮━?쒖옄?숈감??#寃쎌감?먮룞李⑥꽭 #?꾨컲?쇱옄?숈감??#?섎굹??먮룞李⑥꽭 #洹몃옖??먮룞李⑥꽭 #?먮룞李⑥쑀吏鍮?#?먮룞李⑥꽭?꾪깮??#李⑤졊寃쎄컧 #?먮룞李?#?먮룞李④?由?#?앺솢怨꾩궛湲?#諛붾줈??#怨꾩궛湲?
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural ??candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup ??product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup ??app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram ??diagrams/infographics with structured layout and text.
+- scientific-educational ??classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing ??campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual ??slide, chart, workflow, and data-heavy business visuals.
+- logo-brand ??logo/mark exploration, vector-friendly.
+- illustration-story ??comics, children?셲 book art, narrative scenes.
+- stylized-concept ??style-driven concept art, 3D/stylized renders.
+- historical-scene ??period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization ??translate/replace in-image text, preserve layout.
+- identity-preserve ??try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit ??remove/replace a specific element (including interior swaps).
+- lighting-weather ??time-of-day/season/atmosphere changes only.
+- background-extraction ??transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer ??apply reference style while changing subject/scene.
+- compositing ??multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render ??drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Content -Raw -Encoding UTF8 IMAGE_RULES.md; Get-Content -Raw -Encoding UTF8 plan.json; Get-Content -Raw -Encoding UTF8 manuscript.md' in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\20261003-car-tax-calculator-20261006-155331
+ succeeded in 108ms:
+# 블로그 이미지 생성 규칙 (Codex 자동 실행용)
+
+`scripts/codex_image_draft.py`가 Codex를 부를 때 이 파일을 읽힌다.
+Codex는 이미지 계획 JSON의 항목을 하나씩 그대로 그린다. 이미지에 들어갈 글자는 계획에 적힌 문구가 전부다.
+
+## 컨셉
+
+| concept | 스타일 | 쓰는 글 | 레퍼런스 |
+|---|---|---|---|
+| halftone | 하프톤 인쇄 사진. 원색 단색 배경, 점으로 찍힌 사진 질감, 레트로 잡지 느낌 | 육아 정책·정보, 바로답 | design/thumbnail-references/halftone/00~03.png |
+| travel-poster | 빈티지 여행 포스터. 평면 도형, 촘촘한 풍경, 제한된 색, 옛 관광 포스터 느낌 | 섬 여행 | design/thumbnail-references/travel-poster/00~03.png |
+| photo-doodle | 사진 위 낙서. 실제 사진 위에 손그림 선, 레터링, 작은 캐릭터 | 제품 소개 | design/thumbnail-references/photo-doodle/00~03.png |
+
+- 레퍼런스는 분위기, 색, 질감, 구도만 참고한다. 그림을 그대로 베끼지 않는다.
+- 한 원고의 이미지는 같은 컨셉과 같은 색 조합으로 통일한다.
+
+## 썸네일 원칙
+
+- 썸네일은 검색 결과에서 눌러보고 싶게 만드는 것이 목적이다. 호기심, 놀람, 긴장감처럼 어느 정도 자극이 있는 혁신적인 장면과 문구를 쓴다. 흔한 정보 카드처럼 만들지 않는다.
+- AI 느낌을 줄인다. 반짝이는 광택 피부, 아이돌 같은 모델, 완벽하게 정돈된 장면 대신 실제 사진 같은 질감, 생활감, 컨셉의 인쇄·손그림 질감을 살린다.
+- 자극적이더라도 사실과 다른 과장은 하지 않는다. 문구와 숫자는 원고에 있는 것만 쓴다.
+- **작게 봐도 읽혀야 한다.** 썸네일은 휴대폰 검색 결과에서 손톱만 한 크기로 보인다. 그 크기에서 제목이 바로 읽히도록 제목은 8~12자 안팎으로 짧게, 화면 폭의 대부분을 차지할 만큼 크게 쓴다. 배경과 글자의 명암 대비를 강하게 하고, 작은 보조 문구는 넣지 않는다.
+- **숫자 하나를 가장 크게.** 원고에서 가장 궁금증을 부르는 구체적인 숫자 하나(예: 최대 20%, 월 200만원, 3,460만원)를 골라 제목보다 크거나 같은 크기로 넣는다. 숫자가 여러 개면 하나만 고른다. 원고에 마땅한 숫자가 없으면 넣지 않는다.
+
+## 글당 이미지 수
+
+썸네일 1장 + 본문 이미지 장수.
+
+| 글 | 썸네일 | 본문 이미지 | 합계 |
+|---|---|---|---|
+| 육아 | 1 | 3 | 4 |
+| 커넥트 | 1 | 2 | 3 |
+| 바로답 | 1 | 2 (실제 계산기 캡처는 별도) | 3 |
+| 섬 여행 | 1 | 4 (나중에 적용) | 5 |
+
+## 글자
+
+- 계획의 `text`에 적힌 문구만 철자 그대로 넣는다. 계획에 없는 글자, 영문, 숫자를 지어내지 않는다. `text`가 비어 있으면 글자를 넣지 않는다.
+- 썸네일은 제목 한 줄과 숫자 하나 정도. 정보 이미지는 제목 한 줄과 짧은 항목 5개까지.
+- 글자는 크고 굵은 한글 고딕 계열로, 모바일에서 읽히게 화면 가장자리에서 떨어뜨린다.
+- 쓰지 않는 것: 테두리 두른 글자, 알약 배지, 말풍선, 하트, 별, 반짝이, 가운뎃점(·), VS, 장식 괄호, 작은 각주, 빽빽한 표, 가짜 로고.
+- 그림이 화면의 70% 이상을 차지한다.
+
+## 진행자 (섬 글)
+
+- 섬 시리즈에는 진행자가 나온다. 얼굴 기준은 `private_media/personas/island-host/` 의 여성(female-01~03)과 남성(male-01~03) 사진이다. 계획의 `host_references`에 한 사람의 사진 2~3장을 넣는다.
+- 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)은 유지하고, 옷과 포즈와 배경은 그 이미지의 컨셉과 계절에 맞게 바꾼다. 참고 사진의 해외 배경은 쓰지 않고 그 글의 실제 섬 풍경에 둔다.
+- 그림체도 컨셉을 따른다. 빈티지 여행 포스터 컨셉이면 진행자도 포스터 그림체로 그린다.
+- 진행자가 나오는 항목은 prompt에 "진행자"라고 적는다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
+
+## 사실과 안전
+
+- 실제 장소, 제품, 제도와 다른 모양을 그리지 않는다. 다른 섬의 랜드마크, 실제 회사 로고, 존재하지 않는 표지판과 시설을 넣지 않는다.
+- 아이 얼굴은 계획에 적힌 경우에만 보이게 한다. 실제 아이 사진을 복제하지 않는다.
+- 잘못된 안전 장면을 그리지 않는다. 운전 중 휴대전화 조작, 잘못된 카시트 장착, 엎드려 재우기, 아이 혼자 물가 등.
+- 매끈한 AI 광택, 과한 HDR, 판타지 요소를 쓰지 않는다.
+
+## 사양
+
+- 정사각형 1:1, 가능하면 1254×1254.
+- PNG로 계획의 `file` 경로에 저장한다.
+
+## 이미지 계획 JSON (Claude가 작성)
+
+원고 옆에 `<원고이름>.images.json`으로 저장한다.
+
+```json
+{
+  "concept": "halftone",
+  "reference": "design/thumbnail-references/halftone/01.png",
+  "images": [
+    {
+      "file": "assets/posts/<slug>/01-thumbnail.png",
+      "insert": "top",
+      "text": ["다자녀 통행료 할인", "최대 20%"],
+      "prompt": "장면, 구도, 색, 글자 위치를 구체적으로"
+    },
+    {
+      "file": "assets/posts/<slug>/02-장면.png",
+      "insert": "## 원고의 소제목 그대로",
+      "text": [],
+      "prompt": "..."
+    }
+  ]
+}
+```
+
+- `insert`: `top`은 본문 맨 위(첫 이미지가 대표 이미지), `## 소제목`은 그 소제목 바로 아래.
+- `reference`: 위 컨셉 표의 레퍼런스 중 하나. 글마다 번호를 바꿔 변화를 준다.
+- `prompt`: 무엇을 어디에 어떤 색으로 그릴지, `text`를 어디에 어떤 크기로 둘지까지 적는다. 확인되지 않은 가격, 날짜, 전화번호는 넣지 않는다.
+
+{
+  "concept": "halftone",
+  "reference": "reference.png",
+  "host_references": [],
+  "images": [
+    {
+      "file": "g01-thumbnail.png",
+      "insert": "top",
+      "text": [
+        "자동차세 1월 연납",
+        "1만 2천 원"
+      ],
+      "prompt": "하프톤 인쇄 사진 스타일의 정사각형 썸네일. 배경은 쨍한 주황빨강 단색에 거친 종이 질감. 화면 위쪽 65%에 아파트 지하주차장 입구에서 우편함의 납부 고지서 봉투를 꺼내 든 손과 그 뒤에 서 있는 평범한 준중형 승용차의 뒷모습을 점으로 찍힌 사진 질감으로 그린다. 얼굴은 보이지 않고 손과 차 뒷부분만. 고지서와 차량에는 글자, 회사 이름, 로고, 번호판 숫자를 넣지 않는다. 생활감 있는 점퍼 차림, 겨울 아침 빛. 화면 아래쪽 35%에 아주 크고 굵은 흰색 한글 제목 '자동차세 1월 연납'을 한 줄로, 그 아래에 제목보다 더 큰 노란색 '1만 2천 원'을 둔다. 글자 테두리, 배지, 말풍선, 반짝이, 작은 보조 문구는 쓰지 않는다."
+    },
+    {
+      "file": "g02-engine-size.png",
+      "insert": "## 1,600cc와 1,601cc는 1년에 12만 원 차이",
+      "text": [],
+      "prompt": "같은 하프톤 인쇄 사진 스타일과 같은 주황빨강, 노랑, 흰색 색 조합. 중고차 매장 앞에서 두 대의 비슷한 크기 승용차를 나란히 세워 둔 장면을 비스듬히 본다. 한 대 보닛 위에 자동차등록증처럼 보이는 서류가 놓여 있지만 글자와 숫자는 읽을 수 없는 흐린 줄무늬로만 표현한다. 서류 옆에 볼펜과 차 열쇠 두 개. 사람 얼굴은 넣지 않는다. 회사 이름, 로고, 번호판 숫자, 실제 서식 이름은 그리지 않는다. 글자는 넣지 않는다."
+    },
+    {
+      "file": "g03-prepay-calendar.png",
+      "insert": "## 1월에 연납하면 얼마나 아낄까",
+      "text": [],
+      "prompt": "같은 하프톤 인쇄 사진 스타일과 같은 주황빨강, 노랑, 흰색 색 조합. 거실 식탁 위에 벽걸이 달력 대신 탁상 달력 한 권이 펼쳐져 있고, 그 옆에 납부 고지서 봉투와 휴대폰, 머그컵, 볼펜이 놓여 있다. 달력의 날짜와 글자는 읽을 수 없는 흐린 점과 줄무늬로만 표현한다. 창밖은 겨울 아침. 사람 얼굴은 넣지 않는다. 은행, 관공서 이름, 로고, 숫자, 글자는 넣지 않는다."
+    }
+  ]
+}
+# 자동차세 계산 2026 아반떼급 4년 탄 차 1월에 연납하면 얼마 아낄까
+
+<!-- info -->
+자동차세 고지서가 날아올 때마다
+**"왜 우리 차는 이 금액이지?"**싶었던 적 있죠.
+
+배기량이 크면 세금이 많다는 건 알아도
+==1,600cc에서 1cc만 넘어도==
+1년 세금이 12만 원 넘게 뛰는 건 잘 몰라요.
+거기에 차령, 지방교육세, 연납까지 겹쳐요.
+
+<!-- box: quotation_corner -->
+> 비영업용 승용차 세금 = 배기량 × cc당 세액
+> 4년 탄 1,598cc는 1년에 약 **26만 원**
+> 1월에 연납하면 약 **1만 2천 원**을 아껴요
+
+우리 차 배기량과 차령으로 당장 확인하고 싶다면
+아래 주소에 두 숫자만 넣어 보세요.
+https://u-jeverse.com/auto/car-tax
+
+## 자동차세는 이렇게 계산해요
+
+> 배기량 × cc당 세액 × (1 − 차령 경감)
+> + 지방교육세(자동차세의 30%)
+
+**cc당 세액**은 배기량 구간으로 정해져요.
+비영업용 승용차(자가용)는 이렇게 나뉘어요.
+
+| 배기량 | cc당 세액 |
+|---|---|
+| 1,000cc 이하 | 80원 |
+| 1,600cc 이하 | 140원 |
+| 1,600cc 초과 | 200원 |
+
+!!세율은 누진이 아니에요.!!
+1,600cc는 전체 배기량에 140원을 곱하고
+1,601cc는 ==전체 배기량에 200원==을 곱해요.
+그래서 경계에서 세금이 껑충 뛰어요.
+
+## 1,600cc와 1,601cc는 1년에 12만 원 차이
+
+차령 경감이 없는 신차 기준이에요.
+지방교육세를 포함한 1년 세금이에요.
+
+| 배기량 | 자동차세 | 지방교육세 | 1년 합계 |
+|---|---|---|---|
+| 1,600cc | 224,000원 | 67,200원 | 291,200원 |
+| 1,601cc | 320,200원 | 96,060원 | 416,260원 |
+
+***1cc 차이가 125,060원이에요.***
+차를 고를 때 등록증의 배기량을
+꼭 한 번은 확인해 볼 만해요.
+
+## 배기량별 1년 세금 표
+
+비영업용 승용차, 지방교육세 포함 금액이에요.
+3년 미만은 신차와 같고
+4년차는 10%, 12년차 이후는 50%가 깎여요.
+
+| 배기량 | 신차 | 4년차 | 12년차 이후 |
+|---|---|---|---|
+| 999cc 경차급 | 103,896원 | 93,506원 | 51,948원 |
+| 1,598cc 준중형급 | 290,836원 | 261,752원 | 145,418원 |
+| 1,998cc 중형급 | 519,480원 | 467,532원 | 259,740원 |
+| 2,497cc 준대형급 | 649,220원 | 584,298원 | 324,610원 |
+| 3,470cc 대형 SUV급 | 902,200원 | 811,980원 | 451,100원 |
+
+하이브리드는 전기차가 아니라
+**배기량 기준**으로 똑같이 계산해요.
+전기차와 수소차는 배기량이 없어서
+정해진 금액을 내요.
+
+## 차령이 쌓일수록 세금이 줄어요
+
+비영업용 승용차는 차령 3년부터
+매년 5%씩 깎이고 12년차에 50%에서 멈춰요.
+
+아반떼급 1,598cc로 보면 이래요.
+
+| 차령 | 경감률 | 1년 세금 |
+|---|---|---|
+| 1년차 | 0% | 290,836원 |
+| 3년차 | 5% | 276,294원 |
+| 4년차 | 10% | 261,752원 |
+| 5년차 | 15% | 247,210원 |
+| 7년차 | 25% | 218,127원 |
+| 9년차 | 35% | 189,043원 |
+| 11년차 | 45% | 159,959원 |
+| 12년차 이후 | 50% | 145,418원 |
+
+!!차령 3년이 되면 바로 5%예요.!!
+그 전에는 신차와 같은 금액이에요.
+==12년차부터는 더 안 깎여요.==
+오래 탈수록 세금이 줄어드는 대신
+12년이 지나면 그 혜택이 멈춰요.
+
+📷 [실제사진 1] 파일: `assets/posts/baroanswer-car-tax/03-compare-age.png`
+
+## 1월에 연납하면 얼마나 아낄까
+
+자동차세는 원래 6월과 12월에
+반씩 나눠 내요.
+그런데 1년치를 한 번에 내면
+세금을 깎아 줘요.
+
+공제는 **남은 기간의 세금에만** 붙어요.
+2026년 연이율은 5%예요.
+그래서 일찍 낼수록 많이 아껴요.
+
+| 연납 시기 | 연세액 대비 공제율 | 절감액 | 내는 금액 |
+|---|---|---|---|
+| 정기 납부 | 0% | 0원 | 261,752원 |
+| 1월 | 약 4.58% | 약 11,980원 | 약 249,780원 |
+| 3월 | 약 3.77% | 약 9,860원 | 약 251,890원 |
+| 6월 | 약 2.52% | 약 6,600원 | 약 255,160원 |
+| 9월 | 약 1.26% | 약 3,300원 | 약 258,450원 |
+
+4년 탄 1,598cc 비영업용 승용차 기준이에요.
+내 차가 1,998cc이거나 7년 탔다면
+같은 계산기에서 숫자만 바꾸면 달라진 금액이 바로 나와요.
+https://u-jeverse.com/auto/car-tax
+
+***5% 할인이 아니라 4.58%인 이유가 있어요.***
+1월에 연납하면 1월분은 이미 지나서
+남은 334일에만 5%가 붙기 때문이에요.
+5% × 334 ÷ 365일이라 약 4.58%예요.
+
+3월은 남은 275일, 6월은 184일, 9월은 92일이에요.
+==늦게 낼수록 공제가 줄어요.==
+1월과 9월 사이가 약 8,700원 차이예요.
+
+📷 [실제사진 2] 파일: `assets/posts/baroanswer-car-tax/02-compare-prepay.png`
+
+## 자동차세 낼 때 알아둘 점
+
+- 연납은 **1월, 3월, 6월, 9월**에 신청해요
+  신고 기간은 각 달 16일부터 말일까지예요
+- 연납을 신청하면 정기 고지서는 오지 않아요
+  신청을 놓치면 반씩 나눠 내야 해요
+- 자동차세 본세가 연 **10만 원 이하**면
+  6월에 1년치를 한꺼번에 부과할 수 있어요
+  (경차나 전기차가 대상이 될 수 있어요)
+  ==고지 방식은 지자체마다 다르니 고지서를 확인하세요.==
+- 장애인, 국가유공자 등 **감면 대상**이면
+  이 계산보다 세금이 더 줄어요
+- 연도 중간에 차를 사거나 팔면
+  보유한 날수만큼만 일할 계산해요
+
+!!차령은 최초 등록일이 기준이에요.!!
+연식만 보고 계산하면
+등록일에 따라 1년 차이가 날 수 있어요.
+자동차등록증의 최초등록일을 보세요.
+
+## 내 차 자동차세는 계산기로 바로 알 수 있어요
+
+제가 만든 무료 계산기 사이트 **바로답**의
+==자동차세 계산기==는 배기량과 차령만 넣으면
+세금과 연납 절감액을 한 번에 보여줘요.
+
+<!-- box: quotation_postit -->
+> 1단계 비영업용 또는 영업용, 내연기관 또는 전기차 고르기
+> 2단계 배기량과 차령 넣기
+> 3단계 정기 납부 또는 연납 시기 고르기
+> 결과 납부액, 자동차세, 지방교육세, 차령 경감, 연납 절감액
+
+연납 시기별 금액과
+차령별 세금 변화도 함께 나와요.
+
+📷 [실제사진 3] 파일: `assets/posts/baroanswer-car-tax/01-calculator.png`
+
+자동차세 계산기
+https://u-jeverse.com/auto/car-tax
+
+차를 굴리는 데 드는 기름값은
+연비 유류비 계산기로 이어서 볼 수 있어요.
+https://u-jeverse.com/auto/fuel-cost
+
+────────────────────
+
+기준일 2026년 10월 3일
+출처
+지방세법 제127조 세율 https://www.law.go.kr/LSW/lsLinkProc.do?lsNm=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95&joLnkStr=%EC%A0%9C127%EC%A1%B0&mode=2
+지방세법 제128조 납기와 징수방법, 연세액 납부 공제 https://www.law.go.kr/LSW/lsLinkProc.do?lsNm=%EC%A7%80%EB%B0%A9%EC%84%B8%EB%B2%95&joLnkStr=%EC%A0%9C128%EC%A1%B0&mode=2
+서초구청 세금알아보기 자동차세 연납 https://www.seocho.go.kr/site/tax/03/10303010000002023050810.jsp
+바로답 자동차세 계산기 https://u-jeverse.com/auto/car-tax
+실제 세액은 감면 대상, 보유기간, 지자체 고지 방식에 따라 달라질 수 있어요.
+
+#자동차세 #자동차세계산 #자동차세계산기 #자동차세2026 #자동차세연납 #자동차세연납할인 #자동차세연납신청 #자동차세납부 #자동차세배기량 #자동차세차령 #자동차세1월 #지방교육세 #배기량세금 #전기차자동차세 #하이브리드자동차세 #경차자동차세 #아반떼자동차세 #쏘나타자동차세 #그랜저자동차세 #자동차유지비 #자동차세위택스 #차령경감 #자동차 #자동차관리 #생활계산기 #바로답 #계산기
+
+
