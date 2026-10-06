@@ -1,0 +1,872 @@
+Reading prompt from stdin...
+OpenAI Codex v0.160.0
+--------
+workdir: C:\Users\kim\AppData\Local\Temp\codex_image_jobs\hangul-before-school-7year-2026-20261006-155448
+model: gpt-6.1-sol
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a10ffe-57ba-71e3-9287-f5b7c92f80fb
+--------
+user
+이 폴더에서 블로그 이미지를 만든다. 사용자가 미리 승인한 자동 작업이므로 확인을 기다리지 않는다.
+
+1. IMAGE_RULES.md 규칙을 읽는다. 이 폴더에서는 계획의 file 값이 이 폴더 안의 파일 이름이다.
+2. plan.json과 manuscript.md(내용 참고용)를 읽는다.
+3. plan.json의 images를 순서대로 하나씩 내장 이미지 생성 도구로 만든다. 각 항목의 prompt와 text를 정확히 따른다.
+   첨부한 이미지(reference 파일)는 컨셉 레퍼런스다. 분위기, 색, 질감만 참고하고 베끼지 않는다.
+   host-로 시작하는 첨부 이미지는 진행자 얼굴 기준이다. 항목 prompt에 진행자가 나오면 이 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)을 유지하고, 옷과 포즈와 배경은 그 이미지 컨셉에 맞게 새로 그린다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
+4. 생성된 PNG를 이 폴더에 각 항목의 file 이름으로 복사해 저장한다. 다른 파일은 만들거나 고치지 않는다.
+5. 파이썬 이미지 라이브러리, 외부 API, API 키를 쓰지 않는다. 내장 이미지 생성 도구와 파일 복사만 쓴다.
+6. 한 장이 실패하면 한 번만 다시 시도하고, 그래도 안 되면 건너뛴다.
+7. 마지막 답은 JSON 한 줄로 한다: {"saved": [파일 이름들], "failed": [파일 이름들]}
+
+codex
+규칙과 계획을 읽고, 이미지 생성 스킬에 따라 순서대로 생성해 지정된 PNG 파일명으로 저장하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath IMAGE_RULES.md; Get-Content -LiteralPath plan.json; Get-Content -LiteralPath manuscript.md; Get-Content -LiteralPath 'C:/Users/kim/.codex/skills/.system/imagegen/SKILL.md'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\hangul-before-school-7year-2026-20261006-155448
+ succeeded in 120ms:
+# 釉붾줈洹??대?吏 ?앹꽦 洹쒖튃 (Codex ?먮룞 ?ㅽ뻾??
+
+`scripts/codex_image_draft.py`媛 Codex瑜?遺瑜??????뚯씪???쏀엺??
+Codex???대?吏 怨꾪쉷 JSON????ぉ???섎굹??洹몃?濡?洹몃┛?? ?대?吏???ㅼ뼱媛?湲?먮뒗 怨꾪쉷???곹엺 臾멸뎄媛 ?꾨???
+
+## 而⑥뀎
+
+| concept | ?ㅽ???| ?곕뒗 湲 | ?덊띁?곗뒪 |
+|---|---|---|---|
+| halftone | ?섑봽???몄뇙 ?ъ쭊. ?먯깋 ?⑥깋 諛곌꼍, ?먯쑝濡?李랁엺 ?ъ쭊 吏덇컧, ?덊듃濡??≪? ?먮굦 | ?≪븘 ?뺤콉쨌?뺣낫, 諛붾줈??| design/thumbnail-references/halftone/00~03.png |
+| travel-poster | 鍮덊떚吏 ?ы뻾 ?ъ뒪?? ?됰㈃ ?꾪삎, 珥섏킌???띻꼍, ?쒗븳???? ??愿愿??ъ뒪???먮굦 | ???ы뻾 | design/thumbnail-references/travel-poster/00~03.png |
+| photo-doodle | ?ъ쭊 ???숈꽌. ?ㅼ젣 ?ъ쭊 ?꾩뿉 ?먭렇由??? ?덊꽣留? ?묒? 罹먮┃??| ?쒗뭹 ?뚭컻 | design/thumbnail-references/photo-doodle/00~03.png |
+
+- ?덊띁?곗뒪??遺꾩쐞湲? ?? 吏덇컧, 援щ룄留?李멸퀬?쒕떎. 洹몃┝??洹몃?濡?踰좊겮吏 ?딅뒗??
+- ???먭퀬???대?吏??媛숈? 而⑥뀎怨?媛숈? ??議고빀?쇰줈 ?듭씪?쒕떎.
+
+## ?몃꽕???먯튃
+
+- ?몃꽕?쇱? 寃??寃곌낵?먯꽌 ?뚮윭蹂닿퀬 ?띔쾶 留뚮뱶??寃껋씠 紐⑹쟻?대떎. ?멸린?? ??? 湲댁옣媛먯쿂???대뒓 ?뺣룄 ?먭레???덈뒗 ?곸떊?곸씤 ?λ㈃怨?臾멸뎄瑜??대떎. ?뷀븳 ?뺣낫 移대뱶泥섎읆 留뚮뱾吏 ?딅뒗??
+- AI ?먮굦??以꾩씤?? 諛섏쭩?대뒗 愿묓깮 ?쇰?, ?꾩씠??媛숈? 紐⑤뜽, ?꾨꼍?섍쾶 ?뺣룉???λ㈃ ????ㅼ젣 ?ъ쭊 媛숈? 吏덇컧, ?앺솢媛? 而⑥뀎???몄뇙쨌?먭렇由?吏덇컧???대┛??
+- ?먭레?곸씠?붾씪???ъ떎怨??ㅻⅨ 怨쇱옣? ?섏? ?딅뒗?? 臾멸뎄? ?レ옄???먭퀬???덈뒗 寃껊쭔 ?대떎.
+- **?묎쾶 遊먮룄 ?쏀????쒕떎.** ?몃꽕?쇱? ?대???寃??寃곌낵?먯꽌 ?먰넲留????ш린濡?蹂댁씤?? 洹??ш린?먯꽌 ?쒕ぉ??諛붾줈 ?쏀엳?꾨줉 ?쒕ぉ? 8~12???덊뙉?쇰줈 吏㏐쾶, ?붾㈃ ??쓽 ?遺遺꾩쓣 李⑥???留뚰겮 ?ш쾶 ?대떎. 諛곌꼍怨?湲?먯쓽 紐낆븫 ?鍮꾨? 媛뺥븯寃??섍퀬, ?묒? 蹂댁“ 臾멸뎄???ｌ? ?딅뒗??
+- **?レ옄 ?섎굹瑜?媛???ш쾶.** ?먭퀬?먯꽌 媛??沅곴툑利앹쓣 遺瑜대뒗 援ъ껜?곸씤 ?レ옄 ?섎굹(?? 理쒕? 20%, ??200留뚯썝, 3,460留뚯썝)瑜?怨⑤씪 ?쒕ぉ蹂대떎 ?ш굅??媛숈? ?ш린濡??ｋ뒗?? ?レ옄媛 ?щ윭 媛쒕㈃ ?섎굹留?怨좊Ⅸ?? ?먭퀬??留덈븙???レ옄媛 ?놁쑝硫??ｌ? ?딅뒗??
+
+## 湲???대?吏 ??
+?몃꽕??1??+ 蹂몃Ц ?대?吏 ?μ닔.
+
+| 湲 | ?몃꽕??| 蹂몃Ц ?대?吏 | ?⑷퀎 |
+|---|---|---|---|
+| ?≪븘 | 1 | 3 | 4 |
+| 而ㅻ꽖??| 1 | 2 | 3 |
+| 諛붾줈??| 1 | 2 (?ㅼ젣 怨꾩궛湲?罹≪쿂??蹂꾨룄) | 3 |
+| ???ы뻾 | 1 | 4 (?섏쨷???곸슜) | 5 |
+
+## 湲??
+- 怨꾪쉷??`text`???곹엺 臾멸뎄留?泥좎옄 洹몃?濡??ｋ뒗?? 怨꾪쉷???녿뒗 湲?? ?곷Ц, ?レ옄瑜?吏?대궡吏 ?딅뒗?? `text`媛 鍮꾩뼱 ?덉쑝硫?湲?먮? ?ｌ? ?딅뒗??
+- ?몃꽕?쇱? ?쒕ぉ ??以꾧낵 ?レ옄 ?섎굹 ?뺣룄. ?뺣낫 ?대?吏???쒕ぉ ??以꾧낵 吏㏃? ??ぉ 5媛쒓퉴吏.
+- 湲?먮뒗 ?ш퀬 援듭? ?쒓? 怨좊뵓 怨꾩뿴濡? 紐⑤컮?쇱뿉???쏀엳寃??붾㈃ 媛?μ옄由ъ뿉???⑥뼱?⑤┛??
+- ?곗? ?딅뒗 寃? ?뚮몢由??먮Ⅸ 湲?? ?뚯빟 諛곗?, 留먰뭾?? ?섑듃, 蹂? 諛섏쭩?? 媛?대럠??쨌), VS, ?μ떇 愿꾪샇, ?묒? 媛곸＜, 鍮쎈뭣???? 媛吏?濡쒓퀬.
+- 洹몃┝???붾㈃??70% ?댁긽??李⑥??쒕떎.
+
+## 吏꾪뻾??(??湲)
+
+- ???쒕━利덉뿉??吏꾪뻾?먭? ?섏삩?? ?쇨뎬 湲곗?? `private_media/personas/island-host/` ???ъ꽦(female-01~03)怨??⑥꽦(male-01~03) ?ъ쭊?대떎. 怨꾪쉷??`host_references`?????щ엺???ъ쭊 2~3?μ쓣 ?ｋ뒗??
+- ?쇨뎬(?쇨뎬?? ?? 肄? ?? ?ㅼ뼱 ?먮굦)? ?좎??섍퀬, ?룰낵 ?ъ쫰? 諛곌꼍? 洹??대?吏??而⑥뀎怨?怨꾩젅??留욊쾶 諛붽씔?? 李멸퀬 ?ъ쭊???댁쇅 諛곌꼍? ?곗? ?딄퀬 洹?湲???ㅼ젣 ???띻꼍???붾떎.
+- 洹몃┝泥대룄 而⑥뀎???곕Ⅸ?? 鍮덊떚吏 ?ы뻾 ?ъ뒪??而⑥뀎?대㈃ 吏꾪뻾?먮룄 ?ъ뒪??洹몃┝泥대줈 洹몃┛??
+- 吏꾪뻾?먭? ?섏삤????ぉ? prompt??"吏꾪뻾???쇨퀬 ?곷뒗?? 吏꾪뻾?먭? ?녿뒗 ??ぉ?먮뒗 ?щ엺 ?쇨뎬???ｌ? ?딅뒗??
+
+## ?ъ떎怨??덉쟾
+
+- ?ㅼ젣 ?μ냼, ?쒗뭹, ?쒕룄? ?ㅻⅨ 紐⑥뼇??洹몃━吏 ?딅뒗?? ?ㅻⅨ ?ъ쓽 ?쒕뱶留덊겕, ?ㅼ젣 ?뚯궗 濡쒓퀬, 議댁옱?섏? ?딅뒗 ?쒖??먭낵 ?쒖꽕???ｌ? ?딅뒗??
+- ?꾩씠 ?쇨뎬? 怨꾪쉷???곹엺 寃쎌슦?먮쭔 蹂댁씠寃??쒕떎. ?ㅼ젣 ?꾩씠 ?ъ쭊??蹂듭젣?섏? ?딅뒗??
+- ?섎せ???덉쟾 ?λ㈃??洹몃━吏 ?딅뒗?? ?댁쟾 以??대??꾪솕 議곗옉, ?섎せ??移댁떆???μ갑, ?롫뱶???ъ슦湲? ?꾩씠 ?쇱옄 臾쇨? ??
+- 留ㅻ걟??AI 愿묓깮, 怨쇳븳 HDR, ?먰?吏 ?붿냼瑜??곗? ?딅뒗??
+
+## ?ъ뼇
+
+- ?뺤궗媛곹삎 1:1, 媛?ν븯硫?1254횞1254.
+- PNG濡?怨꾪쉷??`file` 寃쎈줈????ν븳??
+
+## ?대?吏 怨꾪쉷 JSON (Claude媛 ?묒꽦)
+
+?먭퀬 ?놁뿉 `<?먭퀬?대쫫>.images.json`?쇰줈 ??ν븳??
+
+```json
+{
+  "concept": "halftone",
+  "reference": "design/thumbnail-references/halftone/01.png",
+  "images": [
+    {
+      "file": "assets/posts/<slug>/01-thumbnail.png",
+      "insert": "top",
+      "text": ["?ㅼ옄? ?듯뻾猷??좎씤", "理쒕? 20%"],
+      "prompt": "?λ㈃, 援щ룄, ?? 湲???꾩튂瑜?援ъ껜?곸쑝濡?
+    },
+    {
+      "file": "assets/posts/<slug>/02-?λ㈃.png",
+      "insert": "## ?먭퀬???뚯젣紐?洹몃?濡?,
+      "text": [],
+      "prompt": "..."
+    }
+  ]
+}
+```
+
+- `insert`: `top`? 蹂몃Ц 留???泥??대?吏媛 ????대?吏), `## ?뚯젣紐?? 洹??뚯젣紐?諛붾줈 ?꾨옒.
+- `reference`: ??而⑥뀎 ?쒖쓽 ?덊띁?곗뒪 以??섎굹. 湲留덈떎 踰덊샇瑜?諛붽퓭 蹂?붾? 以??
+- `prompt`: 臾댁뾿???대뵒???대뼡 ?됱쑝濡?洹몃┫吏, `text`瑜??대뵒???대뼡 ?ш린濡??섏?源뚯? ?곷뒗?? ?뺤씤?섏? ?딆? 媛寃? ?좎쭨, ?꾪솕踰덊샇???ｌ? ?딅뒗??
+{
+  "concept": "halftone",
+  "reference": "reference.png",
+  "host_references": [],
+  "images": [
+    {
+      "file": "01-thumbnail.png",
+      "insert": "top",
+      "text": [
+        "7???쒓? ?꾩쭅?몃뜲",
+        "?낇븰 ??
+      ],
+      "prompt": "?섑봽???몄뇙 ?ъ쭊 ?ㅽ??쇱쓽 ?뺤궗媛곹삎 ?몃꽕?? 諛곌꼍? 夷랁븳 二쇳솴???⑥깋??醫낆씠 吏덇컧. ?붾㈃ ?꾩そ 55%??嫄곗떎 諛붾떏???쇱퀜吏??쒓? ?깅쭚 移대뱶? ?됱뿰?? 諛섏? ??怨듭콉???꾩뿉???대젮?ㅻ낯 ?λ㈃???먯쑝濡?李랁엺 ?ъ쭊 吏덇컧?쇰줈 洹몃┛?? ?щ엺怨??꾩씠 ?쇨뎬? 洹몃━吏 ?딄퀬 ?고븘??伊??묒? ???섎굹留?蹂댁씤?? ?붾㈃ ?꾨옒履?40%???꾩＜ ?ш퀬 援듭? 寃???쒓? ?쒕ぉ '7???쒓? ?꾩쭅?몃뜲'瑜???以꾨줈, 洹??꾨옒?????ш쾶 ?곗깋 湲??'?낇븰 ?????붾떎. 湲???뚮몢由? 諛곗?, 留먰뭾?? 諛섏쭩?대뒗 ?곗? ?딅뒗?? 諛섏쭩?대뒗 AI 愿묓깮 ?놁씠 ?앺솢媛??덈뒗 ?몄뇙 吏덇컧."
+    },
+    {
+      "file": "02-home-play.png",
+      "insert": "## ??踰덉㎏ 吏묒뿉??遺???놁씠 ?섎뒗 ???,
+      "text": [],
+      "prompt": "媛숈? ?섑봽???몄뇙 ?ъ쭊 ?ㅽ??쇨낵 媛숈? 二쇳솴, 寃?? ?щ┝ ??議고빀. 嫄곗떎 ?곸옄 ?꾩뿉 洹몃┝梨???沅뚯씠 ?쇱퀜???덇퀬 ?놁뿉 ?대쫫 湲??移대뱶? ?됱뿰???듭씠 ?볦씤 ?λ㈃???꾩뿉??蹂?援щ룄. ?대Ⅸ ?먭낵 ?꾩씠 ?먯씠 媛숈? 梨??섏씠吏瑜??④퍡 吏싰퀬 ?덇퀬 ?쇨뎬? 蹂댁씠吏 ?딅뒗?? 湲?먮뒗 ?ｌ? ?딅뒗??"
+    },
+    {
+      "file": "03-school-check.png",
+      "insert": "## 泥?踰덉㎏ ?낇븰 ?????뺣룄硫?異⑸텇?댁슂",
+      "text": [
+        "?낇븰 ?????뺣룄硫?,
+        "???대쫫 ?쎄린",
+        "?먯쓬 紐⑥쓬 ?뚮━",
+        "諛쏆묠 ?녿뒗 湲??
+      ],
+      "prompt": "媛숈? ?섑봽???몄뇙 ?ㅽ??쇱쓽 ?뺣낫 ?ъ뒪?? 諛곌꼍? ?щ┝??醫낆씠??二쇳솴 ?섑봽????臾대뒳. ?쇱そ 35%???묒? 梨낃?諛⑷낵 ?고븘 ???먮（瑜??섑봽???ъ쭊 吏덇컧?쇰줈 洹몃┛?? ?щ엺 ?쇨뎬? ?녿떎. ?ㅻⅨ履?65%???ш퀬 援듭? 寃???쒓? ?쒕ぉ '?낇븰 ?????뺣룄硫????먭퀬 洹??꾨옒 ?먯쑝濡?泥댄겕???ㅻえ 移???以? '???대쫫 ?쎄린', '?먯쓬 紐⑥쓬 ?뚮━', '諛쏆묠 ?녿뒗 湲??. ?ㅻⅨ 湲?먮굹 ?묒? 湲?⑤뒗 ?곗? ?딅뒗??"
+    },
+    {
+      "file": "04-checklist.png",
+      "insert": "## ?낇븰 ?꾧퉴吏 梨숆꺼?먮㈃ 醫뗭? 寃?,
+      "text": [
+        "?쒓????꾩씠? ?대낵 寃?,
+        "媛꾪뙋 湲??李얘린",
+        "?대쫫 移대뱶 留뚮뱾湲?,
+        "洹몃┝梨?踰덇컝???쎄린",
+        "?섎（ 10遺꾨쭔"
+      ],
+      "prompt": "媛숈? ?섑봽???몄뇙 ?ㅽ??? ?꾧? ???좊컻???꾩뿉 ?볦씤 ?몃? 硫붾え吏 ???κ낵 ?고븘, ?묒? 洹몃┝梨낆쓣 ?꾩뿉???대젮?ㅻ낯 ?λ㈃???섑봽???ъ쭊 吏덇컧?쇰줈 洹몃┛?? 硫붾え吏 ?꾩뿉 ?ш퀬 援듭? ?쒓? ?쒕ぉ '?쒓????꾩씠? ?대낵 寃?怨??먯쑝濡?泥댄겕???ㅻえ 移???以? '媛꾪뙋 湲??李얘린', '?대쫫 移대뱶 留뚮뱾湲?, '洹몃┝梨?踰덇컝???쎄린', '?섎（ 10遺꾨쭔'. 諛곌꼍 ?됱? 二쇳솴怨??щ┝. ?꾩씠??洹몃━吏 ?딅뒗??"
+    }
+  ]
+}
+# 7???쒓? ?꾩쭅 紐??먯뼱??珥덈벑 ?낇븰 ???대뵒源뚯? 以鍮꾪븷源??쒓??좎뿉 ?뺤씤?섎뒗 湲곗? 5媛吏
+
+<!-- parenting -->
+?덈뀞?섏꽭?? 泥レ㎏ 7?댁뿉
+5?붿깮 ?띾뫁?닿퉴吏 ?ㅼ슦???ㅻ뫁???꾨튌?덉슂.
+
+7??寃⑥슱??媛源뚯썙吏硫?遺紐?留덉쓬??湲됲빐?몄슂.
+?놁쭛 ?꾩씠??梨낆쓣 ?좎닠 ?쎈뒗?ㅻ뒗??**?곕━ ?꾩씠???꾩쭅 諛쏆묠???대젮?대뜲** ?띠옏?꾩슂.
+
+?쒓??좎씠 3???욎씠????怨좊???吏싳뼱遊ㅼ뼱??
+?낇븰 ?꾩뿉 ==?대뵒源뚯? 以鍮꾪븯硫??섎뒗吏==
+洹몃━怨??몄젣 ?곷떞??諛쏆븘???섎뒗吏瑜?紐⑥븯?댁슂.
+
+***?낇븰??肄붿븵?대㈃ 愿쒗엳 ?섎쭔 ??? 寃?媛숈옏?꾩슂~***
+泥쒖쿇???쎌뼱蹂댁떆硫?留덉쓬???쒓껐 媛踰쇱썙吏?嫄곗삁??
+
+## ?숆탳???쒓????대뼸寃?媛瑜댁튌源?
+珥덈벑?숆탳 1, 2?숇뀈? ?쒓? ?대뱷??援먯쑁怨쇱젙 ?덉뿉??吏곸젒 媛瑜댁퀜??
+2022 媛쒖젙 援먯쑁怨쇱젙? 1, 2?숇뀈 援?뼱瑜?!!醫낆쟾蹂대떎 34?쒓컙 ?섎젮!! ?쒓? 援먯쑁??媛뺥솕?덉뼱??
+
+??援먯쑁怨쇱젙? **2024??3??*??1, 2?숇뀈遺???곸슜?먭퀬
+2027??3?붿뿉??紐⑤뱺 ?숇뀈?쇰줈 ?댁뼱?몄슂.
+洹몃옒???숆탳??==?쒓???泥섏쓬 諛곗슦???꾩씠==???④퍡 媛瑜댁튂??嫄??꾩젣濡??섏뾽??吏쒖슂.
+
+## 洹몃윴?????ㅻ뱾 誘몃━ 諛곗슱源?
+?꾩떎? 議곌툑 ?щ씪??
+?ш탳?↔굇?뺤뾾?붿꽭?곴낵 ?뺤튂?섎뒗?꾨쭏?ㅼ씠
+2024??1??珥? ?숇?紐?209紐낆뿉寃?臾쇱뿀?붾땲
+**64.8%**媛 痍⑦븰 ?꾩뿉 ?쒓???誘몃━ 諛곗썱?ㅺ퀬 ?듯뻽?댁슂.
+
+誘몃━ 諛곗슫 ?댁쑀 1?꾨뒗 **61.2%**媛 怨좊Ⅸ
+?숆탳媛 ?쒓????덈떎???꾩젣濡??댁쁺?쒕떎怨??앷컖?댁꽌?덉슂.
+?ㅻ쭔 209紐낆쓣 ??곸쑝濡???議곗궗?쇱꽌
+?꾩껜 遺紐⑥쓽 ?됯퇏?쇰줈 蹂닿린???대젮?뚯슂.
+
+| 議곗궗 ??ぉ | 寃곌낵 |
+|---|---|
+| 痍⑦븰 ???쒓? ?좏뻾 | 64.8% |
+| ?댁쑀 1???숆탳 ?꾩젣 | 61.2% |
+| ?댁쑀 2???ㅻⅨ ?꾩씠???뚯븘??| 32.1% |
+
+<!-- experience -->
+> 泥レ㎏ ?낇븰 以鍮꾨? ?섎떎 蹂대땲 二쇰??먯꽌 ?쒓??????먮떎???댁빞湲곌? ?먭씀 ?ㅻ젮??議곌툒?댁??붾씪怨좎슂. ????숈썝遺???뚯븘蹂닿린 ?꾩뿉 ?꾩씠媛 吏묒뿉??湲?먮? ?쇰쭏???쎈뒗吏 癒쇱? 媛숈씠 ?뺤씤??遊ㅼ뼱??
+
+## 泥?踰덉㎏ ?낇븰 ?????뺣룄硫?異⑸텇?댁슂
+
+?쒓????꾨꼍?섍쾶 ?쇱빞 ?낇븰?섎뒗 嫄??꾨땲?먯슂.
+援?뼱 ?섏뾽?먯꽌 泥섏쓬遺???ㅼ떆 ?ㅻ（湲??뚮Ц??**???대쫫怨?媛꾨떒???깅쭚**???쎌뼱蹂대뒗 ?뺣룄硫?異쒕컻?좎쑝濡?異⑸텇?섎떎???덈궡媛 留롮븘??
+
+湲곗????몄썙?먮㈃ ??遺덉븞?댁슂.
+==?먯쓬怨?紐⑥쓬 ?뚮━==瑜??뚭퀬
+諛쏆묠 ?녿뒗 湲?먮? ?붾벉?붾벉 ?쎌쓣 ???덉쑝硫?醫뗭븘??
+諛쏆묠???덈뒗 湲?먮뒗 ?숆탳?먯꽌 ?댁뼱??諛곗슦硫??쇱슂.
+
+## ??踰덉㎏ ?쎄린媛 癒쇱? ?곌린???섏쨷
+
+?꾩씠?ㅼ? ?쎄린? ?곌린???띾룄媛 ?щ씪??
+!!?쎄린瑜?癒쇱? ?듯엳怨?! ?곌린??泥쒖쿇???곕씪???
+???섏씠 ?꾩쭅 ?쏀븳 ?꾩씠?먭쾶
+諛쏆븘?곌린遺???쒗궎硫??쒓????レ뼱吏????덉뼱??
+
+?고븘???↔린 ?꾩뿉???щ젅?뚯뒪???됱뿰?꾨줈 ??湲뗪린瑜?癒쇱? ?대낫?몄슂.
+**?섎（ 10遺??덊뙉**?쇰줈 吏㏐쾶 ?딆뼱???섎뒗 寃??꾩씠媛 吏移섏? ?딅뒗 諛⑸쾿?댁뿉??
+
+## ??踰덉㎏ 吏묒뿉??遺???놁씠 ?섎뒗 ???
+?앺솢 ??湲?먮? ??댁쿂??李얠븘蹂대뒗 寃?媛???ъ썙??
+
+- 媛꾪뙋, 怨쇱옄 遊됱?, ?꾪뙆?????쒖???湲??李얘린
+- ?꾩씠 ?대쫫 湲?먮줈 移대뱶 留뚮뱾??蹂닿린
+- 醫뗭븘?섎뒗 洹몃┝梨낆쓣 遺紐⑥? ??以꾩뵫 踰덇컝???쎄린
+- 媛숈? ?뚮━濡??쒖옉?섎뒗 ?깅쭚 留먮???
+臾몄젣吏묒쓣 ?섎━湲곕낫??==?꾩씠媛 ?λ?瑜?蹂댁씠??湲??=遺???쒖옉??蹂댁꽭??
+梨낆쓣 ?쎌뼱二쇰뒗 ?쒓컙??湲몄닔濡?湲?먯뿉 ????멸린?щ룄 ?곕씪 而ㅼ졇??
+
+## ??踰덉㎏ ?덈Т ?쇱컢 ?꾨꼍?섍쾶 ?쇰㈃
+
+誘몃━ 留롮씠 諛곗슦??寃?瑗??앹씠 ?섎뒗 寃껊룄 ?꾨땲?먯슂.
+?대? ???꾨뒗 ?꾩씠???숆탳 ?쒓? ?섏뾽??**吏猷⑦븯寃??먭뺨吏??섎룄** ?덈떎怨??댁슂.
+
+洹몃옒???섏뾽 ?쒕룄媛 ?먰듃?ъ?吏 ?딄쾶
+!!湲?먮낫???ｊ퀬 留먰븯???듦?!!??媛숈씠 湲몃윭二쇰뒗 寃?醫뗭븘??
+?좎깮??留먯????앷퉴吏 ?ｊ퀬 ?쒖꽌瑜?湲곕떎由щ뒗 ?쇱씠?먯슂.
+
+<!-- experience -->
+> ?꾩씠留덈떎 湲?먯뿉 愿?ъ씠 ?앷린???쒓린媛 ?ㅻⅤ?ㅻ뒗 嫄?泥レ㎏瑜??ㅼ슦硫??먭펷?댁슂. ?꾩쭅 ?띾뫁?대뒗 ?쒖갭 ?ㅼ쓽 ?쇱씠吏留? ?섏쨷?먮룄 鍮꾧탳蹂대떎???꾩씠 ?띾룄瑜?癒쇱? 蹂대젮怨??댁슂.
+
+## ?ㅼ꽢 踰덉㎏ ?곷떞???꾩슂???좏샇
+
+?쒓?????쾶 諛곗슦??寃껉낵 ?쒕룆利앹? ?щ씪??
+?쒖슱??대┛?대퀝???덈궡瑜?蹂대㈃
+?쒕룆利앹? 湲???뺥솗?섍퀬 ?좎갹?섍쾶 ?쎄린 ?대졄怨?**泥좎옄瑜??먯＜ ?由щ뒗** ?숈뒿?μ븷?덉슂.
+
+吏꾨떒? 吏??寃?? ?쎄린? ?곌린 ?숈뾽 ?깆랬,
+?좉꼍?щ━ ?됯?瑜??④퍡 蹂닿퀬 ?대젮??
+援먯쑁 湲고쉶媛 遺議깊뻽??寃쎌슦??癒쇱? ?쒖쇅?섍퀬 ?댄렣蹂몃떎怨??댁슂.
+
+> ?곷떞節쒖땐遺꾪엳 媛瑜댁튂怨??곗뒿?덈뒗?곕룄 1?숇뀈 ?대궡 湲?먯? ?뚮━瑜??곌껐?섍린 ?섎뱾?댄븯硫??숆탳 ?좎깮?섍낵 ?뚯븘泥?냼?꾧낵 ?먮뒗 ?숈뒿 ?대━?됱뿉 ?곷떞??蹂댁꽭?? 7?댁뿉 ?쒓???紐??먮떎???ъ떎留뚯쑝濡?嫄깆젙???꾩슂???놁뼱??
+
+## ?낇븰 ?꾧퉴吏 梨숆꺼?먮㈃ 醫뗭? 寃?
+<!-- box: quotation_postit -->
+> **???대쫫**怨?媛꾨떒???깅쭚 ?쎌뼱蹂닿린
+> ==?먯쓬 紐⑥쓬 ?뚮━==? 諛쏆묠 ?녿뒗 湲??> ?섎（ 10遺??대궡 吏㏃? ?쒓? ???> ?고븘 ?↔린蹂대떎 癒쇱? ??湲뗪린
+
+***?꾩씠 ?띾룄瑜?誘우뼱二쇰뒗 寃??쒖씪 ?좊뱺??以鍮꾨뜑?쇨퀬??***
+??湲 ??ν빐 ?먯떆怨??쒓??좎뿉 ?꾩씠? 湲??????쒕쾲 ?대낫?몄슂.
+
+????????????????????
+
+湲곗???2026??10??6??異쒖쿂
+援먯쑁遺 2022 媛쒖젙 援먯쑁怨쇱젙 諛쒗몴 2022??12??22??援???쇰낫 蹂대룄 https://www.kmib.co.kr/article/view.asp?arcid=0924279370
+?ш탳?↔굇?뺤뾾?붿꽭???뺤튂?섎뒗?꾨쭏??珥? ?숇?紐??쒓? ?좏뻾?숈뒿 議곗궗 2024??2??21???댁뒪??蹂대룄 https://www.newspim.com/news/view/20240221000733
+?쒖슱??대┛?대퀝???쒕룆利??덈궡 https://child.snuh.org/health/nMedInfo/nView.do?category=DIS&medid=AA000594
+??湲? ?쇰컲?곸씤 ?뺣낫?대ŉ 吏꾨떒?대굹 移섎즺瑜???좏븯吏 ?딆븘?? ?꾩씠 ?곹깭媛 嫄깆젙?섎㈃ ?꾨Ц媛? ?곷떞?섏꽭??
+
+#7?댄븳湲 #?쒓??쇨린 #珥덈벑?낇븰以鍮?#?낇븰?꾪븳湲 #?쒓??좏뻾?숈뒿 #?쒓?梨낆엫援먯쑁 #珥덈벑1?숇뀈?쒓? #?쒓??대뱷 #7?댄븳湲紐삳뿄 #?쒓???#?쒓????#?쒓?怨듬??쒓린 #?쒕룆利앹쬆??#?숈뒿?대━??#2020?꾩깮 #2027珥덈벑?낇븰 #?좎븘援먯쑁 #珥덈벑?낇븰 #?꾩씠?쒓? #?쒓?怨듬?諛⑸쾿 #諛쏆븘?곌린 #臾명빐??#寃쎄린?꾩쑁??#?ㅻ뫁?댁븘鍮?#?띾뫁?댁쑁??#?≪븘?뺣낫 #7?댁쑁??#2026?쒓???
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural ??candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup ??product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup ??app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram ??diagrams/infographics with structured layout and text.
+- scientific-educational ??classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing ??campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual ??slide, chart, workflow, and data-heavy business visuals.
+- logo-brand ??logo/mark exploration, vector-friendly.
+- illustration-story ??comics, children?셲 book art, narrative scenes.
+- stylized-concept ??style-driven concept art, 3D/stylized renders.
+- historical-scene ??period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization ??translate/replace in-image text, preserve layout.
+- identity-preserve ??try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit ??remove/replace a specific element (including interior swaps).
+- lighting-weather ??time-of-day/season/atmosphere changes only.
+- background-extraction ??transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer ??apply reference style while changing subject/scene.
+- compositing ??multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render ??drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Content -Encoding UTF8 -LiteralPath IMAGE_RULES.md; Get-Content -Encoding UTF8 -LiteralPath plan.json; Get-Content -Encoding UTF8 -LiteralPath manuscript.md' in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\hangul-before-school-7year-2026-20261006-155448
+ succeeded in 134ms:
+# 블로그 이미지 생성 규칙 (Codex 자동 실행용)
+
+`scripts/codex_image_draft.py`가 Codex를 부를 때 이 파일을 읽힌다.
+Codex는 이미지 계획 JSON의 항목을 하나씩 그대로 그린다. 이미지에 들어갈 글자는 계획에 적힌 문구가 전부다.
+
+## 컨셉
+
+| concept | 스타일 | 쓰는 글 | 레퍼런스 |
+|---|---|---|---|
+| halftone | 하프톤 인쇄 사진. 원색 단색 배경, 점으로 찍힌 사진 질감, 레트로 잡지 느낌 | 육아 정책·정보, 바로답 | design/thumbnail-references/halftone/00~03.png |
+| travel-poster | 빈티지 여행 포스터. 평면 도형, 촘촘한 풍경, 제한된 색, 옛 관광 포스터 느낌 | 섬 여행 | design/thumbnail-references/travel-poster/00~03.png |
+| photo-doodle | 사진 위 낙서. 실제 사진 위에 손그림 선, 레터링, 작은 캐릭터 | 제품 소개 | design/thumbnail-references/photo-doodle/00~03.png |
+
+- 레퍼런스는 분위기, 색, 질감, 구도만 참고한다. 그림을 그대로 베끼지 않는다.
+- 한 원고의 이미지는 같은 컨셉과 같은 색 조합으로 통일한다.
+
+## 썸네일 원칙
+
+- 썸네일은 검색 결과에서 눌러보고 싶게 만드는 것이 목적이다. 호기심, 놀람, 긴장감처럼 어느 정도 자극이 있는 혁신적인 장면과 문구를 쓴다. 흔한 정보 카드처럼 만들지 않는다.
+- AI 느낌을 줄인다. 반짝이는 광택 피부, 아이돌 같은 모델, 완벽하게 정돈된 장면 대신 실제 사진 같은 질감, 생활감, 컨셉의 인쇄·손그림 질감을 살린다.
+- 자극적이더라도 사실과 다른 과장은 하지 않는다. 문구와 숫자는 원고에 있는 것만 쓴다.
+- **작게 봐도 읽혀야 한다.** 썸네일은 휴대폰 검색 결과에서 손톱만 한 크기로 보인다. 그 크기에서 제목이 바로 읽히도록 제목은 8~12자 안팎으로 짧게, 화면 폭의 대부분을 차지할 만큼 크게 쓴다. 배경과 글자의 명암 대비를 강하게 하고, 작은 보조 문구는 넣지 않는다.
+- **숫자 하나를 가장 크게.** 원고에서 가장 궁금증을 부르는 구체적인 숫자 하나(예: 최대 20%, 월 200만원, 3,460만원)를 골라 제목보다 크거나 같은 크기로 넣는다. 숫자가 여러 개면 하나만 고른다. 원고에 마땅한 숫자가 없으면 넣지 않는다.
+
+## 글당 이미지 수
+
+썸네일 1장 + 본문 이미지 장수.
+
+| 글 | 썸네일 | 본문 이미지 | 합계 |
+|---|---|---|---|
+| 육아 | 1 | 3 | 4 |
+| 커넥트 | 1 | 2 | 3 |
+| 바로답 | 1 | 2 (실제 계산기 캡처는 별도) | 3 |
+| 섬 여행 | 1 | 4 (나중에 적용) | 5 |
+
+## 글자
+
+- 계획의 `text`에 적힌 문구만 철자 그대로 넣는다. 계획에 없는 글자, 영문, 숫자를 지어내지 않는다. `text`가 비어 있으면 글자를 넣지 않는다.
+- 썸네일은 제목 한 줄과 숫자 하나 정도. 정보 이미지는 제목 한 줄과 짧은 항목 5개까지.
+- 글자는 크고 굵은 한글 고딕 계열로, 모바일에서 읽히게 화면 가장자리에서 떨어뜨린다.
+- 쓰지 않는 것: 테두리 두른 글자, 알약 배지, 말풍선, 하트, 별, 반짝이, 가운뎃점(·), VS, 장식 괄호, 작은 각주, 빽빽한 표, 가짜 로고.
+- 그림이 화면의 70% 이상을 차지한다.
+
+## 진행자 (섬 글)
+
+- 섬 시리즈에는 진행자가 나온다. 얼굴 기준은 `private_media/personas/island-host/` 의 여성(female-01~03)과 남성(male-01~03) 사진이다. 계획의 `host_references`에 한 사람의 사진 2~3장을 넣는다.
+- 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)은 유지하고, 옷과 포즈와 배경은 그 이미지의 컨셉과 계절에 맞게 바꾼다. 참고 사진의 해외 배경은 쓰지 않고 그 글의 실제 섬 풍경에 둔다.
+- 그림체도 컨셉을 따른다. 빈티지 여행 포스터 컨셉이면 진행자도 포스터 그림체로 그린다.
+- 진행자가 나오는 항목은 prompt에 "진행자"라고 적는다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
+
+## 사실과 안전
+
+- 실제 장소, 제품, 제도와 다른 모양을 그리지 않는다. 다른 섬의 랜드마크, 실제 회사 로고, 존재하지 않는 표지판과 시설을 넣지 않는다.
+- 아이 얼굴은 계획에 적힌 경우에만 보이게 한다. 실제 아이 사진을 복제하지 않는다.
+- 잘못된 안전 장면을 그리지 않는다. 운전 중 휴대전화 조작, 잘못된 카시트 장착, 엎드려 재우기, 아이 혼자 물가 등.
+- 매끈한 AI 광택, 과한 HDR, 판타지 요소를 쓰지 않는다.
+
+## 사양
+
+- 정사각형 1:1, 가능하면 1254×1254.
+- PNG로 계획의 `file` 경로에 저장한다.
+
+## 이미지 계획 JSON (Claude가 작성)
+
+원고 옆에 `<원고이름>.images.json`으로 저장한다.
+
+```json
+{
+  "concept": "halftone",
+  "reference": "design/thumbnail-references/halftone/01.png",
+  "images": [
+    {
+      "file": "assets/posts/<slug>/01-thumbnail.png",
+      "insert": "top",
+      "text": ["다자녀 통행료 할인", "최대 20%"],
+      "prompt": "장면, 구도, 색, 글자 위치를 구체적으로"
+    },
+    {
+      "file": "assets/posts/<slug>/02-장면.png",
+      "insert": "## 원고의 소제목 그대로",
+      "text": [],
+      "prompt": "..."
+    }
+  ]
+}
+```
+
+- `insert`: `top`은 본문 맨 위(첫 이미지가 대표 이미지), `## 소제목`은 그 소제목 바로 아래.
+- `reference`: 위 컨셉 표의 레퍼런스 중 하나. 글마다 번호를 바꿔 변화를 준다.
+- `prompt`: 무엇을 어디에 어떤 색으로 그릴지, `text`를 어디에 어떤 크기로 둘지까지 적는다. 확인되지 않은 가격, 날짜, 전화번호는 넣지 않는다.
+{
+  "concept": "halftone",
+  "reference": "reference.png",
+  "host_references": [],
+  "images": [
+    {
+      "file": "01-thumbnail.png",
+      "insert": "top",
+      "text": [
+        "7살 한글 아직인데",
+        "입학 전"
+      ],
+      "prompt": "하프톤 인쇄 사진 스타일의 정사각형 썸네일. 배경은 쨍한 주황색 단색에 종이 질감. 화면 위쪽 55%에 거실 바닥에 펼쳐진 한글 낱말 카드와 색연필, 반쯤 쓴 공책을 위에서 내려다본 장면을 점으로 찍힌 사진 질감으로 그린다. 사람과 아이 얼굴은 그리지 않고 연필을 쥔 작은 손 하나만 보인다. 화면 아래쪽 40%에 아주 크고 굵은 검정 한글 제목 '7살 한글 아직인데'를 한 줄로, 그 아래에 더 크게 흰색 글씨 '입학 전'을 둔다. 글자 테두리, 배지, 말풍선, 반짝이는 쓰지 않는다. 반짝이는 AI 광택 없이 생활감 있는 인쇄 질감."
+    },
+    {
+      "file": "02-home-play.png",
+      "insert": "## 세 번째 집에서 부담 없이 하는 놀이",
+      "text": [],
+      "prompt": "같은 하프톤 인쇄 사진 스타일과 같은 주황, 검정, 크림 색 조합. 거실 탁자 위에 그림책 한 권이 펼쳐져 있고 옆에 이름 글자 카드와 색연필 통이 놓인 장면을 위에서 본 구도. 어른 손과 아이 손이 같은 책 페이지를 함께 짚고 있고 얼굴은 보이지 않는다. 글자는 넣지 않는다."
+    },
+    {
+      "file": "03-school-check.png",
+      "insert": "## 첫 번째 입학 전 이 정도면 충분해요",
+      "text": [
+        "입학 전 이 정도면",
+        "내 이름 읽기",
+        "자음 모음 소리",
+        "받침 없는 글자"
+      ],
+      "prompt": "같은 하프톤 인쇄 스타일의 정보 포스터. 배경은 크림색 종이에 주황 하프톤 점 무늬. 왼쪽 35%에 작은 책가방과 연필 한 자루를 하프톤 사진 질감으로 그린다. 사람 얼굴은 없다. 오른쪽 65%에 크고 굵은 검정 한글 제목 '입학 전 이 정도면'을 두고 그 아래 손으로 체크한 네모 칸 세 줄: '내 이름 읽기', '자음 모음 소리', '받침 없는 글자'. 다른 글자나 작은 글씨는 쓰지 않는다."
+    },
+    {
+      "file": "04-checklist.png",
+      "insert": "## 입학 전까지 챙겨두면 좋은 것",
+      "text": [
+        "한글날 아이와 해볼 것",
+        "간판 글자 찾기",
+        "이름 카드 만들기",
+        "그림책 번갈아 읽기",
+        "하루 10분만"
+      ],
+      "prompt": "같은 하프톤 인쇄 스타일. 현관 앞 신발장 위에 놓인 노란 메모지 한 장과 연필, 작은 그림책을 위에서 내려다본 장면을 하프톤 사진 질감으로 그린다. 메모지 위에 크고 굵은 한글 제목 '한글날 아이와 해볼 것'과 손으로 체크한 네모 칸 네 줄: '간판 글자 찾기', '이름 카드 만들기', '그림책 번갈아 읽기', '하루 10분만'. 배경 색은 주황과 크림. 아이는 그리지 않는다."
+    }
+  ]
+}
+# 7살 한글 아직 못 뗐어요 초등 입학 전 어디까지 준비할까 한글날에 확인하는 기준 5가지
+
+<!-- parenting -->
+안녕하세요, 첫째 7살에
+5월생 쌍둥이까지 키우는 다둥이 아빠예요.
+
+7살 겨울이 가까워지면 부모 마음이 급해져요.
+옆집 아이는 책을 술술 읽는다는데
+**우리 아이는 아직 받침이 어려운데** 싶잖아요.
+
+한글날이 3일 앞이라 이 고민을 짚어봤어요.
+입학 전에 ==어디까지 준비하면 되는지==
+그리고 언제 상담을 받아야 하는지를 모았어요.
+
+***입학이 코앞이면 괜히 나만 늦은 것 같잖아요~***
+천천히 읽어보시면 마음이 한결 가벼워질 거예요.
+
+## 학교는 한글을 어떻게 가르칠까
+
+초등학교 1, 2학년은 한글 해득을
+교육과정 안에서 직접 가르쳐요.
+2022 개정 교육과정은 1, 2학년 국어를
+!!종전보다 34시간 늘려!! 한글 교육을 강화했어요.
+
+이 교육과정은 **2024년 3월**에 1, 2학년부터 적용됐고
+2027년 3월에는 모든 학년으로 이어져요.
+그래서 학교는 ==한글을 처음 배우는 아이==도
+함께 가르치는 걸 전제로 수업을 짜요.
+
+## 그런데 왜 다들 미리 배울까
+
+현실은 조금 달라요.
+사교육걱정없는세상과 정치하는엄마들이
+2024년 1월 초1 학부모 209명에게 물었더니
+**64.8%**가 취학 전에 한글을 미리 배웠다고 답했어요.
+
+미리 배운 이유 1위는 **61.2%**가 고른
+학교가 한글을 안다는 전제로 운영된다고 생각해서예요.
+다만 209명을 대상으로 한 조사라서
+전체 부모의 평균으로 보기는 어려워요.
+
+| 조사 항목 | 결과 |
+|---|---|
+| 취학 전 한글 선행 | 64.8% |
+| 이유 1위 학교 전제 | 61.2% |
+| 이유 2위 다른 아이도 알아서 | 32.1% |
+
+<!-- experience -->
+> 첫째 입학 준비를 하다 보니 주변에서 한글을 다 뗐다는 이야기가 자꾸 들려서 조급해지더라고요. 저는 학원부터 알아보기 전에 아이가 집에서 글자를 얼마나 읽는지 먼저 같이 확인해 봤어요.
+
+## 첫 번째 입학 전 이 정도면 충분해요
+
+한글을 완벽하게 떼야 입학하는 건 아니에요.
+국어 수업에서 처음부터 다시 다루기 때문에
+**내 이름과 간단한 낱말**을 읽어보는 정도면
+출발선으로 충분하다는 안내가 많아요.
+
+기준을 세워두면 덜 불안해요.
+==자음과 모음 소리==를 알고
+받침 없는 글자를 더듬더듬 읽을 수 있으면 좋아요.
+받침이 있는 글자는 학교에서 이어서 배우면 돼요.
+
+## 두 번째 읽기가 먼저 쓰기는 나중
+
+아이들은 읽기와 쓰기의 속도가 달라요.
+!!읽기를 먼저 익히고!! 쓰기는 천천히 따라와요.
+손 힘이 아직 약한 아이에게
+받아쓰기부터 시키면 한글이 싫어질 수 있어요.
+
+연필을 잡기 전에는
+크레파스나 색연필로 선 긋기를 먼저 해보세요.
+**하루 10분 안팎**으로 짧게 끊어서 하는 게
+아이가 지치지 않는 방법이에요.
+
+## 세 번째 집에서 부담 없이 하는 놀이
+
+생활 속 글자를 놀이처럼 찾아보는 게 가장 쉬워요.
+
+- 간판, 과자 봉지, 아파트 동 표지판 글자 찾기
+- 아이 이름 글자로 카드 만들어 보기
+- 좋아하는 그림책을 부모와 한 줄씩 번갈아 읽기
+- 같은 소리로 시작하는 낱말 말놀이
+
+문제집을 늘리기보다
+==아이가 흥미를 보이는 글자==부터 시작해 보세요.
+책을 읽어주는 시간이 길수록
+글자에 대한 호기심도 따라 커져요.
+
+## 네 번째 너무 일찍 완벽하게 떼면
+
+미리 많이 배우는 게 꼭 득이 되는 것도 아니에요.
+이미 다 아는 아이는 학교 한글 수업이
+**지루하게 느껴질 수도** 있다고 해요.
+
+그래서 수업 태도가 흐트러지지 않게
+!!글자보다 듣고 말하는 습관!!을
+같이 길러주는 게 좋아요.
+선생님 말씀을 끝까지 듣고 순서를 기다리는 일이에요.
+
+<!-- experience -->
+> 아이마다 글자에 관심이 생기는 시기가 다르다는 걸 첫째를 키우며 느꼈어요. 아직 쌍둥이는 한참 뒤의 일이지만, 나중에도 비교보다는 아이 속도를 먼저 보려고 해요.
+
+## 다섯 번째 상담이 필요한 신호
+
+한글을 늦게 배우는 것과 난독증은 달라요.
+서울대어린이병원 안내를 보면
+난독증은 글을 정확하고 유창하게 읽기 어렵고
+**철자를 자주 틀리는** 학습장애예요.
+
+진단은 지능 검사, 읽기와 쓰기 학업 성취,
+신경심리 평가를 함께 보고 내려요.
+교육 기회가 부족했던 경우는
+먼저 제외하고 살펴본다고 해요.
+
+> 상담｜충분히 가르치고 연습했는데도 1학년 내내 글자와 소리를 연결하기 힘들어하면 학교 선생님과 소아청소년과 또는 학습 클리닉에 상담해 보세요. 7살에 한글을 못 뗐다는 사실만으로 걱정할 필요는 없어요.
+
+## 입학 전까지 챙겨두면 좋은 것
+
+<!-- box: quotation_postit -->
+> **내 이름**과 간단한 낱말 읽어보기
+> ==자음 모음 소리==와 받침 없는 글자
+> 하루 10분 이내 짧은 한글 놀이
+> 연필 잡기보다 먼저 선 긋기
+
+***아이 속도를 믿어주는 게 제일 든든한 준비더라고요.***
+이 글 저장해 두시고
+한글날에 아이와 글자 놀이 한번 해보세요.
+
+────────────────────
+
+기준일 2026년 10월 6일
+출처
+교육부 2022 개정 교육과정 발표 2022년 12월 22일 국민일보 보도 https://www.kmib.co.kr/article/view.asp?arcid=0924279370
+사교육걱정없는세상 정치하는엄마들 초1 학부모 한글 선행학습 조사 2024년 2월 21일 뉴스핌 보도 https://www.newspim.com/news/view/20240221000733
+서울대어린이병원 난독증 안내 https://child.snuh.org/health/nMedInfo/nView.do?category=DIS&medid=AA000594
+이 글은 일반적인 정보이며 진단이나 치료를 대신하지 않아요. 아이 상태가 걱정되면 전문가와 상담하세요.
+
+#7살한글 #한글떼기 #초등입학준비 #입학전한글 #한글선행학습 #한글책임교육 #초등1학년한글 #한글해득 #7살한글못뗌 #한글날 #한글놀이 #한글공부시기 #난독증증상 #학습클리닉 #2020년생 #2027초등입학 #유아교육 #초등입학 #아이한글 #한글공부방법 #받아쓰기 #문해력 #경기도육아 #다둥이아빠 #쌍둥이육아 #육아정보 #7살육아 #2026한글날
+
