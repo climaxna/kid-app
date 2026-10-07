@@ -1,0 +1,19 @@
+{
+  "manuscript": "baroanswer/20261007-income-tax-calculator.md",
+  "plan": "baroanswer/20261007-income-tax-calculator.images.json",
+  "title": "종합소득세 계산 2026 프리랜서 연 6000만 원 벌면 5월에 얼마 더 낼까",
+  "started": "2026-10-07T10:09:40",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 187,
+  "codex_log": "logs/codex/20261007-income-tax-calculator-20261007-100940.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261007-income-tax-calculator-20261007-100940",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224433831414,
+  "images_uploaded": 6,
+  "images_in_draft": 6,
+  "title_verified": true,
+  "finished": "2026-10-07T10:13:10"
+}

@@ -32,7 +32,7 @@
 | 15 | 배란일·가임기 계산기 | /health/ovulation | 배란일 계산기 | 상 | 있음 | 연중 | 임신 준비, 건강 정보라 공식 근거 필수 | 임시저장 baroanswer/20261005-ovulation-calculator.md |
 | 16 | 아기 개월수·백일·돌 계산기 | /date/baby-days | 아기 개월수 계산, 백일 계산 | 상 | 없음 | 연중 | 육아 독자와 겹침, 백일 돌 준비 | 임시저장 baroanswer/20260930-baby-100days-calculator.md |
 | 17 | 육아휴직급여 계산기 | /work/parental-leave | 육아휴직급여 계산 | 상 | 없음 | 연중 | 완료 | 임시저장 |
-| 18 | 종합소득세 계산기 | /tax/income-tax | 종합소득세 계산 | 상 | 없음 | 5월 | 4월 말 발행 | 대기 |
+| 18 | 종합소득세 계산기 | /tax/income-tax | 종합소득세 계산 | 상 | 없음 | 5월 | 4월 말 발행 | 임시저장 baroanswer/20261007-income-tax-calculator.md |
 | 19 | 시급·월급 변환기 | /work/wage | 시급 월급 계산, 최저임금 월급 | 상 | 있음 | 8월 최저임금 결정 후 | 2027 최저임금 월급 환산 | 대기 |
 | 20 | 4대보험 계산기 | /tax/insurance | 4대보험 계산 | 상 | 없음 | 연중 | 근로자 부담분과 회사 부담분 | 대기 |
 | 21 | 전기요금 계산기 | /life/electricity-bill | 전기요금 계산, 누진세 | 상 | 없음 | 7~8월, 12~1월 | 누진 구간표 | 대기 |
