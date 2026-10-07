@@ -1,0 +1,31 @@
+{
+  "outDir": "assets/posts/baroanswer-income-tax",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/tax/income-tax",
+      "fill": {
+        "사업·프리랜서 총수입": "60000000",
+        "사업 필요경비": "18000000"
+      }
+    },
+    {
+      "file": "02-compare-bracket.png",
+      "url": "https://u-jeverse.com/tax/income-tax",
+      "fill": {
+        "사업·프리랜서 총수입": "60000000",
+        "사업 필요경비": "18000000"
+      },
+      "figure": "과세표준이 누진세율"
+    },
+    {
+      "file": "03-compare-deduction.png",
+      "url": "https://u-jeverse.com/tax/income-tax",
+      "fill": {
+        "사업·프리랜서 총수입": "60000000",
+        "사업 필요경비": "18000000"
+      },
+      "figure": "추가 소득공제가"
+    }
+  ]
+}
