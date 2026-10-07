@@ -17,3 +17,4 @@
 - 2026-10-04 | 가정용 전기차 충전기 | EPI 7kW 세로형, 이동형 케이블 13A, 이동형 케이블 16A | affiliate/posts/20261004-ev-home-charger-guide.md | 임시저장 logNo 224430717449 | 이미지 3/3
 - 2026-10-05 | 강아지 유모차 개모차 | 멀리 MW4, 로띠에 뉴바론 플러스, 가르르 도기로버 골드 | affiliate/posts/20261005-dog-stroller-guide.md | 임시저장 logNo 224432166865 | 이미지 3/3
 - 2026-10-06 | 여행용 캐리어 | 비토 TSA 24/26인치, 스탁사인 벌컨 26인치, 레븐 24인치 | affiliate/posts/20261006-travel-carrier-size-guide.md | 임시저장 logNo 224433081151 | 이미지 3/3
+- 2026-10-07 | 가정용 파라핀 베스 | 에코따숨 프라임, 에코따숨 마스터, 웰비오 클래식 | affiliate/posts/20261007-paraffin-bath-guide.md | 임시저장 logNo 224434108041 | 이미지 3/3
