@@ -1,0 +1,995 @@
+Reading prompt from stdin...
+OpenAI Codex v0.160.1
+--------
+workdir: C:\Users\kim\AppData\Local\Temp\codex_image_jobs\idolbom-service-2026-20261007-141559
+model: gpt-6.1-sol
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a114ca-3a16-78a0-8d7f-0ea30f0734b1
+--------
+user
+이 폴더에서 블로그 이미지를 만든다. 사용자가 미리 승인한 자동 작업이므로 확인을 기다리지 않는다.
+
+1. IMAGE_RULES.md 규칙을 읽는다. 이 폴더에서는 계획의 file 값이 이 폴더 안의 파일 이름이다.
+2. plan.json과 manuscript.md(내용 참고용)를 읽는다.
+3. plan.json의 images를 순서대로 하나씩 내장 이미지 생성 도구로 만든다. 각 항목의 prompt와 text를 정확히 따른다.
+   첨부한 이미지(reference 파일)는 컨셉 레퍼런스다. 분위기, 색, 질감만 참고하고 베끼지 않는다.
+   thumb-로 시작하는 첨부 이미지는 썸네일 항목(insert가 top) 전용 융합 레퍼런스다. 두 장의 특징(평면 벡터 랜드마크 콜라주의 색과 도형, 실제 사진 위에 평면 일러스트 인물과 곡선 리본을 얹는 합성 구도)을 섞어 새 장면을 만들되 그림이나 건물, 글자, 로고를 베끼지 않는다. 본문 항목에는 쓰지 않는다.
+   host-로 시작하는 첨부 이미지는 진행자 얼굴 기준이다. 항목 prompt에 진행자가 나오면 이 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)을 유지하고, 옷과 포즈와 배경은 그 이미지 컨셉에 맞게 새로 그린다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
+4. 생성된 PNG를 이 폴더에 각 항목의 file 이름으로 복사해 저장한다. 다른 파일은 만들거나 고치지 않는다.
+5. 파이썬 이미지 라이브러리, 외부 API, API 키를 쓰지 않는다. 내장 이미지 생성 도구와 파일 복사만 쓴다.
+6. 한 장이 실패하면 한 번만 다시 시도하고, 그래도 안 되면 건너뛴다.
+7. 마지막 답은 JSON 한 줄로 한다: {"saved": [파일 이름들], "failed": [파일 이름들]}
+
+codex
+규칙과 계획을 읽고, 이미지 생성 스킬에 따라 순서대로 생성해 지정된 파일명으로 저장하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath IMAGE_RULES.md; Get-Content -LiteralPath plan.json; Get-Content -LiteralPath manuscript.md; Get-Content -LiteralPath 'C:/Users/kim/.codex/skills/.system/imagegen/SKILL.md'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\idolbom-service-2026-20261007-141559
+ succeeded in 128ms:
+# 釉붾줈洹??대?吏 ?앹꽦 洹쒖튃 (Codex ?먮룞 ?ㅽ뻾??
+
+`scripts/codex_image_draft.py`媛 Codex瑜?遺瑜??????뚯씪???쏀엺??
+Codex???대?吏 怨꾪쉷 JSON????ぉ???섎굹??洹몃?濡?洹몃┛?? ?대?吏???ㅼ뼱媛?湲?먮뒗 怨꾪쉷???곹엺 臾멸뎄媛 ?꾨???
+
+## 而⑥뀎
+
+| concept | ?ㅽ???| ?곕뒗 湲 | ?덊띁?곗뒪 |
+|---|---|---|---|
+| halftone | ?섑봽???몄뇙 ?ъ쭊. ?먯깋 ?⑥깋 諛곌꼍, ?먯쑝濡?李랁엺 ?ъ쭊 吏덇컧, ?덊듃濡??≪? ?먮굦 | ?≪븘 ?뺤콉쨌?뺣낫, 諛붾줈??| design/thumbnail-references/halftone/00~03.png |
+| travel-poster | 鍮덊떚吏 ?ы뻾 ?ъ뒪?? ?됰㈃ ?꾪삎, 珥섏킌???띻꼍, ?쒗븳???? ??愿愿??ъ뒪???먮굦 | ???ы뻾 | design/thumbnail-references/travel-poster/00~04.png |
+| photo-doodle | ?ъ쭊 ???숈꽌. ?ㅼ젣 ?ъ쭊 ?꾩뿉 ?먭렇由??? ?덊꽣留? ?묒? 罹먮┃??| ?쒗뭹 ?뚭컻 | design/thumbnail-references/photo-doodle/00~04.png |
+
+- ?덊띁?곗뒪??遺꾩쐞湲? ?? 吏덇컧, 援щ룄留?李멸퀬?쒕떎. 洹몃┝??洹몃?濡?踰좊겮吏 ?딅뒗??
+- ???먭퀬???대?吏??媛숈? 而⑥뀎怨?媛숈? ??議고빀?쇰줈 ?듭씪?쒕떎.
+
+## ?몃꽕???먯튃
+
+- ?몃꽕?쇱? 寃??寃곌낵?먯꽌 ?뚮윭蹂닿퀬 ?띔쾶 留뚮뱶??寃껋씠 紐⑹쟻?대떎. ?멸린?? ??? 湲댁옣媛먯쿂???대뒓 ?뺣룄 ?먭레???덈뒗 ?곸떊?곸씤 ?λ㈃怨?臾멸뎄瑜??대떎. ?뷀븳 ?뺣낫 移대뱶泥섎읆 留뚮뱾吏 ?딅뒗??
+- AI ?먮굦??以꾩씤?? 諛섏쭩?대뒗 愿묓깮 ?쇰?, ?꾩씠??媛숈? 紐⑤뜽, ?꾨꼍?섍쾶 ?뺣룉???λ㈃ ????ㅼ젣 ?ъ쭊 媛숈? 吏덇컧, ?앺솢媛? 而⑥뀎???몄뇙쨌?먭렇由?吏덇컧???대┛??
+- ?먭레?곸씠?붾씪???ъ떎怨??ㅻⅨ 怨쇱옣? ?섏? ?딅뒗?? 臾멸뎄? ?レ옄???먭퀬???덈뒗 寃껊쭔 ?대떎.
+- **?묎쾶 遊먮룄 ?쏀????쒕떎.** ?몃꽕?쇱? ?대???寃??寃곌낵?먯꽌 ?먰넲留????ш린濡?蹂댁씤?? 洹??ш린?먯꽌 ?쒕ぉ??諛붾줈 ?쏀엳?꾨줉 ?쒕ぉ? 8~12???덊뙉?쇰줈 吏㏐쾶, ?붾㈃ ??쓽 ?遺遺꾩쓣 李⑥???留뚰겮 ?ш쾶 ?대떎. 諛곌꼍怨?湲?먯쓽 紐낆븫 ?鍮꾨? 媛뺥븯寃??섍퀬, ?묒? 蹂댁“ 臾멸뎄???ｌ? ?딅뒗??
+- **?レ옄 ?섎굹瑜?媛???ш쾶.** ?먭퀬?먯꽌 媛??沅곴툑利앹쓣 遺瑜대뒗 援ъ껜?곸씤 ?レ옄 ?섎굹(?? 理쒕? 20%, ??200留뚯썝, 3,460留뚯썝)瑜?怨⑤씪 ?쒕ぉ蹂대떎 ?ш굅??媛숈? ?ш린濡??ｋ뒗?? ?レ옄媛 ?щ윭 媛쒕㈃ ?섎굹留?怨좊Ⅸ?? ?먭퀬??留덈븙???レ옄媛 ?놁쑝硫??ｌ? ?딅뒗??
+
+## ??湲 ?몃꽕?? ?듯빀 ?ㅽ???(2026-10-06 ?ъ슜??吏?? ?ㅼ쓬 湲遺??
+
+???몃꽕?쇱씠 ?쒕줈 鍮꾩듂?댁졇???꾨옒 ???덊띁?곗뒪瑜??듯빀?쒕떎. 怨꾪쉷 JSON??`"thumbnail_references"`濡??????ｋ뒗???몃꽕????ぉ ?꾩슜, 蹂몃Ц ?대?吏?먮뒗 ?곗? ?딅뒗??.
+
+- `design/thumbnail-references/travel-poster/04.png`(鍮덊떚吏?ы뻾?ъ뒪??4): ?됰㈃ 踰≫꽣, 珥섏킌???쒕뱶留덊겕 肄쒕씪二? 媛뺥븳 ?먯깋 ?붾젅?? ?묒? ?뚰뭹(?닿린援? ?몃뱶?몃윮, 吏??? ??
+- `design/thumbnail-references/photo-doodle/04.png`(?ъ쭊?꾨굺??4): ?ㅼ젣 ?띻꼍 ?ъ쭊 ?꾩뿉 ?됰㈃ ?쇰윭?ㅽ듃 ?몃Ъ???밴퀬, 援듭? 怨≪꽑 由щ낯怨?援щ쫫 紐⑥뼇??寃뱀튇 ?⑹꽦 援щ룄
+
+?듯빀 諛⑸쾿:
+- 諛뷀깢? 洹??ъ쓽 ?ㅼ젣 ?띻꼍 ?ъ쭊 吏덇컧(?ㅼ궗)?쇰줈 ?섍퀬, 洹??꾩뿉 A???됰㈃ 踰≫꽣 洹몃┝泥대줈 洹??ъ쓽 ?쒕뱶留덊겕? ?뚰뭹???쇰? 寃뱀퀜 ?밸뒗??
+- 吏꾪뻾?먮뒗 B泥섎읆 ?됰㈃ ?쇰윭?ㅽ듃濡??띻꼍 ?ъ쭊 ?꾩뿉 ?쇱쭅?섍쾶 ?밸뒗?? ?쇨뎬 湲곗?? `host_references`.
+- 援듭? 怨≪꽑 由щ낯, 援щ쫫, ?묒? ?뚰뭹???붾㈃ 媛?μ옄由ъ뿉 ?섎젮 ?ｌ뼱 ?吏곸엫??以?? 留ㅻ쾲 由щ낯 ?됯낵 ?뚰뭹, 援щ룄(?몃Ъ ?꾩튂, ?쒖젏)瑜?諛붽퓭 吏곸쟾 ?몃꽕?쇨낵 寃뱀튂吏 ?딄쾶 ?쒕떎.
+- ?몃꽕???먯튃(???쒕ぉ 8~12?? ?レ옄 ?섎굹, 媛뺥븳 ?鍮? 70% ?댁긽 洹몃┝)? 洹몃?濡?吏?⑤떎. ???덊띁?곗뒪??湲?? 濡쒓퀬, 嫄대Ъ, ?몃Ъ??踰좊겮吏 ?딅뒗?? 洹??ъ뿉 ?녿뒗 ?쒕뱶留덊겕瑜??ｌ? ?딅뒗??
+- ?뱀씤???섑뵆(2026-10-06 ?ъ슜???뺤씤): `design/thumbnail-references/island-fusion/approved-sample.png`. 援ъ꽦(?꾩そ ???쒕ぉ, 泥?줉 ?????몃? ?レ옄, ?ㅼ궗 ?띻꼍, ?ㅻⅨ履???吏꾪뻾?? 怨≪꽑 由щ낯, ?닿린援ъ? 吏??? ?뚰뭹)??湲곗??쇰줈 ?쇰릺, ???λ㈃쨌?뚰뭹쨌由щ낯 ?됀룹쭊?됱옄 ?ъ쫰??湲留덈떎 諛붽씔?? 吏꾪뻾?먮뒗 ?ㅼ궗 媛숈? 留ㅻ걟???몃Ъ???꾨땲???됰㈃ ?쇰윭?ㅽ듃 ?먮굦?????섍쾶 ?대떎.
+- 蹂몃Ц ?대?吏 4?μ? 湲곗〈 travel-poster 而⑥뀎怨?`reference`瑜?洹몃?濡??대떎.
+
+## 湲???대?吏 ??
+
+?몃꽕??1??+ 蹂몃Ц ?대?吏 ?μ닔.
+
+| 湲 | ?몃꽕??| 蹂몃Ц ?대?吏 | ?⑷퀎 |
+|---|---|---|---|
+| ?≪븘 | 1 | 3 | 4 |
+| 而ㅻ꽖??| 1 | 2 | 3 |
+| 諛붾줈??| 1 | 2 (?ㅼ젣 怨꾩궛湲?罹≪쿂??蹂꾨룄) | 3 |
+| ???ы뻾 | 1 | 4 (?섏쨷???곸슜) | 5 |
+
+## 湲??
+
+- 怨꾪쉷??`text`???곹엺 臾멸뎄留?泥좎옄 洹몃?濡??ｋ뒗?? 怨꾪쉷???녿뒗 湲?? ?곷Ц, ?レ옄瑜?吏?대궡吏 ?딅뒗?? `text`媛 鍮꾩뼱 ?덉쑝硫?湲?먮? ?ｌ? ?딅뒗??
+- ?몃꽕?쇱? ?쒕ぉ ??以꾧낵 ?レ옄 ?섎굹 ?뺣룄. ?뺣낫 ?대?吏???쒕ぉ ??以꾧낵 吏㏃? ??ぉ 5媛쒓퉴吏.
+- 湲?먮뒗 ?ш퀬 援듭? ?쒓? 怨좊뵓 怨꾩뿴濡? 紐⑤컮?쇱뿉???쏀엳寃??붾㈃ 媛?μ옄由ъ뿉???⑥뼱?⑤┛??
+- ?곗? ?딅뒗 寃? ?뚮몢由??먮Ⅸ 湲?? ?뚯빟 諛곗?, 留먰뭾?? ?섑듃, 蹂? 諛섏쭩?? 媛?대럠??쨌), VS, ?μ떇 愿꾪샇, ?묒? 媛곸＜, 鍮쎈뭣???? 媛吏?濡쒓퀬.
+- 洹몃┝???붾㈃??70% ?댁긽??李⑥??쒕떎.
+
+## 吏꾪뻾??(??湲)
+
+- ???쒕━利덉뿉??吏꾪뻾?먭? ?섏삩?? ?쇨뎬 湲곗?? `private_media/personas/island-host/` ???ъ꽦(female-01~03)怨??⑥꽦(male-01~03) ?ъ쭊?대떎. 怨꾪쉷??`host_references`?????щ엺???ъ쭊 2~3?μ쓣 ?ｋ뒗??
+- ?쇨뎬(?쇨뎬?? ?? 肄? ?? ?ㅼ뼱 ?먮굦)? ?좎??섍퀬, ?룰낵 ?ъ쫰? 諛곌꼍? 洹??대?吏??而⑥뀎怨?怨꾩젅??留욊쾶 諛붽씔?? 李멸퀬 ?ъ쭊???댁쇅 諛곌꼍? ?곗? ?딄퀬 洹?湲???ㅼ젣 ???띻꼍???붾떎.
+- 洹몃┝泥대룄 而⑥뀎???곕Ⅸ?? 鍮덊떚吏 ?ы뻾 ?ъ뒪??而⑥뀎?대㈃ 吏꾪뻾?먮룄 ?ъ뒪??洹몃┝泥대줈 洹몃┛??
+- 吏꾪뻾?먭? ?섏삤????ぉ? prompt??"吏꾪뻾???쇨퀬 ?곷뒗?? 吏꾪뻾?먭? ?녿뒗 ??ぉ?먮뒗 ?щ엺 ?쇨뎬???ｌ? ?딅뒗??
+
+## ?ъ떎怨??덉쟾
+
+- ?ㅼ젣 ?μ냼, ?쒗뭹, ?쒕룄? ?ㅻⅨ 紐⑥뼇??洹몃━吏 ?딅뒗?? ?ㅻⅨ ?ъ쓽 ?쒕뱶留덊겕, ?ㅼ젣 ?뚯궗 濡쒓퀬, 議댁옱?섏? ?딅뒗 ?쒖??먭낵 ?쒖꽕???ｌ? ?딅뒗??
+- ?꾩씠 ?쇨뎬? 怨꾪쉷???곹엺 寃쎌슦?먮쭔 蹂댁씠寃??쒕떎. ?ㅼ젣 ?꾩씠 ?ъ쭊??蹂듭젣?섏? ?딅뒗??
+- ?섎せ???덉쟾 ?λ㈃??洹몃━吏 ?딅뒗?? ?댁쟾 以??대??꾪솕 議곗옉, ?섎せ??移댁떆???μ갑, ?롫뱶???ъ슦湲? ?꾩씠 ?쇱옄 臾쇨? ??
+- 留ㅻ걟??AI 愿묓깮, 怨쇳븳 HDR, ?먰?吏 ?붿냼瑜??곗? ?딅뒗??
+
+## ?ъ뼇
+
+- ?뺤궗媛곹삎 1:1, 媛?ν븯硫?1254횞1254.
+- PNG濡?怨꾪쉷??`file` 寃쎈줈????ν븳??
+
+## ?대?吏 怨꾪쉷 JSON (Claude媛 ?묒꽦)
+
+?먭퀬 ?놁뿉 `<?먭퀬?대쫫>.images.json`?쇰줈 ??ν븳??
+
+```json
+{
+  "concept": "halftone",
+  "reference": "design/thumbnail-references/halftone/01.png",
+  "thumbnail_references": ["??湲留? ???듯빀 ?덊띁?곗뒪 2??寃쎈줈"],
+  "images": [
+    {
+      "file": "assets/posts/<slug>/01-thumbnail.png",
+      "insert": "top",
+      "text": ["?ㅼ옄? ?듯뻾猷??좎씤", "理쒕? 20%"],
+      "prompt": "?λ㈃, 援щ룄, ?? 湲???꾩튂瑜?援ъ껜?곸쑝濡?
+    },
+    {
+      "file": "assets/posts/<slug>/02-?λ㈃.png",
+      "insert": "## ?먭퀬???뚯젣紐?洹몃?濡?,
+      "text": [],
+      "prompt": "..."
+    }
+  ]
+}
+```
+
+- `insert`: `top`? 蹂몃Ц 留???泥??대?吏媛 ????대?吏), `## ?뚯젣紐?? 洹??뚯젣紐?諛붾줈 ?꾨옒.
+- `reference`: ??而⑥뀎 ?쒖쓽 ?덊띁?곗뒪 以??섎굹. 湲留덈떎 踰덊샇瑜?諛붽퓭 蹂?붾? 以??
+- `prompt`: 臾댁뾿???대뵒???대뼡 ?됱쑝濡?洹몃┫吏, `text`瑜??대뵒???대뼡 ?ш린濡??섏?源뚯? ?곷뒗?? ?뺤씤?섏? ?딆? 媛寃? ?좎쭨, ?꾪솕踰덊샇???ｌ? ?딅뒗??
+{
+  "concept": "halftone",
+  "thumbnail_references": [],
+  "reference": "reference.png",
+  "host_references": [],
+  "images": [
+    {
+      "file": "01-thumbnail.png",
+      "insert": "top",
+      "text": [
+        "?꾩씠?뚮큵 吏???뺣?",
+        "?쒓컙??1,918??
+      ],
+      "prompt": "?섑봽???몄뇙 ?ъ쭊 吏덇컧???뺤궗媛곹삎 ?몃꽕?? 吏꾪븳 二쇳솴???⑥깋 諛곌꼍. 嫄곗떎 ?꾧??먯꽌 ?뚮낫誘멸? 臾??덉쑝濡??ㅼ뼱?쒕뒗 ?룸え?듦낵 ?꾩씠 ?좊컻, ?λ궃媛?釉붾줉???⑹뼱吏??앺솢媛??덈뒗 ?λ㈃, ?쇨뎬? ?ш쾶 蹂댁씠吏 ?딄쾶. ?곷떒???곗깋 援듭? 怨좊뵓 ??湲?먮줈 '?꾩씠?뚮큵 吏???뺣?' ??以? ?섎떒???몃????꾩＜ ??援듭? 湲?먮줈 '?쒓컙??1,918??. 湲?먮뒗 媛?μ옄由ъ뿉???⑥뼱?⑤━怨?諛곌꼍怨??鍮꾨? 媛뺥븯寃? 洹몃┝???붾㈃ 70% ?댁긽. 留ㅻ걟??AI 愿묓깮 湲덉?."
+    },
+    {
+      "file": "02-home-care-scene.png",
+      "insert": "## 泥?踰덉㎏ ?곕━ 吏묒? ?대뒓 ?좏삎?쇨퉴",
+      "text": [],
+      "prompt": "媛숈? 二쇳솴 ?섑봽???몄뇙 ?ㅽ??? 嫄곗떎 諛붾떏?먯꽌 ?뚮낫誘몄쓽 ?먭낵 ?꾩씠???묒? ?먯씠 釉붾줉???④퍡 ?볥뒗 ?대줈利덉뾽. ?꾩씠 ?쇨뎬? 蹂댁씠吏 ?딄쾶 ?먭낵 諛??꾩＜. 湲???놁쓬. ?덉쟾?섍퀬 ?됲솕濡쒖슫 ?λ㈃."
+    },
+    {
+      "file": "03-support-info.png",
+      "insert": "## ??踰덉㎏ ?쒓컙??蹂몄씤遺?닿툑",
+      "text": [
+        "?쒓컙??蹂몄씤遺??,
+        "媛??1,918??,
+        "?섑삎 3,837??,
+        "?ㅽ삎 8,953??
+      ],
+      "prompt": "媛숈? 二쇳솴 ?섑봽???ㅽ??쇱쓽 ?뺣낫 ?대?吏. ?곷떒???곗깋 援듭? ?쒕ぉ '?쒓컙??蹂몄씤遺??, ?꾨옒??媛??1,918?? ?섑삎 3,837?? ?ㅽ삎 8,953?먯쓣 ??援듭? 怨좊뵓?쇰줈 ??以?諛곗튂. ?ㅻⅨ履??꾨옒???섑봽???먯쑝濡?李랁엺 ?묒? 吏?紐⑥뼇 洹몃┝. 湲?먯? 諛곌꼍 ?鍮?媛뺥븯寃? 吏??臾멸뎄 ??湲??湲덉?."
+    },
+    {
+      "file": "04-final-check.png",
+      "insert": "## ?좎껌 ?꾩뿉 梨숆꺼?먮㈃ 醫뗭? 寃?,
+      "text": [
+        "?좎껌 ??泥댄겕",
+        "?뚮뱷 ?좏삎 ?뺤씤",
+        "援???됰났移대뱶",
+        "?덉튂湲?異⑹쟾",
+        "吏???쒓컙 ?뺤씤"
+      ],
+      "prompt": "媛숈? 二쇳솴 ?섑봽???ㅽ??쇱쓽 泥댄겕由ъ뒪???대?吏. ?곷떒 ?곗깋 援듭? ?쒕ぉ '?좎껌 ??泥댄겕', ?꾨옒 ??ぉ ??以?'?뚮뱷 ?좏삎 ?뺤씤' '援???됰났移대뱶' '?덉튂湲?異⑹쟾' '吏???쒓컙 ?뺤씤'???ш퀬 援듭? 怨좊뵓?쇰줈 ?쇱そ ?뺣젹, 媛?以??욎뿉 ?⑥닚??泥댄겕 ?쒖떆. 吏??臾멸뎄 ??湲??湲덉?, 洹몃┝???붾㈃ 70% ?댁긽."
+    }
+  ]
+}
+# 2026 ?꾩씠?뚮큵?쒕퉬???좎껌 諛⑸쾿 ?뚮뱷 湲곗? 250% ?뺣? ?쒓컙??蹂몄씤遺??1918?먮????뺤씤??5媛吏
+
+<!-- parenting -->
+?덈뀞?섏꽭?? 泥レ㎏ 7?댁뿉
+5?붿깮 ?띾뫁?닿퉴吏 ?ㅼ슦???ㅻ뫁???꾨튌?덉슂.
+
+?꾩씠媛 ?꾪봽嫄곕굹 媛묒옄湲??쇱씠 ?앷린硫?
+?좉퉸 留↔만 怨녹씠 ?놁뼱??
+**?덉븵??罹꾩틖?댁????쒓컙**??瑗??ㅻ뜑?쇨퀬??
+洹몃윺 ??吏묒쑝濡??뚮낫誘멸? ? 二쇰뒗 寃?
+?뺣? ?꾩씠?뚮큵?쒕퉬?ㅼ삁??
+
+?ы빐遺??吏?먮컺?????덈뒗 ?뚮뱷 湲곗???
+**以묒쐞?뚮뱷 200%?먯꽌 250%**源뚯? ?볦뼱議뚯뼱??
+?덉쟾???덈씫?덈뜕 媛?뺣룄
+!!?ㅼ떆 ?뺤씤??蹂?留뚰빐??!
+
+***?쇱옄 ??媛먮떦?섎젮??吏移섎뒗 寃??쒖씪 ?꾪뿕?섎뜑?쇨퀬??***
+?좎껌 ?쒖꽌遺??蹂몄씤遺?닿툑源뚯?
+?섎굹??吏싳뼱 蹂쇨쾶??
+
+## 2026?꾩뿉 ?щ씪吏???
+
+?ъ꽦媛議깅? 諛쒗몴瑜?蹂대㈃
+?ы빐 ?щ씪吏??댁슜? ?ш쾶 ??媛吏?덉슂.
+
+| ??ぉ | 2026??蹂寃??댁슜 |
+|---|---|
+| ?뚮뱷 湲곗? | 以묒쐞?뚮뱷 200% ?댄븯?먯꽌 250% ?댄븯濡??뺣? |
+| ?쒓컙???댁슜?붽툑 | 12,180?먯뿉??12,790?먯쑝濡?5% ?몄긽 |
+| 痍⑥빟媛援?吏?먯떆媛?| ??960?쒓컙?먯꽌 1,080?쒓컙?쇰줈 ?뺣? |
+| 吏??媛援???| 12留?媛援ъ뿉??12留?6泥?媛援щ줈 ?뺣? |
+
+?쒕?紐? 議곗넀, ?μ븷, 泥?냼?꾨?紐?媛援ъ쿂??
+?뚮큵 遺?댁씠 ??媛?뺤?
+==?곌컙 吏?먯떆媛꾩씠 120?쒓컙 ?섏뿀?댁슂.==
+?멸뎄媛먯냼吏??媛?뺤? 蹂몄씤遺?닿툑??異붽?濡?吏?먮컺?꾩슂.
+
+## 泥?踰덉㎏ ?곕━ 吏묒? ?대뒓 ?좏삎?쇨퉴
+
+?뺣? 吏?먯? ?뚮뱷???곕씪
+**媛?뺣???留덊삎源뚯?** ?섎돇?댁슂.
+
+| ?좏삎 | 湲곗? 以묒쐞?뚮뱷 |
+|---|---|
+| 媛??| 75% ?댄븯 |
+| ?섑삎 | 75% 珥덇낵 120% ?댄븯 |
+| ?ㅽ삎 | 120% 珥덇낵 150% ?댄븯 |
+| ?쇳삎 | 150% 珥덇낵 250% ?댄븯 |
+| 留덊삎 | 250% 珥덇낵 ?뺣?吏???놁쓬 |
+
+?ы빐遺??==?쇳삎??250%源뚯?==
+?볦뼱吏??덉씠?먯슂.
+留덊삎? ?뺣? 吏?먭툑???놁뼱??
+?댁슜?붽툑???꾩븸 ?댁빞 ?댁슂.
+
+## ??踰덉㎏ ????곕졊怨??쒕퉬??醫낅쪟
+
+?꾩씠?뚮큵?쒕퉬?ㅻ뒗
+!!?앺썑 3媛쒖썡遺??留?12??!源뚯? ?댁슜?댁슂.
+?쒕퉬?ㅻ뒗 ?ш쾶 ??媛吏濡??섎돇?댁슂.
+
+- **?쒓컙??*: ?앺썑 3媛쒖썡~12?? 1??2?쒓컙 ?댁긽 ?좎껌
+- **?곸븘醫낆씪??*: 36媛쒖썡 ?댄븯, 1??3?쒓컙 ?댁긽 ?좎껌
+
+?쒓컙?쒕뒗 異붽? ?쒓컙??
+理쒖냼 30遺??⑥쐞濡??섎┫ ???덉뼱??
+?곸븘醫낆씪?쒕뒗 嫄닿컯, ?곸뼇, ?꾩깮??梨숆린??
+==留욎땄???뚮큵==?대씪??寃??뱀쭠?댁뿉??
+
+?꾩씠媛 媛먯뿼蹂??뺤쭊??諛쏆븯???뚮뒗
+**湲곕낯?붽툑??50%**瑜??뺣?媛 吏?먰븯??
+吏덈퀝媛먯뿼?꾨룞吏???쒕퉬?ㅻ룄 ?덉뼱??
+
+<!-- experience -->
+> ??щ뒗 ?띾뫁?닿? ?꾩쭅 4媛쒖썡?대씪 吏湲??뱀옣 ???쇱? ?놁?留? 泥レ㎏ ?숆탳 ?됱궗??媛묒옄湲?蹂묒썝??媛?????뚮? ?앷컖?댁꽌 誘몃━ ?먭꺽 ?뺤씤留????먮젮怨??댁슂.
+
+## ??踰덉㎏ ?쒓컙??蹂몄씤遺?닿툑
+
+?쒓컙??湲곕낯???댁슜?붽툑?
+2026??湲곗? **?쒓컙??12,790??*?댁뿉??
+醫낇빀?뺤? **16,620??*?닿퀬??
+
+湲곕낯?뺤쓣 誘몄랬???꾨룞?먭쾶 ????
+?뺣? 吏?먯쑉???곸슜?섎㈃
+蹂몄씤遺?댁? ?대젃寃?怨꾩궛?쇱슂.
+
+| ?좏삎 | ?뺣? 吏??| ?쒓컙??蹂몄씤遺??|
+|---|---|---|
+| 媛??| 85% | ??1,918??|
+| ?섑삎 | 70% | ??3,837??|
+| ?ㅽ삎 | 30% | ??8,953??|
+
+媛?뺤씠?쇰㈃ !!?쒓컙??1,918??!?쇰줈
+?뚮낫誘멸? 吏묒뿉 ? 二쇰뒗 嫄곗삁??
+?쇳삎??吏?먯쑉怨?痍⑦븰 ?꾨룞 湲곗??
+==?꾩씠?뚮큵 ?꾨━吏?=?먯꽌 ?곕줈 ?뺤씤?섏꽭??
+
+## ??踰덉㎏ 吏?먯떆媛꾧낵 異붽? ?붽툑
+
+?뺣? 吏?먯? **?곌컙 ?쒓컙 ?쒕룄** ?덉뿉?쒕쭔 ?곸슜?쇱슂.
+?쒕룄瑜??섍릿 ?쒓컙? ?꾩븸 蹂몄씤???댁빞 ?댁슂.
+
+?곸븘醫낆씪?쒕뒗 **??200?쒓컙** ?대궡濡?吏?먮뤌??
+?쒕?紐???痍⑥빟媛援ъ쓽 ?쒓컙???쒕룄??
+?ы빐 **1,080?쒓컙**?쇰줈 ?섏뿀?댁슂.
+
+媛묒옄湲??꾩슂??湲닿툒?뚮큵?
+嫄대떦 **3,000??*??異붽??쇱슂.
+?쇰컲 媛援ъ쓽 ?쒓컙???쒕룄??
+?댁슜 ?꾩뿉 瑗?!!?꾨━吏묒뿉???ㅼ떆 ?뺤씤!!?섏꽭??
+
+## ?ㅼ꽢 踰덉㎏ ?좎껌 ?쒖꽌
+
+泥섏쓬 ?곕뒗 遺꾨뱾? ?쒖꽌媛 ?룰컝由ш린 ?ъ썙??
+?뺣? 吏?먯쓣 諛쏆쑝?ㅻ㈃
+==?쒕퉬???좎껌 ?꾩뿉 ?먭꺽 寃곗젙==??癒쇱??덉슂.
+
+1. 蹂듭?濡쒕굹 ?꾩씠?뚮큵 ?꾨━吏묒뿉???뺣?吏??寃곗젙 ?좎껌
+2. 媛???쇳삎 寃곗젙 ?듭? ?뺤씤
+3. 援???됰났移대뱶 諛쒓툒怨??덉튂湲?異⑹쟾
+4. ?꾩씠?뚮큵 ?꾨━吏묒씠???깆뿉???쒕퉬???덉빟
+
+寃곗젙 ?듭?媛 ?섏삤湲??꾩뿉??
+?뺣? 吏?먯쓣 諛쏆쓣 ???놁쑝??
+**?ъ쑀 ?덇쾶 誘몃━** ?좎껌???먮뒗 寃?醫뗭븘??
+臾몄쓽???꾩씠?뚮큵 ?꾨━吏묒뿉 ?덈궡??
+吏?먯꽱???꾪솕濡??섎㈃ ?쇱슂.
+
+> 二쇱쓽節쒖냼???좏삎? 嫄닿컯蹂댄뿕猷??깆쓣 諛뷀깢?쇰줈 ?뺥빐吏怨??대쭏???щ씪吏????덉뼱?? 湲덉븸怨?吏?먯쑉? ?댁슜?섎뒗 ?쒖젏???꾨━吏??덈궡瑜?瑗??ㅼ떆 ?뺤씤?섏꽭??
+
+## ?ы빐 ?덈줈 ?앷릿 ?덉쟾 ?μ튂
+
+4??23?쇰???**?꾩씠?뚮큵??援???먭꺽??*?
+誘쇨컙 ?쒓났湲곌? ?깅줉?쒓? ?쒗뻾?먯뼱??
+?뚮낫誘몃? 吏묒뿉 ?ㅼ씠???쒕퉬?ㅻ씪
+==?먭꺽怨??깅줉 ?щ?==瑜??뺤씤?????덇쾶 ??嫄곗삁??
+
+## ?좎껌 ?꾩뿉 梨숆꺼?먮㈃ 醫뗭? 寃?
+
+<!-- box: quotation_postit -->
+> ?곕━ 吏?**?뚮뱷 ?좏삎** 癒쇱? ?뺤씤
+> ?꾩씠 ?섏씠??留욌뒗 ==?쒓컙???곸븘醫낆씪???좏깮==
+> 援???됰났移대뱶? ?덉튂湲?以鍮?
+> ?뺣? 吏???쒓컙 ?쒕룄? ?⑥? ?쒓컙 ?뺤씤
+
+***誘욧퀬 留↔만 怨??섎굹留??덉뼱??留덉쓬???쒓껐 媛踰쇱썙吏?붾씪怨좎슂.***
+?꾩슂??遺꾧퍡 ?꾩????섎룄濡?
+??湲 ??ν빐 ?먯꽭??
+
+????????????????????
+
+湲곗???2026??10??7??
+異쒖쿂
+?꾩씠?뚮큵?쒕퉬???꾨━吏??쒕퉬???덈궡 https://www.idolbom.go.kr
+??쒕?援??뺤콉釉뚮━???꾩씠?뚮큵?쒕퉬??吏?????以묒쐞?뚮뱷 250% ?댄븯 媛援ш퉴吏 ?뺣? https://www.korea.kr/news/policyNewsView.do?newsId=148958189
+??쒕?援??뺤콉釉뚮━???대뀈 ?꾩씠?뚮큵?쒕퉬??12留?6000媛援щ줈 ?뺣? https://www.korea.kr/news/policyNewsView.do?newsId=148950388
+??쒕?援??뺤콉釉뚮━??2026???꾩씠?뚮큵 ?쒕퉬?????덉쟾?섍퀬 ?좊뱺?섍쾶 https://www.korea.kr/multi/visualNewsView.do?newsId=148958677
+蹂듭?濡?怨듭떇 釉붾줈洹??꾩씠?뚮큵?쒕퉬??吏??????뺣? https://blog.bokjiro.go.kr/1800
+蹂몄씤遺?닿툑? ?쒓컙???댁슜?붽툑 12,790?먯뿉 媛??85% ?섑삎 70% ?ㅽ삎 30% 吏?먯쑉???곸슜??怨꾩궛?덉뼱??
+??湲? ?쇰컲?곸씤 ?뺣낫?대ŉ ?ㅼ젣 吏???щ????꾩씠?뚮큵 ?꾨━吏묎낵 吏?먯꽱???덈궡瑜??뺤씤?섏꽭??
+
+#?꾩씠?뚮큵?쒕퉬??#?꾩씠?뚮큵?쒕퉬??026 #?꾩씠?뚮큵?쒕퉬?ㅼ떊泥?#?꾩씠?뚮큵?쒕퉬?ㅻ퉬??#?꾩씠?뚮큵?쒕퉬?ㅼ냼?앷린以 #?꾩씠?뚮큵 #?꾩씠?뚮낫誘?#?곸븘醫낆씪??#?쒓컙?쒕룎遊?#以묒쐞?뚮뱷250 #?꾩씠?뚮큵蹂몄씤遺?닿툑 #?꾩씠?뚮큵吏?먭툑 #?뺣?吏?먮룎遊?#?뚮큵怨듬갚 #援???됰났移대뱶 #蹂듭?濡?#?≪븘?뺤콉 #?≪븘吏?먭툑 #寃쎄린?꾩쑁??#?ㅻ뫁?댁븘鍮?#?띾뫁?댁쑁??#?≪븘?뺣낫 #?곸븘?뚮큵 #留욌쾶?댁쑁??#?꾩씠?뚮큵??#2026?≪븘?뺤콉 #?≪븘?꾩슦誘?#湲닿툒?뚮큵
+---
+name: "imagegen"
+description: "Generate or edit raster images when the task benefits from AI-created bitmap visuals such as photos, illustrations, textures, sprites, mockups, or transparent-background cutouts. Use when Codex should create a brand-new image, transform an existing image, or derive visual variants from references, and the output should be a bitmap asset rather than repo-native code or vector. Do not use when the task is better handled by editing existing SVG/vector/code-native assets, extending an established icon or logo system, or building the visual directly in HTML/CSS/canvas."
+---
+
+# Image Generation Skill
+
+Generates or edits images for the current project (for example website assets, game assets, UI mockups, product mockups, wireframes, logo design, photorealistic images, or infographics).
+
+## Top-level modes and rules
+
+This skill has exactly two top-level modes:
+
+- **Default built-in tool mode (preferred):** built-in `image_gen` tool for image generation, editing, and transparent-image requests. Does not require `OPENAI_API_KEY`.
+- **Fallback CLI mode:** `scripts/image_gen.py` CLI. Use when the user explicitly asks for or confirms the CLI/API/model path. Requires `OPENAI_API_KEY`.
+
+Within CLI fallback, the CLI exposes three subcommands:
+
+- `generate`
+- `edit`
+- `generate-batch`
+
+Rules:
+- Use the built-in `image_gen` tool by default for normal image generation and editing requests.
+- Do not switch to CLI fallback for ordinary quality, size, or file-path control.
+- For transparent images, ask built-in `image_gen` for a transparent background and preserve the generated alpha.
+- Never silently switch from built-in `image_gen` or CLI `gpt-image-2` to CLI `gpt-image-1.5`; ask the user first unless they explicitly requested `gpt-image-1.5`.
+- The word `batch` by itself does not mean CLI fallback. If the user asks for many assets or says to batch-generate assets without explicitly asking for CLI/API/model controls, stay on the built-in path and issue one built-in call per requested asset or variant.
+- If the built-in tool fails or is unavailable, tell the user the CLI fallback exists and that it requires `OPENAI_API_KEY`. Proceed only if the user explicitly asks for that fallback.
+- If the user explicitly asks for CLI mode, use the bundled `scripts/image_gen.py` workflow. Do not create one-off SDK runners.
+- Never modify `scripts/image_gen.py`. If something is missing, ask the user before doing anything else.
+
+Built-in save-path policy:
+- In built-in tool mode, Codex saves generated images under `$CODEX_HOME/*` by default.
+- Do not describe or rely on OS temp as the default built-in destination.
+- Do not describe or rely on a destination-path argument (if any) on the built-in `image_gen` tool. If a specific location is needed, generate first and then move or copy the selected output from `$CODEX_HOME/generated_images/...`.
+- Save-path precedence in built-in mode:
+  1. If the user names a destination, move or copy the selected output there.
+  2. If the image is meant for the current project, move or copy the final selected image into the workspace before finishing.
+  3. If the image is only for preview or brainstorming, render it inline; the underlying file can remain at the default `$CODEX_HOME/*` path.
+- Never leave a project-referenced asset only at the default `$CODEX_HOME/*` path.
+- Do not overwrite an existing asset unless the user explicitly asked for replacement; otherwise create a sibling versioned filename such as `hero-v2.png` or `item-icon-edited.png`.
+
+Shared prompt guidance for both modes lives in `references/prompting.md` and `references/sample-prompts.md`.
+
+Fallback-only docs/resources for CLI mode:
+- `references/cli.md`
+- `references/image-api.md`
+- `references/codex-network.md`
+- `scripts/image_gen.py`
+
+## When to use
+- Generate a new image (concept art, product shot, cover, website hero)
+- Generate a new image using one or more reference images for style, composition, or mood
+- Edit an existing image (inpainting, lighting or weather transformations, background replacement, object removal, compositing, transparent background)
+- Produce many assets or variants for one task
+
+## When not to use
+- Extending or matching an existing SVG/vector icon set, logo system, or illustration library inside the repo
+- Creating simple shapes, diagrams, wireframes, or icons that are better produced directly in SVG, HTML/CSS, or canvas
+- Making a small project-local asset edit when the source file already exists in an editable native format
+- Any task where the user clearly wants deterministic code-native output instead of a generated bitmap
+
+## Decision tree
+
+Think about two separate questions:
+
+1. **Intent:** is this a new image or an edit of an existing image?
+2. **Execution strategy:** is this one asset or many assets/variants?
+
+Intent:
+- If the user wants to modify an existing image while preserving parts of it, treat the request as **edit**.
+- If the user provides images only as references for style, composition, mood, or subject guidance, treat the request as **generate**.
+- If the user provides no images, treat the request as **generate**.
+
+Built-in edit semantics:
+- Built-in edit mode is for images already visible in the conversation context, such as attached images or images generated earlier in the thread.
+- If the user wants to edit a local image file with the built-in tool, first load it with built-in `view_image` tool so the image is visible in the conversation context, then proceed with the built-in edit flow.
+- Do not promise arbitrary filesystem-path editing through the built-in tool.
+- If a local file still needs direct file-path control, masks, or other explicit CLI-only parameters, use the explicit CLI fallback only when the user asks for it.
+- For edits, preserve invariants aggressively and save non-destructively by default.
+
+Execution strategy:
+- In the built-in default path, produce many assets or variants by issuing one `image_gen` call per requested asset or variant.
+- In the CLI fallback path, use the CLI `generate-batch` subcommand only when the user explicitly chose CLI mode and needs many prompts/assets.
+- For many distinct assets, do not use `n` as a substitute for separate prompts. `n` is for variants of one prompt; distinct assets need distinct built-in calls or distinct CLI `generate-batch` jobs.
+
+Assume the user wants a new image unless they clearly ask to change an existing one.
+
+## Workflow
+1. Decide the top-level mode: built-in by default, including transparent-output requests; fallback CLI only if explicitly requested or confirmed.
+2. Decide the intent: `generate` or `edit`.
+3. Decide whether the output is preview-only or meant to be consumed by the current project.
+4. Decide the execution strategy: single asset vs repeated built-in calls vs CLI `generate-batch`.
+5. Collect inputs up front: prompt(s), exact text (verbatim), constraints/avoid list, and any input images.
+6. For every input image, label its role explicitly:
+   - reference image
+   - edit target
+   - supporting insert/style/compositing input
+7. If the edit target is only on the local filesystem and you are staying on the built-in path, inspect it with `view_image` first so the image is available in conversation context.
+8. If the user asked for a photo, illustration, sprite, product image, banner, or other explicitly raster-style asset, use `image_gen` rather than substituting SVG/HTML/CSS placeholders. If the request is for an icon, logo, or UI graphic that should match existing repo-native SVG/vector/code assets, prefer editing those directly instead.
+9. Augment the prompt based on specificity:
+   - If the user's prompt is already specific and detailed, normalize it into a clear spec without adding creative requirements.
+   - If the user's prompt is generic, add tasteful augmentation only when it materially improves output quality.
+10. Use the built-in `image_gen` tool by default.
+11. For transparent-output requests, ask built-in `image_gen` for a transparent background and preserve the generated alpha channel.
+12. Inspect outputs and validate: subject, style, composition, text accuracy, and invariants/avoid items.
+13. Iterate with a single targeted change, then re-check.
+14. For preview-only work, render the image inline; the underlying file may remain at the default `$CODEX_HOME/generated_images/...` path.
+15. For project-bound work, move or copy the selected artifact into the workspace and update any consuming code or references. Never leave a project-referenced asset only at the default `$CODEX_HOME/generated_images/...` path.
+16. For batches or multi-asset requests, persist every requested deliverable final in the workspace unless the user explicitly asked to keep outputs preview-only. Discarded variants do not need to be kept unless requested.
+17. If the user explicitly chooses or confirms the CLI fallback, then use the fallback-only docs for model, quality, size, `input_fidelity`, masks, output format, output paths, and network setup.
+18. Always report the final saved path(s) for any workspace-bound asset(s), plus the final prompt or prompt set and whether the built-in tool or fallback CLI mode was used.
+
+## Transparent image requests
+
+Ask built-in `image_gen` for a genuinely transparent background and preserve its alpha.
+
+## Prompt augmentation
+
+Reformat user prompts into a structured, production-oriented spec. Make the user's goal clearer and more actionable, but do not blindly add detail.
+
+Treat this as prompt-shaping guidance, not a closed schema. Use only the lines that help, and add a short extra labeled line when it materially improves clarity.
+
+### Specificity policy
+
+Use the user's prompt specificity to decide how much augmentation is appropriate:
+
+- If the prompt is already specific and detailed, preserve that specificity and only normalize/structure it.
+- If the prompt is generic, you may add tasteful augmentation when it will materially improve the result.
+
+Allowed augmentations:
+- composition or framing hints
+- polish level or intended-use hints
+- practical layout guidance
+- reasonable scene concreteness that supports the stated request
+
+Not allowed augmentations:
+- extra characters or objects that are not implied by the request
+- brand names, slogans, palettes, or narrative beats that are not implied
+- arbitrary side-specific placement unless the surrounding layout supports it
+
+## Use-case taxonomy (exact slugs)
+
+Classify each request into one of these buckets and keep the slug consistent across prompts and references.
+
+Generate:
+- photorealistic-natural ??candid/editorial lifestyle scenes with real texture and natural lighting.
+- product-mockup ??product/packaging shots, catalog imagery, merch concepts.
+- ui-mockup ??app/web interface mockups and wireframes; specify the desired fidelity.
+- infographic-diagram ??diagrams/infographics with structured layout and text.
+- scientific-educational ??classroom explainers, scientific diagrams, and learning visuals with required labels and accuracy constraints.
+- ads-marketing ??campaign concepts and ad creatives with audience, brand position, scene, and exact tagline/copy.
+- productivity-visual ??slide, chart, workflow, and data-heavy business visuals.
+- logo-brand ??logo/mark exploration, vector-friendly.
+- illustration-story ??comics, children?셲 book art, narrative scenes.
+- stylized-concept ??style-driven concept art, 3D/stylized renders.
+- historical-scene ??period-accurate/world-knowledge scenes.
+
+Edit:
+- text-localization ??translate/replace in-image text, preserve layout.
+- identity-preserve ??try-on, person-in-scene; lock face/body/pose.
+- precise-object-edit ??remove/replace a specific element (including interior swaps).
+- lighting-weather ??time-of-day/season/atmosphere changes only.
+- background-extraction ??transparent background / clean cutout. Ask built-in `image_gen` for actual transparency.
+- style-transfer ??apply reference style while changing subject/scene.
+- compositing ??multi-image insert/merge with matched lighting/perspective.
+- sketch-to-render ??drawing/line art to photoreal render.
+
+## Shared prompt schema
+
+Use the following labeled spec as shared prompt scaffolding for both top-level modes:
+
+```text
+Use case: <taxonomy slug>
+Asset type: <where the asset will be used>
+Primary request: <user's main prompt>
+Input images: <Image 1: role; Image 2: role> (optional)
+Scene/backdrop: <environment>
+Subject: <main subject>
+Style/medium: <photo/illustration/3D/etc>
+Composition/framing: <wide/close/top-down; placement>
+Lighting/mood: <lighting + mood>
+Color palette: <palette notes>
+Materials/textures: <surface details>
+Text (verbatim): "<exact text>"
+Constraints: <must keep/must avoid>
+Avoid: <negative constraints>
+```
+
+Notes:
+- `Asset type` and `Input images` are prompt scaffolding, not dedicated CLI flags.
+- `Scene/backdrop` refers to the visual setting. It is not the same as the fallback CLI `background` parameter, which controls output transparency behavior.
+- Fallback-only execution notes such as `Quality:`, `Input fidelity:`, masks, output format, and output paths belong in the CLI path only. Do not treat them as built-in `image_gen` tool arguments.
+
+Augmentation rules:
+- Keep it short.
+- Add only the details needed to improve the prompt materially.
+- For edits, explicitly list invariants (`change only X; keep Y unchanged`).
+- If any critical detail is missing and blocks success, ask a question; otherwise proceed.
+
+## Examples
+
+### Generation example (hero image)
+```text
+Use case: product-mockup
+Asset type: landing page hero
+Primary request: a minimal hero image of a ceramic coffee mug
+Style/medium: clean product photography
+Composition/framing: wide composition with usable negative space for page copy if needed
+Lighting/mood: soft studio lighting
+Constraints: no logos, no text, no watermark
+```
+
+### Edit example (invariants)
+```text
+Use case: precise-object-edit
+Asset type: product photo background replacement
+Primary request: replace only the background with a warm sunset gradient
+Constraints: change only the background; keep the product and its edges unchanged; no text; no watermark
+```
+
+## Prompting best practices
+- Structure prompt as scene/backdrop -> subject -> details -> constraints.
+- Include intended use (ad, UI mock, infographic) to set the mode and polish level.
+- Use camera/composition language for photorealism.
+- Only use SVG/vector stand-ins when the user explicitly asked for vector output or a non-image placeholder.
+- Quote exact text and specify typography + placement.
+- For tricky words, spell them letter-by-letter and require verbatim rendering.
+- For multi-image inputs, reference images by index and describe how they should be used.
+- For edits, repeat invariants every iteration to reduce drift.
+- Iterate with single-change follow-ups.
+- If the prompt is generic, add only the extra detail that will materially help.
+- If the prompt is already detailed, normalize it instead of expanding it.
+- For CLI fallback only, see `references/cli.md` and `references/image-api.md` for model, `quality`, `input_fidelity`, masks, output format, and output-path guidance.
+- For transparent images, ask built-in `image_gen` for actual transparency and preserve its alpha.
+
+More principles shared by both modes: `references/prompting.md`.
+Copy/paste specs shared by both modes: `references/sample-prompts.md`.
+
+## Guidance by asset type
+Asset-type templates (website assets, game assets, wireframes, logo) are consolidated in `references/sample-prompts.md`.
+
+## gpt-image-2 guidance for CLI fallback
+
+The fallback CLI defaults to `gpt-image-2`.
+
+- Use `gpt-image-2` for new CLI/API workflows unless the user confirms a different model.
+- CLI `gpt-image-2` does not support `background=transparent`; ask before using `gpt-image-1.5` unless the user explicitly requested that model.
+- `gpt-image-2` always uses high fidelity for image inputs; do not set `input_fidelity` with this model.
+- `gpt-image-2` supports `quality` values `low`, `medium`, `high`, and `auto`.
+- Use `quality low` for fast drafts, thumbnails, and quick iterations. Use `medium`, `high`, or `auto` for final assets, dense text, diagrams, identity-sensitive edits, or high-resolution outputs.
+- Square images are typically fastest to generate. Use `1024x1024` for fast square drafts.
+- If the user asks for 4K-style output, use `3840x2160` for landscape or `2160x3840` for portrait.
+- `gpt-image-2` size may be `auto` or `WIDTHxHEIGHT` if all constraints hold: max edge `<= 3840px`, both edges multiples of `16px`, long-to-short ratio `<= 3:1`, total pixels between `655,360` and `8,294,400`.
+
+Popular `gpt-image-2` sizes:
+- `1024x1024` square
+- `1536x1024` landscape
+- `1024x1536` portrait
+- `2048x2048` 2K square
+- `2048x1152` 2K landscape
+- `3840x2160` 4K landscape
+- `2160x3840` 4K portrait
+- `auto`
+
+## Fallback CLI mode only
+
+### Temp and output conventions
+These conventions apply only to the CLI fallback. They do not describe built-in `image_gen` output behavior.
+- Use `tmp/imagegen/` for intermediate files (for example JSONL batches); delete them when done.
+- Write final artifacts under `output/imagegen/`.
+- Use `--out` or `--out-dir` to control output paths; keep filenames stable and descriptive.
+
+### Dependencies
+Prefer `uv` for dependency management in this repo.
+
+Required Python package:
+```bash
+uv pip install openai
+```
+
+Optional for image inspection and downscaling:
+```bash
+uv pip install pillow
+```
+
+Portability note:
+- If you are using the installed skill outside this repo, install dependencies into that environment with its package manager.
+- In uv-managed environments, `uv pip install ...` remains the preferred path.
+
+### Environment
+- `OPENAI_API_KEY` must be set for live API calls.
+- Do not ask the user for `OPENAI_API_KEY` when using the built-in `image_gen` tool.
+- Never ask the user to paste the full key in chat. Ask them to set it locally and confirm when ready.
+
+If the key is missing, give the user these steps:
+1. Create an API key in the OpenAI platform UI: https://platform.openai.com/api-keys
+2. Set `OPENAI_API_KEY` as an environment variable in their system.
+3. Offer to guide them through setting the environment variable for their OS/shell if needed.
+
+If installation is not possible in this environment, tell the user which dependency is missing and how to install it into their active environment.
+
+### Script-mode notes
+- CLI commands + examples: `references/cli.md`
+- API parameter quick reference: `references/image-api.md`
+- Network approvals / sandbox settings for CLI mode: `references/codex-network.md`
+
+## Reference map
+- `references/prompting.md`: shared prompting principles for both modes.
+- `references/sample-prompts.md`: shared copy/paste prompt recipes for both modes.
+- `references/cli.md`: fallback-only CLI usage via `scripts/image_gen.py`.
+- `references/image-api.md`: fallback-only API/CLI parameter reference.
+- `references/codex-network.md`: fallback-only network/sandbox troubleshooting for CLI mode.
+- `scripts/image_gen.py`: fallback-only CLI implementation. Use only when the user explicitly chooses or confirms CLI mode.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Content -Encoding UTF8 -LiteralPath IMAGE_RULES.md; Get-Content -Encoding UTF8 -LiteralPath plan.json; Get-Content -Encoding UTF8 -LiteralPath manuscript.md; Get-ChildItem -Name' in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\idolbom-service-2026-20261007-141559
+ succeeded in 94ms:
+# 블로그 이미지 생성 규칙 (Codex 자동 실행용)
+
+`scripts/codex_image_draft.py`가 Codex를 부를 때 이 파일을 읽힌다.
+Codex는 이미지 계획 JSON의 항목을 하나씩 그대로 그린다. 이미지에 들어갈 글자는 계획에 적힌 문구가 전부다.
+
+## 컨셉
+
+| concept | 스타일 | 쓰는 글 | 레퍼런스 |
+|---|---|---|---|
+| halftone | 하프톤 인쇄 사진. 원색 단색 배경, 점으로 찍힌 사진 질감, 레트로 잡지 느낌 | 육아 정책·정보, 바로답 | design/thumbnail-references/halftone/00~03.png |
+| travel-poster | 빈티지 여행 포스터. 평면 도형, 촘촘한 풍경, 제한된 색, 옛 관광 포스터 느낌 | 섬 여행 | design/thumbnail-references/travel-poster/00~04.png |
+| photo-doodle | 사진 위 낙서. 실제 사진 위에 손그림 선, 레터링, 작은 캐릭터 | 제품 소개 | design/thumbnail-references/photo-doodle/00~04.png |
+
+- 레퍼런스는 분위기, 색, 질감, 구도만 참고한다. 그림을 그대로 베끼지 않는다.
+- 한 원고의 이미지는 같은 컨셉과 같은 색 조합으로 통일한다.
+
+## 썸네일 원칙
+
+- 썸네일은 검색 결과에서 눌러보고 싶게 만드는 것이 목적이다. 호기심, 놀람, 긴장감처럼 어느 정도 자극이 있는 혁신적인 장면과 문구를 쓴다. 흔한 정보 카드처럼 만들지 않는다.
+- AI 느낌을 줄인다. 반짝이는 광택 피부, 아이돌 같은 모델, 완벽하게 정돈된 장면 대신 실제 사진 같은 질감, 생활감, 컨셉의 인쇄·손그림 질감을 살린다.
+- 자극적이더라도 사실과 다른 과장은 하지 않는다. 문구와 숫자는 원고에 있는 것만 쓴다.
+- **작게 봐도 읽혀야 한다.** 썸네일은 휴대폰 검색 결과에서 손톱만 한 크기로 보인다. 그 크기에서 제목이 바로 읽히도록 제목은 8~12자 안팎으로 짧게, 화면 폭의 대부분을 차지할 만큼 크게 쓴다. 배경과 글자의 명암 대비를 강하게 하고, 작은 보조 문구는 넣지 않는다.
+- **숫자 하나를 가장 크게.** 원고에서 가장 궁금증을 부르는 구체적인 숫자 하나(예: 최대 20%, 월 200만원, 3,460만원)를 골라 제목보다 크거나 같은 크기로 넣는다. 숫자가 여러 개면 하나만 고른다. 원고에 마땅한 숫자가 없으면 넣지 않는다.
+
+## 섬 글 썸네일: 융합 스타일 (2026-10-06 사용자 지시, 다음 글부터)
+
+섬 썸네일이 서로 비슷해져서 아래 두 레퍼런스를 융합한다. 계획 JSON에 `"thumbnail_references"`로 둘 다 넣는다(썸네일 항목 전용, 본문 이미지에는 쓰지 않는다).
+
+- `design/thumbnail-references/travel-poster/04.png`(빈티지여행포스터_4): 평면 벡터, 촘촘한 랜드마크 콜라주, 강한 원색 팔레트, 작은 소품(열기구, 푸드트럭, 지도 핀 등)
+- `design/thumbnail-references/photo-doodle/04.png`(사진위낙서_4): 실제 풍경 사진 위에 평면 일러스트 인물을 얹고, 굵은 곡선 리본과 구름 모양을 겹친 합성 구도
+
+융합 방법:
+- 바탕은 그 섬의 실제 풍경 사진 질감(실사)으로 하고, 그 위에 A의 평면 벡터 그림체로 그 섬의 랜드마크와 소품을 일부 겹쳐 얹는다.
+- 진행자는 B처럼 평면 일러스트로 풍경 사진 위에 큼직하게 얹는다. 얼굴 기준은 `host_references`.
+- 굵은 곡선 리본, 구름, 작은 소품을 화면 가장자리에 흘려 넣어 움직임을 준다. 매번 리본 색과 소품, 구도(인물 위치, 시점)를 바꿔 직전 썸네일과 겹치지 않게 한다.
+- 썸네일 원칙(큰 제목 8~12자, 숫자 하나, 강한 대비, 70% 이상 그림)은 그대로 지킨다. 두 레퍼런스의 글자, 로고, 건물, 인물을 베끼지 않는다. 그 섬에 없는 랜드마크를 넣지 않는다.
+- 승인된 샘플(2026-10-06 사용자 확인): `design/thumbnail-references/island-fusion/approved-sample.png`. 구성(위쪽 큰 제목, 청록 띠 위 노란 숫자, 실사 풍경, 오른쪽 앞 진행자, 곡선 리본, 열기구와 지도 핀 소품)을 기준으로 삼되, 섬 장면·소품·리본 색·진행자 포즈는 글마다 바꾼다. 진행자는 실사 같은 매끈한 인물이 아니라 평면 일러스트 느낌이 더 나게 쓴다.
+- 본문 이미지 4장은 기존 travel-poster 컨셉과 `reference`를 그대로 쓴다.
+
+## 글당 이미지 수
+
+썸네일 1장 + 본문 이미지 장수.
+
+| 글 | 썸네일 | 본문 이미지 | 합계 |
+|---|---|---|---|
+| 육아 | 1 | 3 | 4 |
+| 커넥트 | 1 | 2 | 3 |
+| 바로답 | 1 | 2 (실제 계산기 캡처는 별도) | 3 |
+| 섬 여행 | 1 | 4 (나중에 적용) | 5 |
+
+## 글자
+
+- 계획의 `text`에 적힌 문구만 철자 그대로 넣는다. 계획에 없는 글자, 영문, 숫자를 지어내지 않는다. `text`가 비어 있으면 글자를 넣지 않는다.
+- 썸네일은 제목 한 줄과 숫자 하나 정도. 정보 이미지는 제목 한 줄과 짧은 항목 5개까지.
+- 글자는 크고 굵은 한글 고딕 계열로, 모바일에서 읽히게 화면 가장자리에서 떨어뜨린다.
+- 쓰지 않는 것: 테두리 두른 글자, 알약 배지, 말풍선, 하트, 별, 반짝이, 가운뎃점(·), VS, 장식 괄호, 작은 각주, 빽빽한 표, 가짜 로고.
+- 그림이 화면의 70% 이상을 차지한다.
+
+## 진행자 (섬 글)
+
+- 섬 시리즈에는 진행자가 나온다. 얼굴 기준은 `private_media/personas/island-host/` 의 여성(female-01~03)과 남성(male-01~03) 사진이다. 계획의 `host_references`에 한 사람의 사진 2~3장을 넣는다.
+- 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)은 유지하고, 옷과 포즈와 배경은 그 이미지의 컨셉과 계절에 맞게 바꾼다. 참고 사진의 해외 배경은 쓰지 않고 그 글의 실제 섬 풍경에 둔다.
+- 그림체도 컨셉을 따른다. 빈티지 여행 포스터 컨셉이면 진행자도 포스터 그림체로 그린다.
+- 진행자가 나오는 항목은 prompt에 "진행자"라고 적는다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
+
+## 사실과 안전
+
+- 실제 장소, 제품, 제도와 다른 모양을 그리지 않는다. 다른 섬의 랜드마크, 실제 회사 로고, 존재하지 않는 표지판과 시설을 넣지 않는다.
+- 아이 얼굴은 계획에 적힌 경우에만 보이게 한다. 실제 아이 사진을 복제하지 않는다.
+- 잘못된 안전 장면을 그리지 않는다. 운전 중 휴대전화 조작, 잘못된 카시트 장착, 엎드려 재우기, 아이 혼자 물가 등.
+- 매끈한 AI 광택, 과한 HDR, 판타지 요소를 쓰지 않는다.
+
+## 사양
+
+- 정사각형 1:1, 가능하면 1254×1254.
+- PNG로 계획의 `file` 경로에 저장한다.
+
+## 이미지 계획 JSON (Claude가 작성)
+
+원고 옆에 `<원고이름>.images.json`으로 저장한다.
+
+```json
+{
+  "concept": "halftone",
+  "reference": "design/thumbnail-references/halftone/01.png",
+  "thumbnail_references": ["섬 글만: 위 융합 레퍼런스 2장 경로"],
+  "images": [
+    {
+      "file": "assets/posts/<slug>/01-thumbnail.png",
+      "insert": "top",
+      "text": ["다자녀 통행료 할인", "최대 20%"],
+      "prompt": "장면, 구도, 색, 글자 위치를 구체적으로"
+    },
+    {
+      "file": "assets/posts/<slug>/02-장면.png",
+      "insert": "## 원고의 소제목 그대로",
+      "text": [],
+      "prompt": "..."
+    }
+  ]
+}
+```
+
+- `insert`: `top`은 본문 맨 위(첫 이미지가 대표 이미지), `## 소제목`은 그 소제목 바로 아래.
+- `reference`: 위 컨셉 표의 레퍼런스 중 하나. 글마다 번호를 바꿔 변화를 준다.
+- `prompt`: 무엇을 어디에 어떤 색으로 그릴지, `text`를 어디에 어떤 크기로 둘지까지 적는다. 확인되지 않은 가격, 날짜, 전화번호는 넣지 않는다.
+{
+  "concept": "halftone",
+  "thumbnail_references": [],
+  "reference": "reference.png",
+  "host_references": [],
+  "images": [
+    {
+      "file": "01-thumbnail.png",
+      "insert": "top",
+      "text": [
+        "아이돌봄 지원 확대",
+        "시간당 1,918원"
+      ],
+      "prompt": "하프톤 인쇄 사진 질감의 정사각형 썸네일. 진한 주황색 단색 배경. 거실 현관에서 돌보미가 문 안으로 들어서는 뒷모습과 아이 신발, 장난감 블록이 흩어진 생활감 있는 장면, 얼굴은 크게 보이지 않게. 상단에 흰색 굵은 고딕 큰 글자로 '아이돌봄 지원 확대' 한 줄, 하단에 노란색 아주 큰 굵은 글자로 '시간당 1,918원'. 글자는 가장자리에서 떨어뜨리고 배경과 대비를 강하게. 그림이 화면 70% 이상. 매끈한 AI 광택 금지."
+    },
+    {
+      "file": "02-home-care-scene.png",
+      "insert": "## 첫 번째 우리 집은 어느 유형일까",
+      "text": [],
+      "prompt": "같은 주황 하프톤 인쇄 스타일. 거실 바닥에서 돌보미의 손과 아이의 작은 손이 블록을 함께 쌓는 클로즈업. 아이 얼굴은 보이지 않게 손과 발 위주. 글자 없음. 안전하고 평화로운 장면."
+    },
+    {
+      "file": "03-support-info.png",
+      "insert": "## 세 번째 시간당 본인부담금",
+      "text": [
+        "시간당 본인부담",
+        "가형 1,918원",
+        "나형 3,837원",
+        "다형 8,953원"
+      ],
+      "prompt": "같은 주황 하프톤 스타일의 정보 이미지. 상단에 흰색 굵은 제목 '시간당 본인부담', 아래에 가형 1,918원, 나형 3,837원, 다형 8,953원을 큰 굵은 고딕으로 세 줄 배치. 오른쪽 아래에 하프톤 점으로 찍힌 작은 집 모양 그림. 글자와 배경 대비 강하게, 지정 문구 외 글자 금지."
+    },
+    {
+      "file": "04-final-check.png",
+      "insert": "## 신청 전에 챙겨두면 좋은 것",
+      "text": [
+        "신청 전 체크",
+        "소득 유형 확인",
+        "국민행복카드",
+        "예치금 충전",
+        "지원 시간 확인"
+      ],
+      "prompt": "같은 주황 하프톤 스타일의 체크리스트 이미지. 상단 흰색 굵은 제목 '신청 전 체크', 아래 항목 네 줄 '소득 유형 확인' '국민행복카드' '예치금 충전' '지원 시간 확인'을 크고 굵은 고딕으로 왼쪽 정렬, 각 줄 앞에 단순한 체크 표시. 지정 문구 외 글자 금지, 그림이 화면 70% 이상."
+    }
+  ]
+}
+# 2026 아이돌봄서비스 신청 방법 소득 기준 250% 확대 시간당 본인부담 1918원부터 확인할 5가지
+
+<!-- parenting -->
+안녕하세요, 첫째 7살에
+5월생 쌍둥이까지 키우는 다둥이 아빠예요.
+
+아이가 아프거나 갑자기 일이 생기면
+잠깐 맡길 곳이 없어서
+**눈앞이 캄캄해지는 순간**이 꼭 오더라고요.
+그럴 때 집으로 돌보미가 와 주는 게
+정부 아이돌봄서비스예요.
+
+올해부터 지원받을 수 있는 소득 기준이
+**중위소득 200%에서 250%**까지 넓어졌어요.
+예전에 탈락했던 가정도
+!!다시 확인해 볼 만해요!!
+
+***혼자 다 감당하려다 지치는 게 제일 위험하더라고요~***
+신청 순서부터 본인부담금까지
+하나씩 짚어 볼게요.
+
+## 2026년에 달라진 점
+
+여성가족부 발표를 보면
+올해 달라진 내용은 크게 네 가지예요.
+
+| 항목 | 2026년 변경 내용 |
+|---|---|
+| 소득 기준 | 중위소득 200% 이하에서 250% 이하로 확대 |
+| 시간당 이용요금 | 12,180원에서 12,790원으로 5% 인상 |
+| 취약가구 지원시간 | 연 960시간에서 1,080시간으로 확대 |
+| 지원 가구 수 | 12만 가구에서 12만 6천 가구로 확대 |
+
+한부모, 조손, 장애, 청소년부모 가구처럼
+돌봄 부담이 큰 가정은
+==연간 지원시간이 120시간 늘었어요.==
+인구감소지역 가정은 본인부담금도 추가로 지원받아요.
+
+## 첫 번째 우리 집은 어느 유형일까
+
+정부 지원은 소득에 따라
+**가형부터 마형까지** 나뉘어요.
+
+| 유형 | 기준 중위소득 |
+|---|---|
+| 가형 | 75% 이하 |
+| 나형 | 75% 초과 120% 이하 |
+| 다형 | 120% 초과 150% 이하 |
+| 라형 | 150% 초과 250% 이하 |
+| 마형 | 250% 초과 정부지원 없음 |
+
+올해부터 ==라형이 250%까지==
+넓어진 셈이에요.
+마형은 정부 지원금이 없어서
+이용요금을 전액 내야 해요.
+
+## 두 번째 대상 연령과 서비스 종류
+
+아이돌봄서비스는
+!!생후 3개월부터 만 12세!!까지 이용해요.
+서비스는 크게 두 가지로 나뉘어요.
+
+- **시간제**: 생후 3개월~12세, 1회 2시간 이상 신청
+- **영아종일제**: 36개월 이하, 1회 3시간 이상 신청
+
+시간제는 추가 시간을
+최소 30분 단위로 늘릴 수 있어요.
+영아종일제는 건강, 영양, 위생을 챙기는
+==맞춤형 돌봄==이라는 게 특징이에요.
+
+아이가 감염병 확진을 받았을 때는
+**기본요금의 50%**를 정부가 지원하는
+질병감염아동지원 서비스도 있어요.
+
+<!-- experience -->
+> 저희는 쌍둥이가 아직 4개월이라 지금 당장 쓸 일은 없지만, 첫째 학교 행사나 갑자기 병원에 가야 할 때를 생각해서 미리 자격 확인만 해 두려고 해요.
+
+## 세 번째 시간당 본인부담금
+
+시간제 기본형 이용요금은
+2026년 기준 **시간당 12,790원**이에요.
+종합형은 **16,620원**이고요.
+
+기본형을 미취학 아동에게 쓸 때
+정부 지원율을 적용하면
+본인부담은 이렇게 계산돼요.
+
+| 유형 | 정부 지원 | 시간당 본인부담 |
+|---|---|---|
+| 가형 | 85% | 약 1,918원 |
+| 나형 | 70% | 약 3,837원 |
+| 다형 | 30% | 약 8,953원 |
+
+가형이라면 !!시간당 1,918원!!으로
+돌보미가 집에 와 주는 거예요.
+라형의 지원율과 취학 아동 기준은
+==아이돌봄 누리집==에서 따로 확인하세요.
+
+## 네 번째 지원시간과 추가 요금
+
+정부 지원은 **연간 시간 한도** 안에서만 적용돼요.
+한도를 넘긴 시간은 전액 본인이 내야 해요.
+
+영아종일제는 **월 200시간** 이내로 지원돼요.
+한부모 등 취약가구의 시간제 한도는
+올해 **1,080시간**으로 늘었어요.
+
+갑자기 필요한 긴급돌봄은
+건당 **3,000원**이 추가돼요.
+일반 가구의 시간제 한도는
+이용 전에 꼭 !!누리집에서 다시 확인!!하세요.
+
+## 다섯 번째 신청 순서
+
+처음 쓰는 분들은 순서가 헷갈리기 쉬워요.
+정부 지원을 받으려면
+==서비스 신청 전에 자격 결정==이 먼저예요.
+
+1. 복지로나 아이돌봄 누리집에서 정부지원 결정 신청
+2. 가형~라형 결정 통지 확인
+3. 국민행복카드 발급과 예치금 충전
+4. 아이돌봄 누리집이나 앱에서 서비스 예약
+
+결정 통지가 나오기 전에는
+정부 지원을 받을 수 없으니
+**여유 있게 미리** 신청해 두는 게 좋아요.
+문의는 아이돌봄 누리집에 안내된
+지원센터 전화로 하면 돼요.
+
+> 주의｜소득 유형은 건강보험료 등을 바탕으로 정해지고 해마다 달라질 수 있어요. 금액과 지원율은 이용하는 시점의 누리집 안내를 꼭 다시 확인하세요.
+
+## 올해 새로 생긴 안전 장치
+
+4월 23일부터 **아이돌봄사 국가자격제**와
+민간 제공기관 등록제가 시행됐어요.
+돌보미를 집에 들이는 서비스라
+==자격과 등록 여부==를 확인할 수 있게 된 거예요.
+
+## 신청 전에 챙겨두면 좋은 것
+
+<!-- box: quotation_postit -->
+> 우리 집 **소득 유형** 먼저 확인
+> 아이 나이에 맞는 ==시간제 영아종일제 선택==
+> 국민행복카드와 예치금 준비
+> 정부 지원 시간 한도와 남은 시간 확인
+
+***믿고 맡길 곳 하나만 있어도 마음이 한결 가벼워지더라고요.***
+필요한 분께 도움이 되도록
+이 글 저장해 두세요.
+
+────────────────────
+
+기준일 2026년 10월 7일
+출처
+아이돌봄서비스 누리집 서비스 안내 https://www.idolbom.go.kr
+대한민국 정책브리핑 아이돌봄서비스 지원 대상 중위소득 250% 이하 가구까지 확대 https://www.korea.kr/news/policyNewsView.do?newsId=148958189
+대한민국 정책브리핑 내년 아이돌봄서비스 12만 6000가구로 확대 https://www.korea.kr/news/policyNewsView.do?newsId=148950388
+대한민국 정책브리핑 2026년 아이돌봄 서비스 더 안전하고 든든하게 https://www.korea.kr/multi/visualNewsView.do?newsId=148958677
+복지로 공식 블로그 아이돌봄서비스 지원 대폭 확대 https://blog.bokjiro.go.kr/1800
+본인부담금은 시간당 이용요금 12,790원에 가형 85% 나형 70% 다형 30% 지원율을 적용해 계산했어요.
+이 글은 일반적인 정보이며 실제 지원 여부는 아이돌봄 누리집과 지원센터 안내를 확인하세요.
+
+#아이돌봄서비스 #아이돌봄서비스2026 #아이돌봄서비스신청 #아이돌봄서비스비용 #아이돌봄서비스소득기준 #아이돌봄 #아이돌보미 #영아종일제 #시간제돌봄 #중위소득250 #아이돌봄본인부담금 #아이돌봄지원금 #정부지원돌봄 #돌봄공백 #국민행복카드 #복지로 #육아정책 #육아지원금 #경기도육아 #다둥이아빠 #쌍둥이육아 #육아정보 #영아돌봄 #맞벌이육아 #아이돌봄사 #2026육아정책 #육아도우미 #긴급돌봄
+IMAGE_RULES.md
+manuscript.md
+plan.json
+reference.png
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Copy-Item -LiteralPath 'C:\\Users\\kim\\.codex\\generated_images\\01a114ca-3a16-78a0-8d7f-0ea30f0734b1\\exec-69e2a4a7-3b63-4e73-a6c3-deb2dc9c3736.png' -Destination '01-thumbnail.png'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\idolbom-service-2026-20261007-141559
+ succeeded in 117ms:
+codex
+썸네일을 저장했습니다. 같은 주황색 하프톤 질감으로 본문 이미지 세 장을 이어서 생성하겠습니다.
+
+exec
+"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Copy-Item -LiteralPath 'C:\\Users\\kim\\.codex\\generated_images\\01a114ca-3a16-78a0-8d7f-0ea30f0734b1\\exec-bd74ed82-d2c1-400c-8829-6f0669be76d5.png' -Destination '02-home-care-scene.png'" in C:\Users\kim\AppData\Local\Temp\codex_image_jobs\idolbom-service-2026-20261007-141559
+ succeeded in 105ms:
