@@ -1,0 +1,40 @@
+{
+  "concept": "photoreal",
+  "reference": "design/thumbnail-references/photoreal/00.png",
+  "host_references": [
+    "private_media/personas/island-host/female40-01.png",
+    "private_media/personas/island-host/female40-03.png"
+  ],
+  "images": [
+    {
+      "file": "assets/posts/20261007-gyodongdo-group-bus-autumn/01-thumbnail.png",
+      "insert": "top",
+      "text": ["교동도 단체 여행", "신분증 필수"],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 10월 오후, 강화 교동도 화개산 중턱 전망 데크에서 내려다본 넓은 황금빛 논과 그 너머 회색빛 바다. 진행자(첨부 host 얼굴, 40대 후반 여성)는 연한 카키색 트렌치 바람막이와 얇은 머플러 차림으로 화면 왼쪽 40%에 서서 카메라를 보고 웃으며 한 손에 신분증 카드를 살짝 들어 보인다(카드 글자는 보이지 않게). 채도 낮게, 흐린 가을 햇빛, 바람에 날린 머리. 화면 위쪽에 크고 굵은 흰색 한글 고딕 제목 '교동도 단체 여행', 오른쪽 아래에 더 크게 노란색 '신분증 필수'. 글자 뒤 옅은 그림자만, 테두리·배지·말풍선 없음. 표지판, 로고, 다른 사람 얼굴 없음."
+    },
+    {
+      "file": "assets/posts/20261007-gyodongdo-group-bus-autumn/02-bridge.png",
+      "insert": "## 01. 단체 버스로 교동도 가는 길",
+      "text": [],
+      "prompt": "실제 사진 느낌. 가을 아침, 강화도와 교동도를 잇는 긴 교량 위를 달리는 흰색 대형 관광버스를 멀리서 본 장면. 버스에 회사 이름이나 로고는 없다. 다리 아래 잔잔한 바다와 갯벌, 멀리 낮은 산. 채도 낮게, 옅은 안개. 글자 없음, 사람 얼굴 없음."
+    },
+    {
+      "file": "assets/posts/20261007-gyodongdo-group-bus-autumn/03-garden-view.png",
+      "insert": "## 02. 화개정원에서 섬 전체 내려다보기",
+      "text": [],
+      "prompt": "실제 사진 느낌. 산 중턱 정원의 산책로와 국화, 억새가 핀 화단 너머로 교동도의 넓은 논과 바다가 내려다보이는 풍경. 중년 여성 일행 서너 명이 뒷모습으로 산책로를 걸어간다(얼굴 보이지 않게). 흐린 가을 오후, 낮은 채도. 글자, 표지판 없음."
+    },
+    {
+      "file": "assets/posts/20261007-gyodongdo-group-bus-autumn/04-market-alley.png",
+      "insert": "## 03. 대룡시장 골목 천천히 걷기",
+      "text": [],
+      "prompt": "실제 사진 느낌. 오래된 시골 골목 시장. 낡은 단층 상점들, 빛바랜 차양, 오래된 이발소와 다방처럼 보이는 옛 가게 외관, 좁은 시멘트 골목. 간판은 읽을 수 없게 흐리거나 글자 없이. 중년 여성 일행 두세 명이 뒷모습으로 천천히 걸어간다. 따뜻한 가을 햇빛, 낮은 채도. 사람 얼굴과 로고 없음."
+    },
+    {
+      "file": "assets/posts/20261007-gyodongdo-group-bus-autumn/05-final.png",
+      "insert": "## 05. 출발 전 마지막 확인",
+      "text": [],
+      "prompt": "실제 사진 느낌. 가을 들판 옆 시골길에 세워진 흰색 관광버스(로고 없음) 앞에서 진행자(첨부 host 얼굴, 40대 후반 여성)가 화면 오른쪽 30% 안에 서서 일행을 기다리며 손목시계를 보는 모습. 썸네일과 다른 옷: 베이지 니트 카디건과 작은 크로스백. 해 질 무렵 부드러운 빛, 낮은 채도. 글자 없음, 다른 사람 얼굴 없음."
+    }
+  ]
+}

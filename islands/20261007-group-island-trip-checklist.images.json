@@ -1,0 +1,40 @@
+{
+  "concept": "photoreal",
+  "reference": "design/thumbnail-references/photoreal/00.png",
+  "host_references": [
+    "private_media/personas/island-host/male50-02.png",
+    "private_media/personas/island-host/male50-03.png"
+  ],
+  "images": [
+    {
+      "file": "assets/posts/20261007-group-island-trip-checklist/01-thumbnail.png",
+      "insert": "top",
+      "text": ["섬 단체 여행 준비", "20명 이상"],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 가을 아침 남해안 섬 여객선 선착장, 정박한 작은 흰색 여객선(선사 이름·로고 없음)과 잔잔한 바다, 멀리 초록 섬. 진행자(첨부 host 얼굴, 50대 초반 남성)는 체크 셔츠 위 남색 경량 패딩 조끼 차림으로 화면 왼쪽 40%에 서서 카메라를 보며 웃고 한 손으로 클립보드 명단을 들어 보인다(명단 글자는 읽을 수 없게). 채도 낮게, 바람. 화면 위쪽에 크고 굵은 흰색 한글 고딕 제목 '섬 단체 여행 준비', 오른쪽 아래에 더 크게 노란색 '20명 이상'. 글자 뒤 옅은 그림자만, 테두리·배지·말풍선 없음. 표지판, 로고, 다른 사람 얼굴 없음."
+    },
+    {
+      "file": "assets/posts/20261007-group-island-trip-checklist/02-bus-vs-ship.png",
+      "insert": "## 01. 버스로 가는 섬과 배 타는 섬",
+      "text": [],
+      "prompt": "실제 사진 느낌. 바다 위 긴 연륙교를 건너는 흰색 관광버스(로고 없음)를 멀리서 본 장면, 같은 바다 아래쪽으로 작은 여객선 한 척이 하얀 물살을 내며 지나간다. 가을 오후, 낮은 채도, 옅은 해무. 글자와 사람 얼굴 없음."
+    },
+    {
+      "file": "assets/posts/20261007-group-island-trip-checklist/03-boarding.png",
+      "insert": "## 02. 배 타는 섬 단체는 명단부터",
+      "text": [],
+      "prompt": "실제 사진 느낌. 여객선 승선 경사로 앞에 줄을 선 중년 일행의 뒷모습, 손에 신분증이나 휴대전화를 들고 있다(화면의 글자는 보이지 않게). 선착장 바닥과 배 옆면, 가을 아침 빛, 낮은 채도. 사람 얼굴, 글자, 선사 로고 없음."
+    },
+    {
+      "file": "assets/posts/20261007-group-island-trip-checklist/04-sea-weather.png",
+      "insert": "## 03. 결항은 전날 저녁부터 보세요",
+      "text": [],
+      "prompt": "실제 사진 느낌. 흐린 날 파도가 조금 높은 바다와 방파제, 선착장에 묶여 있는 작은 여객선(로고 없음), 낮게 깔린 회색 구름. 차분하고 낮은 채도. 글자와 사람 없음."
+    },
+    {
+      "file": "assets/posts/20261007-group-island-trip-checklist/05-final.png",
+      "insert": "## 05. 출발 전 마지막 확인",
+      "text": [],
+      "prompt": "실제 사진 느낌. 관광버스(로고 없음) 출입문 앞에서 진행자(첨부 host 얼굴, 50대 초반 남성)가 화면 오른쪽 30% 안에 서서 휴대전화 화면을 보며 미소 짓는 모습(화면 글자는 보이지 않게). 썸네일과 다른 옷: 베이지 면 재킷과 회색 니트. 이른 아침 부드러운 빛, 낮은 채도. 글자와 다른 사람 얼굴 없음."
+    }
+  ]
+}
