@@ -1,0 +1,19 @@
+{
+  "manuscript": "islands/20261007-purple-island-aster-group-trip.md",
+  "plan": "islands/20261007-purple-island-aster-group-trip.images.json",
+  "title": "신안 퍼플섬 가을 단체 여행 보라색 하나만 입으면 입장료 0원",
+  "started": "2026-10-07T19:43:41",
+  "images_planned": 5,
+  "codex_exit": 0,
+  "codex_seconds": 403,
+  "codex_log": "logs/codex/20261007-purple-island-aster-group-trip-20261007-194341.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261007-purple-island-aster-group-trip-20261007-194341",
+  "images_ready": 5,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224434447640,
+  "images_uploaded": 5,
+  "images_in_draft": 5,
+  "title_verified": true,
+  "finished": "2026-10-07T19:50:46"
+}

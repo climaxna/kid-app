@@ -1,0 +1,19 @@
+{
+  "manuscript": "islands/20261007-gyodongdo-group-bus-autumn.md",
+  "plan": "islands/20261007-gyodongdo-group-bus-autumn.images.json",
+  "title": "교동도 단체 버스 여행 가을 코스 신분증 챙기고 화개정원 단체 4천원",
+  "started": "2026-10-07T19:36:48",
+  "images_planned": 5,
+  "codex_exit": 0,
+  "codex_seconds": 395,
+  "codex_log": "logs/codex/20261007-gyodongdo-group-bus-autumn-20261007-193648.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261007-gyodongdo-group-bus-autumn-20261007-193648",
+  "images_ready": 5,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224434442235,
+  "images_uploaded": 5,
+  "images_in_draft": 5,
+  "title_verified": true,
+  "finished": "2026-10-07T19:43:40"
+}

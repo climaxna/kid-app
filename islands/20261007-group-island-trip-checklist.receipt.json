@@ -1,0 +1,19 @@
+{
+  "manuscript": "islands/20261007-group-island-trip-checklist.md",
+  "plan": "islands/20261007-group-island-trip-checklist.images.json",
+  "title": "섬 단체 여행 준비 20명 넘으면 명단 미리 내고 배 타기 버스로 가는 섬 3곳",
+  "started": "2026-10-07T19:57:48",
+  "images_planned": 5,
+  "codex_exit": 0,
+  "codex_seconds": 474,
+  "codex_log": "logs/codex/20261007-group-island-trip-checklist-20261007-195748.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261007-group-island-trip-checklist-20261007-195748",
+  "images_ready": 5,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224434459509,
+  "images_uploaded": 5,
+  "images_in_draft": 5,
+  "title_verified": true,
+  "finished": "2026-10-07T20:06:03"
+}
