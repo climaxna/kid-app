@@ -1,0 +1,28 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Verse,Malgun Gothic,104,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,5,2,8,0,0,0,1
+Style: Reference,Malgun Gothic,54,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,3,1,8,0,0,0,1
+Style: Credit,Malgun Gothic,30,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,0,0,0,0,100,100,0,0,1,2,1,8,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:01.60,Verse,,0,0,0,,{\pos(495,570)\fs112\fad(150,100)}이사야\N41장 10절
+Dialogue: 0,0:00:01.65,0:00:05.51,Verse,,0,0,0,,{\pos(495,600)\fs81\fad(150,100)}두려워 말라
+Dialogue: 0,0:00:01.65,0:00:05.51,Verse,,0,0,0,,{\pos(495,745)\fs81\fad(150,100)}내가 너와 함께 함이니라
+Dialogue: 0,0:00:05.51,0:00:09.43,Verse,,0,0,0,,{\pos(495,600)\fs74\fad(150,100)}놀라지 말라
+Dialogue: 0,0:00:05.51,0:00:09.43,Verse,,0,0,0,,{\pos(495,745)\fs74\fad(150,100)}나는 네 하나님이 됨이니라
+Dialogue: 0,0:00:09.43,0:00:12.00,Verse,,0,0,0,,{\pos(495,600)\fs104\fad(150,100)}내가 너를
+Dialogue: 0,0:00:09.43,0:00:12.00,Verse,,0,0,0,,{\pos(495,745)\fs104\fad(150,100)}굳세게 하리라
+Dialogue: 0,0:00:12.00,0:00:14.49,Verse,,0,0,0,,{\pos(495,600)\fs104\fad(150,100)}참으로 너를
+Dialogue: 0,0:00:12.00,0:00:14.49,Verse,,0,0,0,,{\pos(495,745)\fs104\fad(150,100)}도와 주리라
+Dialogue: 0,0:00:14.49,0:00:20.47,Verse,,0,0,0,,{\pos(495,600)\fs76\fad(150,100)}참으로 나의 의로운
+Dialogue: 0,0:00:14.49,0:00:20.47,Verse,,0,0,0,,{\pos(495,745)\fs76\fad(150,100)}오른손으로 너를 붙들리라
+Dialogue: 0,0:00:01.65,0:00:20.47,Reference,,0,0,0,,{\pos(495,1505)\fs54}이사야 41장 10절
+Dialogue: 0,0:00:01.65,0:00:20.47,Credit,,0,0,0,,{\pos(495,1588)\fs30}개역한글 · 대한성서공회

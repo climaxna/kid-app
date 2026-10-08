@@ -1,0 +1,54 @@
+{
+  "duration": 20.466666666666665,
+  "voice": "B / M2",
+  "engine": "Supertonic 3",
+  "speed": 0.9,
+  "steps": 12,
+  "video": "1080x1920,30fps,H264/AAC",
+  "mix_peak": 0.7981830847077921,
+  "exact_verse_text": true,
+  "full_decode": true,
+  "timing": [
+    {
+      "start": 1.65,
+      "voice_end": 4.514512471655329,
+      "end": 5.514512471655329,
+      "text": "두려워 말라 내가 너와 함께 함이니라.",
+      "display": "두려워 말라\n내가 너와 함께 함이니라",
+      "font_size": 81
+    },
+    {
+      "start": 5.514512471655329,
+      "voice_end": 8.428321995464852,
+      "end": 9.428321995464852,
+      "text": "놀라지 말라 나는 네 하나님이 됨이니라.",
+      "display": "놀라지 말라\n나는 네 하나님이 됨이니라",
+      "font_size": 74
+    },
+    {
+      "start": 9.428321995464852,
+      "voice_end": 11.00219954648526,
+      "end": 12.00219954648526,
+      "text": "내가 너를 굳세게 하리라.",
+      "display": "내가 너를\n굳세게 하리라",
+      "font_size": 104
+    },
+    {
+      "start": 12.00219954648526,
+      "voice_end": 13.489931972789115,
+      "end": 14.489931972789115,
+      "text": "참으로 너를 도와 주리라.",
+      "display": "참으로 너를\n도와 주리라",
+      "font_size": 104
+    },
+    {
+      "start": 14.489931972789115,
+      "voice_end": 17.865238095238094,
+      "end": 20.465238095238096,
+      "text": "참으로 나의 의로운 오른손으로 너를 붙들리라.",
+      "display": "참으로 나의 의로운\n오른손으로 너를 붙들리라",
+      "font_size": 76
+    }
+  ],
+  "note": "Signal and visual checks; voice tone selected by user. Listening assessment not claimed."
+}

@@ -2,22 +2,18 @@
   "manuscript": "baroanswer/20261008-insurance-calculator.md",
   "plan": "baroanswer/20261008-insurance-calculator.images.json",
   "title": "4대보험 계산 2026 월급 300만 원이면 매달 얼마가 빠질까",
-  "started": "2026-10-08T10:10:52",
+  "started": "2026-10-08T22:51:21",
   "images_planned": 3,
   "codex_exit": 0,
-  "codex_seconds": 69,
-  "codex_log": "logs/codex/20261008-insurance-calculator-20261008-101052.log",
-  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261008-insurance-calculator-20261008-101052",
-  "images_ready": 0,
-  "missing": [
-    "assets/posts/baroanswer-insurance/g01-thumbnail.png",
-    "assets/posts/baroanswer-insurance/g02-payslip.png",
-    "assets/posts/baroanswer-insurance/g03-meal-allowance.png"
-  ],
-  "status": "saved_text_only",
-  "logNo": 224434949562,
-  "images_uploaded": 3,
-  "images_in_draft": 3,
+  "codex_seconds": 197,
+  "codex_log": "logs/codex/20261008-insurance-calculator-20261008-225121.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261008-insurance-calculator-20261008-225121",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224435718361,
+  "images_uploaded": 6,
+  "images_in_draft": 6,
   "title_verified": true,
-  "finished": "2026-10-08T10:12:19"
+  "finished": "2026-10-08T22:55:02"
 }

@@ -1,0 +1,10 @@
+{
+  "selected_label": "B",
+  "voice_name": "M2",
+  "engine": "Supertonic 3",
+  "speed": 0.90,
+  "steps": 12,
+  "user_selected": true,
+  "reference_sample": "voice-samples-v2/B-M2.mp3",
+  "workflow": "Complete one review sample before producing additional episodes."
+}
