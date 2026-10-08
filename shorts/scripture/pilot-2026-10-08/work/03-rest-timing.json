@@ -1,0 +1,89 @@
+{
+  "id": "03-rest",
+  "duration": 29.9,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "voice": "ko-KR-SunHiNeural",
+  "voice_rate": "-12%",
+  "voice_peak": 0.43044520774967515,
+  "mix_peak": 0.4408977110088213,
+  "size_bytes": 5938840,
+  "min_subtitle_font": 66,
+  "exact_scripture_match": true,
+  "full_decode_ok": true,
+  "segments": [
+    {
+      "kind": "intro",
+      "text": "오늘 하루도, 참 수고 많으셨습니다.",
+      "display": "오늘 하루도\n참 수고 많으셨습니다",
+      "start": 0.25,
+      "voice_end": 3.5385260770975058,
+      "end": 4.088526077097506,
+      "font_size": 82
+    },
+    {
+      "kind": "reference",
+      "text": "마태복음 십일 장, 이십팔 절 말씀입니다.",
+      "display": "마태복음\n11장 28절",
+      "start": 4.088526077097506,
+      "voice_end": 7.770294784580499,
+      "end": 8.320294784580499,
+      "font_size": 82
+    },
+    {
+      "kind": "verse",
+      "text": "수고하고 무거운 짐진 자들아",
+      "display": "수고하고\n무거운 짐진 자들아",
+      "start": 8.320294784580499,
+      "voice_end": 11.087006802721088,
+      "end": 11.63700680272109,
+      "font_size": 82
+    },
+    {
+      "kind": "verse",
+      "text": "다 내게로 오라",
+      "display": "다 내게로 오라",
+      "start": 11.63700680272109,
+      "voice_end": 13.187619047619048,
+      "end": 13.88700680272109,
+      "font_size": 82
+    },
+    {
+      "kind": "verse",
+      "text": "내가 너희를 쉬게 하리라.",
+      "display": "내가 너희를\n쉬게 하리라",
+      "start": 13.88700680272109,
+      "voice_end": 15.837097505668934,
+      "end": 16.387097505668933,
+      "font_size": 82
+    },
+    {
+      "kind": "prayer",
+      "text": "예수님, 지친 몸과 마음을 주님께 맡깁니다.",
+      "display": "지친 몸과 마음을\n주님께 맡깁니다",
+      "start": 16.387097505668933,
+      "voice_end": 20.373945578231293,
+      "end": 20.92394557823129,
+      "font_size": 82
+    },
+    {
+      "kind": "prayer",
+      "text": "주님께 배우며 참된 쉼을 누리게 해 주세요.",
+      "display": "주님께 배우며\n참된 쉼을 누리게 해 주세요",
+      "start": 20.92394557823129,
+      "voice_end": 24.293219954648524,
+      "end": 24.843219954648525,
+      "font_size": 66
+    },
+    {
+      "kind": "prayer",
+      "text": "아멘.",
+      "display": "아멘",
+      "start": 24.843219954648525,
+      "voice_end": 25.671746031746032,
+      "end": 27.093219954648525,
+      "font_size": 82
+    }
+  ]
+}

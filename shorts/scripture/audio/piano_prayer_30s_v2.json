@@ -1,0 +1,362 @@
+{
+  "metrics": {
+    "seconds": 30.0,
+    "sample_rate": 44100,
+    "channels": 2,
+    "peak_dbfs": -3.0000009805991428,
+    "rms_dbfs": -21.1205581154001,
+    "note_count": 58,
+    "tempo_bpm": 72,
+    "validation": "File and signal checks only; not a listening review."
+  },
+  "notes": [
+    {
+      "beat": 0,
+      "midi": 36,
+      "velocity": 0.34,
+      "sustain": 3.9
+    },
+    {
+      "beat": 0.5,
+      "midi": 55,
+      "velocity": 0.21440038591070817,
+      "sustain": 2.1
+    },
+    {
+      "beat": 1.5,
+      "midi": 60,
+      "velocity": 0.24307727332189633,
+      "sustain": 2.1
+    },
+    {
+      "beat": 2.5,
+      "midi": 64,
+      "velocity": 0.20311134650050008,
+      "sustain": 2.1
+    },
+    {
+      "beat": 3.25,
+      "midi": 60,
+      "velocity": 0.16,
+      "sustain": 1.2
+    },
+    {
+      "beat": 4,
+      "midi": 35,
+      "velocity": 0.34,
+      "sustain": 3.9
+    },
+    {
+      "beat": 4.5,
+      "midi": 55,
+      "velocity": 0.19840646819143593,
+      "sustain": 2.1
+    },
+    {
+      "beat": 5.5,
+      "midi": 59,
+      "velocity": 0.23344118676878436,
+      "sustain": 2.1
+    },
+    {
+      "beat": 6.5,
+      "midi": 62,
+      "velocity": 0.22794998749001916,
+      "sustain": 2.1
+    },
+    {
+      "beat": 7.25,
+      "midi": 59,
+      "velocity": 0.16,
+      "sustain": 1.2
+    },
+    {
+      "beat": 8,
+      "midi": 33,
+      "velocity": 0.34,
+      "sustain": 3.9
+    },
+    {
+      "beat": 8.5,
+      "midi": 52,
+      "velocity": 0.21244109743728695,
+      "sustain": 2.1
+    },
+    {
+      "beat": 9.5,
+      "midi": 57,
+      "velocity": 0.23482162332643192,
+      "sustain": 2.1
+    },
+    {
+      "beat": 10.5,
+      "midi": 60,
+      "velocity": 0.23068403025352757,
+      "sustain": 2.1
+    },
+    {
+      "beat": 11.25,
+      "midi": 57,
+      "velocity": 0.16,
+      "sustain": 1.2
+    },
+    {
+      "beat": 12,
+      "midi": 29,
+      "velocity": 0.34,
+      "sustain": 3.9
+    },
+    {
+      "beat": 12.5,
+      "midi": 53,
+      "velocity": 0.19513289344085677,
+      "sustain": 2.1
+    },
+    {
+      "beat": 13.5,
+      "midi": 57,
+      "velocity": 0.21963276174190868,
+      "sustain": 2.1
+    },
+    {
+      "beat": 14.5,
+      "midi": 60,
+      "velocity": 0.2264871070583438,
+      "sustain": 2.1
+    },
+    {
+      "beat": 16,
+      "midi": 40,
+      "velocity": 0.34,
+      "sustain": 3.9
+    },
+    {
+      "beat": 16.5,
+      "midi": 55,
+      "velocity": 0.23764015030913146,
+      "sustain": 2.1
+    },
+    {
+      "beat": 17.5,
+      "midi": 60,
+      "velocity": 0.23723892602495428,
+      "sustain": 2.1
+    },
+    {
+      "beat": 18.5,
+      "midi": 64,
+      "velocity": 0.22322087859230758,
+      "sustain": 2.1
+    },
+    {
+      "beat": 19.25,
+      "midi": 60,
+      "velocity": 0.16,
+      "sustain": 1.2
+    },
+    {
+      "beat": 20,
+      "midi": 38,
+      "velocity": 0.34,
+      "sustain": 3.9
+    },
+    {
+      "beat": 20.5,
+      "midi": 53,
+      "velocity": 0.1981244811917992,
+      "sustain": 2.1
+    },
+    {
+      "beat": 21.5,
+      "midi": 57,
+      "velocity": 0.23952481531722872,
+      "sustain": 2.1
+    },
+    {
+      "beat": 22.5,
+      "midi": 60,
+      "velocity": 0.2063726537008862,
+      "sustain": 2.1
+    },
+    {
+      "beat": 23.25,
+      "midi": 57,
+      "velocity": 0.16,
+      "sustain": 1.2
+    },
+    {
+      "beat": 24,
+      "midi": 31,
+      "velocity": 0.34,
+      "sustain": 3.9
+    },
+    {
+      "beat": 24.5,
+      "midi": 55,
+      "velocity": 0.20587342012283955,
+      "sustain": 2.1
+    },
+    {
+      "beat": 25.5,
+      "midi": 60,
+      "velocity": 0.21131898600681503,
+      "sustain": 2.1
+    },
+    {
+      "beat": 26.5,
+      "midi": 62,
+      "velocity": 0.23678182717717372,
+      "sustain": 2.1
+    },
+    {
+      "beat": 27.25,
+      "midi": 60,
+      "velocity": 0.16,
+      "sustain": 1.2
+    },
+    {
+      "beat": 28,
+      "midi": 36,
+      "velocity": 0.34,
+      "sustain": 3.9
+    },
+    {
+      "beat": 28.5,
+      "midi": 55,
+      "velocity": 0.21069436287595858,
+      "sustain": 2.1
+    },
+    {
+      "beat": 29.5,
+      "midi": 60,
+      "velocity": 0.20653047226876586,
+      "sustain": 2.1
+    },
+    {
+      "beat": 30.5,
+      "midi": 64,
+      "velocity": 0.20974521668136084,
+      "sustain": 2.1
+    },
+    {
+      "beat": 0,
+      "midi": 67,
+      "velocity": 0.4562350951460835,
+      "sustain": 1.4
+    },
+    {
+      "beat": 1.5,
+      "midi": 71,
+      "velocity": 0.44799132000201575,
+      "sustain": 0.9
+    },
+    {
+      "beat": 2.5,
+      "midi": 69,
+      "velocity": 0.4427734466654188,
+      "sustain": 1.2
+    },
+    {
+      "beat": 4,
+      "midi": 67,
+      "velocity": 0.44524481328630994,
+      "sustain": 1.9
+    },
+    {
+      "beat": 6.5,
+      "midi": 62,
+      "velocity": 0.4499596326665995,
+      "sustain": 1.1
+    },
+    {
+      "beat": 8,
+      "midi": 64,
+      "velocity": 0.4555758414693643,
+      "sustain": 1.4
+    },
+    {
+      "beat": 9.5,
+      "midi": 67,
+      "velocity": 0.4858349516955645,
+      "sustain": 0.9
+    },
+    {
+      "beat": 10.5,
+      "midi": 69,
+      "velocity": 0.48461965790573297,
+      "sustain": 1.3
+    },
+    {
+      "beat": 12,
+      "midi": 67,
+      "velocity": 0.4549225499410992,
+      "sustain": 1.4
+    },
+    {
+      "beat": 13.5,
+      "midi": 64,
+      "velocity": 0.4746333007733707,
+      "sustain": 2.0
+    },
+    {
+      "beat": 16,
+      "midi": 67,
+      "velocity": 0.4694467109886378,
+      "sustain": 1.4
+    },
+    {
+      "beat": 17.5,
+      "midi": 72,
+      "velocity": 0.46180946429641234,
+      "sustain": 1.2
+    },
+    {
+      "beat": 19,
+      "midi": 71,
+      "velocity": 0.46775922056334507,
+      "sustain": 0.8
+    },
+    {
+      "beat": 20,
+      "midi": 69,
+      "velocity": 0.4375857355019675,
+      "sustain": 1.4
+    },
+    {
+      "beat": 21.5,
+      "midi": 65,
+      "velocity": 0.46578288884318486,
+      "sustain": 1.5
+    },
+    {
+      "beat": 24,
+      "midi": 67,
+      "velocity": 0.44111156457786954,
+      "sustain": 1.4
+    },
+    {
+      "beat": 25.5,
+      "midi": 65,
+      "velocity": 0.42667577026929715,
+      "sustain": 0.9
+    },
+    {
+      "beat": 26.5,
+      "midi": 62,
+      "velocity": 0.43739949751524465,
+      "sustain": 1.2
+    },
+    {
+      "beat": 28,
+      "midi": 64,
+      "velocity": 0.48608633771022136,
+      "sustain": 1.1
+    },
+    {
+      "beat": 29.25,
+      "midi": 60,
+      "velocity": 0.43203402077371383,
+      "sustain": 3.6
+    }
+  ]
+}

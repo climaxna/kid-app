@@ -1,0 +1,89 @@
+{
+  "id": "01-peace",
+  "duration": 30.466666666666665,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "voice": "ko-KR-SunHiNeural",
+  "voice_rate": "-12%",
+  "voice_peak": 0.4594688301220716,
+  "mix_peak": 0.4749649373230498,
+  "size_bytes": 5343853,
+  "min_subtitle_font": 81,
+  "exact_scripture_match": true,
+  "full_decode_ok": true,
+  "segments": [
+    {
+      "kind": "intro",
+      "text": "잠들기 전, 말씀 안에서 잠시 쉬어가세요.",
+      "display": "잠들기 전\n잠시 쉬어가세요",
+      "start": 0.25,
+      "voice_end": 4.153945578231292,
+      "end": 4.703945578231292,
+      "font_size": 82
+    },
+    {
+      "kind": "reference",
+      "text": "시편 사 편, 팔 절 말씀입니다.",
+      "display": "시편 4편 8절",
+      "start": 4.703945578231292,
+      "voice_end": 8.076349206349207,
+      "end": 8.626349206349207,
+      "font_size": 82
+    },
+    {
+      "kind": "verse",
+      "text": "내가 평안히 눕고 자기도 하리니",
+      "display": "내가 평안히 눕고\n자기도 하리니",
+      "start": 8.626349206349207,
+      "voice_end": 11.183537414965986,
+      "end": 11.733537414965987,
+      "font_size": 82
+    },
+    {
+      "kind": "verse",
+      "text": "나를 안전히 거하게 하시는 이는",
+      "display": "나를 안전히\n거하게 하시는 이는",
+      "start": 11.733537414965987,
+      "voice_end": 14.218548752834469,
+      "end": 14.768548752834468,
+      "font_size": 82
+    },
+    {
+      "kind": "verse",
+      "text": "오직 여호와시니이다.",
+      "display": "오직\n여호와시니이다",
+      "start": 14.768548752834468,
+      "voice_end": 16.558049886621315,
+      "end": 17.108049886621316,
+      "font_size": 82
+    },
+    {
+      "kind": "prayer",
+      "text": "하나님, 오늘의 걱정을 주님께 맡깁니다.",
+      "display": "오늘의 걱정을\n주님께 맡깁니다",
+      "start": 17.108049886621316,
+      "voice_end": 20.79716553287982,
+      "end": 21.34716553287982,
+      "font_size": 82
+    },
+    {
+      "kind": "prayer",
+      "text": "다 풀지 못한 마음에도 평안을 더하여 주세요.",
+      "display": "다 풀지 못한 마음에도\n평안을 더하여 주세요",
+      "start": 21.34716553287982,
+      "voice_end": 24.836145124716555,
+      "end": 25.386145124716556,
+      "font_size": 81
+    },
+    {
+      "kind": "prayer",
+      "text": "아멘.",
+      "display": "아멘",
+      "start": 25.386145124716556,
+      "voice_end": 26.214580498866216,
+      "end": 27.636145124716556,
+      "font_size": 82
+    }
+  ]
+}

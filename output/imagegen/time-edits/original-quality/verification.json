@@ -1,0 +1,32 @@
+[
+  {
+    "file": "C:\\blog\\output\\imagegen\\time-edits\\original-quality\\2번방_오전9시10분.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "format": "PNG",
+    "edited_rows": 26,
+    "pixels_outside_time_boxes_identical": true
+  },
+  {
+    "file": "C:\\blog\\output\\imagegen\\time-edits\\original-quality\\2번방1_오전9시12분.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "format": "PNG",
+    "edited_rows": 26,
+    "pixels_outside_time_boxes_identical": true
+  },
+  {
+    "file": "C:\\blog\\output\\imagegen\\time-edits\\original-quality\\2번방2진짜_오전9시12분.png",
+    "size": [
+      1920,
+      1080
+    ],
+    "format": "PNG",
+    "edited_rows": 26,
+    "pixels_outside_time_boxes_identical": true
+  }
+]

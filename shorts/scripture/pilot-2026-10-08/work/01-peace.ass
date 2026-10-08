@@ -1,0 +1,55 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Main,Malgun Gothic,80,&H001E292B,&H001E292B,&H00FFFFFF,&H00000000,-1,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
+Style: Title,Malgun Gothic,76,&H001E292B,&H001E292B,&H00FFFFFF,&H00000000,-1,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
+Style: Label,Malgun Gothic,36,&H003C594C,&H003C594C,&H00FFFFFF,&H00000000,-1,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
+Style: Source,Malgun Gothic,30,&H00455155,&H00455155,&H00FFFFFF,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:30.47,Label,,0,0,0,,{\pos(96,155)}하루 한 말씀
+Dialogue: 0,0:00:00.00,0:00:30.47,Title,,0,0,0,,{\pos(96,250)}잠들기 전\N위로의 말씀
+Dialogue: 0,0:00:00.00,0:00:30.47,Label,,0,0,0,,{\pos(96,474)\fs28}──────────────────
+Dialogue: 0,0:00:00.00,0:00:04.70,Label,,0,0,0,,{\pos(96,586)}잠시 마음을 쉬어가세요
+Dialogue: 0,0:00:00.00,0:00:04.70,Main,,0,0,0,,{\pos(96,684)\fs82\fad(120,100)}잠들기 전
+Dialogue: 0,0:00:00.00,0:00:04.70,Main,,0,0,0,,{\pos(96,802)\fs82\fad(120,100)}잠시 쉬어가세요
+Dialogue: 0,0:00:04.70,0:00:08.63,Label,,0,0,0,,{\pos(96,586)}오늘의 성경 말씀
+Dialogue: 0,0:00:04.70,0:00:08.63,Main,,0,0,0,,{\pos(96,684)\fs82\fad(120,100)}시편 4편 8절
+Dialogue: 0,0:00:04.70,0:00:08.63,Source,,0,0,0,,{\pos(96,982)\fs34}시편 4편 8절  ·  개역한글
+Dialogue: 0,0:00:04.70,0:00:08.63,Source,,0,0,0,,{\pos(96,1043)\fs28}성경전서 개역한글판 · 대한성서공회
+Dialogue: 0,0:00:08.63,0:00:11.73,Label,,0,0,0,,{\pos(96,586)}성경 말씀
+Dialogue: 0,0:00:08.63,0:00:11.73,Main,,0,0,0,,{\pos(96,684)\fs82\fad(120,100)}내가 평안히 눕고
+Dialogue: 0,0:00:08.63,0:00:11.73,Main,,0,0,0,,{\pos(96,802)\fs82\fad(120,100)}자기도 하리니
+Dialogue: 0,0:00:08.63,0:00:11.73,Source,,0,0,0,,{\pos(96,982)\fs34}시편 4편 8절  ·  개역한글
+Dialogue: 0,0:00:08.63,0:00:11.73,Source,,0,0,0,,{\pos(96,1043)\fs28}성경전서 개역한글판 · 대한성서공회
+Dialogue: 0,0:00:11.73,0:00:14.77,Label,,0,0,0,,{\pos(96,586)}성경 말씀
+Dialogue: 0,0:00:11.73,0:00:14.77,Main,,0,0,0,,{\pos(96,684)\fs82\fad(120,100)}나를 안전히
+Dialogue: 0,0:00:11.73,0:00:14.77,Main,,0,0,0,,{\pos(96,802)\fs82\fad(120,100)}거하게 하시는 이는
+Dialogue: 0,0:00:11.73,0:00:14.77,Source,,0,0,0,,{\pos(96,982)\fs34}시편 4편 8절  ·  개역한글
+Dialogue: 0,0:00:11.73,0:00:14.77,Source,,0,0,0,,{\pos(96,1043)\fs28}성경전서 개역한글판 · 대한성서공회
+Dialogue: 0,0:00:14.77,0:00:17.11,Label,,0,0,0,,{\pos(96,586)}성경 말씀
+Dialogue: 0,0:00:14.77,0:00:17.11,Main,,0,0,0,,{\pos(96,684)\fs82\fad(120,100)}오직
+Dialogue: 0,0:00:14.77,0:00:17.11,Main,,0,0,0,,{\pos(96,802)\fs82\fad(120,100)}여호와시니이다
+Dialogue: 0,0:00:14.77,0:00:17.11,Source,,0,0,0,,{\pos(96,982)\fs34}시편 4편 8절  ·  개역한글
+Dialogue: 0,0:00:14.77,0:00:17.11,Source,,0,0,0,,{\pos(96,1043)\fs28}성경전서 개역한글판 · 대한성서공회
+Dialogue: 0,0:00:17.11,0:00:21.35,Label,,0,0,0,,{\pos(96,586)}함께 드리는 기도
+Dialogue: 0,0:00:17.11,0:00:21.35,Main,,0,0,0,,{\pos(96,684)\fs82\fad(120,100)}오늘의 걱정을
+Dialogue: 0,0:00:17.11,0:00:21.35,Main,,0,0,0,,{\pos(96,802)\fs82\fad(120,100)}주님께 맡깁니다
+Dialogue: 0,0:00:17.11,0:00:21.35,Source,,0,0,0,,{\pos(96,982)\fs30}말씀을 바탕으로 작성한 기도
+Dialogue: 0,0:00:21.35,0:00:25.39,Label,,0,0,0,,{\pos(96,586)}함께 드리는 기도
+Dialogue: 0,0:00:21.35,0:00:25.39,Main,,0,0,0,,{\pos(96,684)\fs81\fad(120,100)}다 풀지 못한 마음에도
+Dialogue: 0,0:00:21.35,0:00:25.39,Main,,0,0,0,,{\pos(96,802)\fs81\fad(120,100)}평안을 더하여 주세요
+Dialogue: 0,0:00:21.35,0:00:25.39,Source,,0,0,0,,{\pos(96,982)\fs30}말씀을 바탕으로 작성한 기도
+Dialogue: 0,0:00:25.39,0:00:27.64,Label,,0,0,0,,{\pos(96,586)}함께 드리는 기도
+Dialogue: 0,0:00:25.39,0:00:27.64,Main,,0,0,0,,{\pos(96,684)\fs82\fad(120,100)}아멘
+Dialogue: 0,0:00:25.39,0:00:27.64,Source,,0,0,0,,{\pos(96,982)\fs30}말씀을 바탕으로 작성한 기도
+Dialogue: 0,0:00:27.64,0:00:30.47,Main,,0,0,0,,{\pos(96,684)\fs68\fad(120,100)}오늘 밤도
+Dialogue: 0,0:00:27.64,0:00:30.47,Main,,0,0,0,,{\pos(96,802)\fs68\fad(120,100)}주님 안에서 평안하세요
+Dialogue: 0,0:00:27.64,0:00:30.47,Label,,0,0,0,,{\pos(96,586)}평안한 하루를 기도합니다

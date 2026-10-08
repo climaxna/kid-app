@@ -1,0 +1,17 @@
+﻿제목
+잠들기 전 듣는 위로의 말씀
+
+설명
+잠들기 전, 시편 4편 8절 말씀과 짧은 기도로 하루를 마무리합니다. 해결하지 못한 걱정을 주님께 아뢰며 평안을 구합니다.
+
+성경: 성경전서 개역한글판, 대한성서공회. 시편 4편 8절.
+https://www.bible.com/ko/bible/88/PSA.4.KRV
+성경 본문과 별도로 작성한 묵상·기도를 함께 담았습니다.
+AI 생성 이미지와 AI 낭독을 사용했습니다.
+
+피아노 샘플: Salamander Grand Piano — Alexander Holm (CC BY 3.0)
+https://github.com/Tonejs/audio/tree/master/salamander
+https://creativecommons.org/licenses/by/3.0/
+개별 음 샘플로 새 선율을 구성했으며 음높이·잔향·길이를 조정했습니다.
+
+#성경말씀 #시편 #잠들기전기도 #위로의말씀 #말씀묵상

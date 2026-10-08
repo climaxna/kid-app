@@ -1,0 +1,89 @@
+{
+  "id": "02-children",
+  "duration": 30.9,
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "voice": "ko-KR-SunHiNeural",
+  "voice_rate": "-12%",
+  "voice_peak": 0.4638475034797876,
+  "mix_peak": 0.47551376324540584,
+  "size_bytes": 4483594,
+  "min_subtitle_font": 81,
+  "exact_scripture_match": true,
+  "full_decode_ok": true,
+  "segments": [
+    {
+      "kind": "intro",
+      "text": "자녀 걱정으로 마음이 무거우신가요?",
+      "display": "자녀 걱정으로\n마음이 무거우신가요?",
+      "start": 0.25,
+      "voice_end": 2.9166213151927436,
+      "end": 3.466621315192744,
+      "font_size": 82
+    },
+    {
+      "kind": "reference",
+      "text": "베드로전서 오 장, 칠 절 말씀입니다.",
+      "display": "베드로전서\n5장 7절",
+      "start": 3.466621315192744,
+      "voice_end": 6.990181405895692,
+      "end": 7.540181405895692,
+      "font_size": 82
+    },
+    {
+      "kind": "verse",
+      "text": "너희 염려를 다 주께 맡겨 버리라",
+      "display": "너희 염려를 다\n주께 맡겨 버리라",
+      "start": 7.540181405895692,
+      "voice_end": 10.353083900226757,
+      "end": 10.903083900226758,
+      "font_size": 82
+    },
+    {
+      "kind": "verse",
+      "text": "이는 저가 너희를 권고하심이니라.",
+      "display": "이는 저가 너희를\n권고하심이니라",
+      "start": 10.903083900226758,
+      "voice_end": 13.613378684807257,
+      "end": 14.163378684807256,
+      "font_size": 82
+    },
+    {
+      "kind": "reflection",
+      "text": "권고하신다는 말은, 돌보신다는 뜻입니다.",
+      "display": "권고하신다는 말은\n돌보신다는 뜻입니다",
+      "start": 14.163378684807256,
+      "voice_end": 17.728072562358278,
+      "end": 18.278072562358275,
+      "font_size": 82
+    },
+    {
+      "kind": "prayer",
+      "text": "주님, 사랑하는 자녀를 돌보아 주세요.",
+      "display": "주님, 사랑하는 자녀를\n돌보아 주세요",
+      "start": 18.278072562358275,
+      "voice_end": 21.543514739229025,
+      "end": 22.093514739229022,
+      "font_size": 82
+    },
+    {
+      "kind": "prayer",
+      "text": "걱정보다 사랑으로 곁을 지키게 해 주세요.",
+      "display": "걱정보다 사랑으로\n곁을 지키게 해 주세요",
+      "start": 22.093514739229022,
+      "voice_end": 25.270702947845802,
+      "end": 25.820702947845803,
+      "font_size": 81
+    },
+    {
+      "kind": "prayer",
+      "text": "아멘.",
+      "display": "아멘",
+      "start": 25.820702947845803,
+      "voice_end": 26.649160997732423,
+      "end": 28.070702947845803,
+      "font_size": 82
+    }
+  ]
+}
