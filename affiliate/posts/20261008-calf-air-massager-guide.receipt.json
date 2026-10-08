@@ -1,0 +1,23 @@
+{
+  "manuscript": "affiliate/posts/20261008-calf-air-massager-guide.md",
+  "plan": "affiliate/posts/20261008-calf-air-massager-guide.images.json",
+  "title": "종아리 공기압 마사지기 살까 말까 마사지샵 몇 번 가면 본전인지 계산해 봤어요",
+  "started": "2026-10-08T17:34:33",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 97,
+  "codex_log": "logs/codex/20261008-calf-air-massager-guide-20261008-173433.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261008-calf-air-massager-guide-20261008-173433",
+  "images_ready": 0,
+  "missing": [
+    "assets/posts/connect-calf-air-massager/01-thumbnail.png",
+    "assets/posts/connect-calf-air-massager/02-worry-scene.png",
+    "assets/posts/connect-calf-air-massager/03-choose-criteria.png"
+  ],
+  "status": "saved_text_only",
+  "logNo": 224435455897,
+  "images_uploaded": 0,
+  "images_in_draft": 0,
+  "title_verified": true,
+  "finished": "2026-10-08T17:36:10"
+}
