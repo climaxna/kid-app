@@ -1,0 +1,15 @@
+{
+  "manuscript": "logs/engine-test/test.md",
+  "plan": "logs/engine-test/test.images.json",
+  "title": "섬 단체 여행 준비 20명 넘으면 명단 미리 내고 배 타기 버스로 가는 섬 3곳",
+  "started": "2026-10-08T22:49:45",
+  "images_planned": 1,
+  "codex_exit": 0,
+  "codex_seconds": 67,
+  "codex_log": "logs/codex/test-20261008-224945.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\test-20261008-224945",
+  "images_ready": 1,
+  "missing": [],
+  "status": "images_only",
+  "finished": "2026-10-08T22:50:52"
+}

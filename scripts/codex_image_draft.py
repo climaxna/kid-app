@@ -7,6 +7,7 @@
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import tempfile
@@ -67,19 +68,33 @@ def is_image(path: Path) -> bool:
         return False
 
 
-CODEX_PROMPT = """이 폴더에서 블로그 이미지를 만든다. 사용자가 미리 승인한 자동 작업이므로 확인을 기다리지 않는다.
+GENERATED_ROOT = Path.home() / ".codex" / "generated_images"
+SESSION_RE = re.compile(r"session id:\s*([0-9a-f-]{36})")
 
-1. IMAGE_RULES.md 규칙을 읽는다. 이 폴더에서는 계획의 file 값이 이 폴더 안의 파일 이름이다.
-2. plan.json과 manuscript.md(내용 참고용)를 읽는다.
-3. plan.json의 images를 순서대로 하나씩 내장 이미지 생성 도구로 만든다. 각 항목의 prompt와 text를 정확히 따른다.
+CODEX_PROMPT_HEAD = """블로그 이미지를 만든다. 사용자가 미리 승인한 자동 작업이므로 확인을 기다리지 않는다.
+규칙, 이미지 계획, 원고는 모두 이 지시문 아래에 들어 있다. 파일을 읽으려고 명령을 실행하지 않는다.
+
+1. 아래 '이미지 계획'의 images를 순서대로, 항목마다 정확히 한 번씩 내장 이미지 생성 도구로 만든다. 다시 시도하지 않는다. 각 항목의 prompt와 text를 정확히 따르고 '이미지 규칙'을 지킨다.
    첨부한 이미지(reference 파일)는 컨셉 레퍼런스다. 분위기, 색, 질감만 참고하고 베끼지 않는다.
    thumb-로 시작하는 첨부 이미지는 썸네일 항목(insert가 top) 전용 융합 레퍼런스다. 두 장의 특징(평면 벡터 랜드마크 콜라주의 색과 도형, 실제 사진 위에 평면 일러스트 인물과 곡선 리본을 얹는 합성 구도)을 섞어 새 장면을 만들되 그림이나 건물, 글자, 로고를 베끼지 않는다. 본문 항목에는 쓰지 않는다.
    host-로 시작하는 첨부 이미지는 진행자 얼굴 기준이다. 항목 prompt에 진행자가 나오면 이 얼굴(얼굴형, 눈, 코, 입, 헤어 느낌)을 유지하고, 옷과 포즈와 배경은 그 이미지 컨셉에 맞게 새로 그린다. 진행자가 없는 항목에는 사람 얼굴을 넣지 않는다.
-4. 생성된 PNG를 이 폴더에 각 항목의 file 이름으로 복사해 저장한다. 다른 파일은 만들거나 고치지 않는다.
-5. 파이썬 이미지 라이브러리, 외부 API, API 키를 쓰지 않는다. 내장 이미지 생성 도구와 파일 복사만 쓴다.
-6. 한 장이 실패하면 한 번만 다시 시도하고, 그래도 안 되면 건너뛴다.
-7. 마지막 답은 JSON 한 줄로 한다: {"saved": [파일 이름들], "failed": [파일 이름들]}
+2. 생성된 PNG를 이 폴더에 각 항목의 file 이름으로 복사해 본다. 복사 명령이 실패하면 다시 시도하지 말고 다음 이미지 생성으로 넘어간다. 파일은 실행한 스크립트가 따로 챙긴다.
+3. 파이썬 이미지 라이브러리, 외부 API, API 키를 쓰지 않는다. 내장 이미지 생성 도구만 쓴다.
+4. 생성 자체가 실패한 항목은 건너뛴다.
+5. 마지막 답은 JSON 한 줄로 한다: {"generated": [만든 순서대로 file 이름들], "failed": [생성 실패한 file 이름들]}
 """
+
+
+def codex_prompt(job: Path) -> str:
+    rules = (job / "IMAGE_RULES.md").read_text(encoding="utf-8")
+    plan = (job / "plan.json").read_text(encoding="utf-8")
+    manuscript = (job / "manuscript.md").read_text(encoding="utf-8")[:4000]
+    return (
+        CODEX_PROMPT_HEAD
+        + "\n\n## 이미지 규칙\n" + rules
+        + "\n\n## 이미지 계획\n" + plan
+        + "\n\n## 원고 (참고용, 앞부분)\n" + manuscript
+    )
 
 
 def prepare_job(md_path: Path, plan: dict, todo: list[dict]) -> Path:
@@ -128,23 +143,54 @@ def run_codex(job: Path, reference_names: list[str], count: int) -> tuple[int, f
     ]
     timeout = min(600 + 300 * count, 3600)
     start = time.time()
+    offset = log_path.stat().st_size if log_path.exists() else 0
     with open(log_path, "a", encoding="utf-8") as log:
         try:
             proc = subprocess.run(
-                cmd, input=CODEX_PROMPT, text=True, encoding="utf-8",
+                cmd, input=codex_prompt(job), text=True, encoding="utf-8",
                 stdout=log, stderr=subprocess.STDOUT, env=env, cwd=str(job), timeout=timeout,
             )
             code = proc.returncode
         except subprocess.TimeoutExpired:
             code = -1
             log.write(f"\n[timeout] {timeout}s\n")
+    with open(log_path, encoding="utf-8", errors="ignore") as log:
+        log.seek(offset)
+        found = SESSION_RE.findall(log.read())
+    (job / "session.txt").write_text(found[-1] if found else "", encoding="utf-8")
     return code, round(time.time() - start), rel(log_path)
 
 
+def generated_files(job: Path, todo: list[dict]) -> dict[str, Path]:
+    """Codex가 파일 복사를 못 했을 때, Codex 저장 폴더의 이미지를 만든 순서대로 계획 항목에 맞춘다."""
+    session = (job / "session.txt").read_text(encoding="utf-8").strip() if (job / "session.txt").exists() else ""
+    folder = GENERATED_ROOT / session
+    if not session or not folder.is_dir():
+        return {}
+    files = sorted((p for p in folder.glob("*.png") if is_image(p)), key=lambda p: p.stat().st_mtime)
+    names = [Path(item["file"]).name for item in todo]
+    try:
+        answer = json.loads((job / "last.txt").read_text(encoding="utf-8").strip().splitlines()[-1])
+        order = [Path(n).name for n in answer.get("generated", [])] or [
+            n for n in names if n not in {Path(f).name for f in answer.get("failed", [])}
+        ]
+    except (OSError, ValueError, IndexError, AttributeError):
+        order = names
+    if len(files) != len(order):
+        return {}
+    return dict(zip(order, files))
+
+
 def collect(job: Path, todo: list[dict]) -> int:
+    fallback = None
     moved = 0
     for item in todo:
-        src = job / Path(item["file"]).name
+        name = Path(item["file"]).name
+        src = job / name
+        if not is_image(src):
+            if fallback is None:
+                fallback = generated_files(job, todo)
+            src = fallback.get(name, src)
         if is_image(src):
             dest = ROOT / item["file"]
             dest.parent.mkdir(parents=True, exist_ok=True)

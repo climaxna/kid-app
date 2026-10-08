@@ -1,0 +1,14 @@
+{
+  "reference": "이사야 41장 10절",
+  "background": "../backgrounds/bg-sea.png",
+  "output": "../out/isaiah-41-10-test.mp4",
+  "card_seconds": 4.5,
+  "outro_seconds": 3,
+  "footer": "성경전서 개역한글판",
+  "cards": [
+    {"lines": ["두려워 말라", "내가 너와 함께 함이니라"]},
+    {"lines": ["놀라지 말라", "나는 네 하나님이 됨이니라"]},
+    {"lines": ["내가 너를 굳세게 하리라", "참으로 너를 도와 주리라"]},
+    {"lines": ["참으로 나의 의로운 오른손으로", "너를 붙들리라"]}
+  ]
+}

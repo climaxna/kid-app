@@ -1,0 +1,33 @@
+{
+  "text": "두려워 말라 내가 너와 함께 함이니라. 놀라지 말라 나는 네 하나님이 됨이니라.",
+  "samples": [
+    {
+      "label": "A",
+      "voice": "M1",
+      "seconds": 8.219863945578231,
+      "sample_rate": 44100,
+      "engine": "Supertonic",
+      "speed": 0.9,
+      "steps": 12
+    },
+    {
+      "label": "B",
+      "voice": "M2",
+      "seconds": 8.010884353741497,
+      "sample_rate": 44100,
+      "engine": "Supertonic",
+      "speed": 0.9,
+      "steps": 12
+    },
+    {
+      "label": "C",
+      "voice": "M3",
+      "seconds": 6.757006802721088,
+      "sample_rate": 44100,
+      "engine": "Supertonic",
+      "speed": 0.9,
+      "steps": 12
+    }
+  ],
+  "note": "Preset voices; no voice cloning or reference audio upload. No music or effects. Direct listening assessment not performed."
+}
