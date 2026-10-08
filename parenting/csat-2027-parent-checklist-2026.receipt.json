@@ -1,0 +1,24 @@
+{
+  "manuscript": "parenting/csat-2027-parent-checklist-2026.md",
+  "plan": "parenting/csat-2027-parent-checklist-2026.images.json",
+  "title": "2027학년도 수능 6주 앞 학부모가 챙길 일정 입실 8시 10분 반입 금지 물품 가채점표 5가지",
+  "started": "2026-10-08T11:45:37",
+  "images_planned": 4,
+  "codex_exit": 0,
+  "codex_seconds": 72,
+  "codex_log": "logs/codex/csat-2027-parent-checklist-2026-20261008-114537.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\csat-2027-parent-checklist-2026-20261008-114537",
+  "images_ready": 0,
+  "missing": [
+    "assets/posts/csat-2027-parent-checklist-2026/01-thumbnail.png",
+    "assets/posts/csat-2027-parent-checklist-2026/02-morning-scene.png",
+    "assets/posts/csat-2027-parent-checklist-2026/03-timetable-info.png",
+    "assets/posts/csat-2027-parent-checklist-2026/04-final-check.png"
+  ],
+  "status": "saved_text_only",
+  "logNo": 224435057425,
+  "images_uploaded": 0,
+  "images_in_draft": 0,
+  "title_verified": true,
+  "finished": "2026-10-08T11:46:49"
+}
