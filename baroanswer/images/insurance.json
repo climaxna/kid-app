@@ -1,0 +1,31 @@
+{
+  "outDir": "assets/posts/baroanswer-insurance",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/tax/insurance",
+      "fill": {
+        "세전 월 급여": "3000000",
+        "보험 산정 제외 보수": "200000"
+      }
+    },
+    {
+      "file": "02-compare-burden.png",
+      "url": "https://u-jeverse.com/tax/insurance",
+      "fill": {
+        "세전 월 급여": "3000000",
+        "보험 산정 제외 보수": "200000"
+      },
+      "figure": "근로자와 회사가 실제로"
+    },
+    {
+      "file": "03-pension-trend.png",
+      "url": "https://u-jeverse.com/tax/insurance",
+      "fill": {
+        "세전 월 급여": "3000000",
+        "보험 산정 제외 보수": "200000"
+      },
+      "figure": "같은 소득일 때 국민연금"
+    }
+  ]
+}
