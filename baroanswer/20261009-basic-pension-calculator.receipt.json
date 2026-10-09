@@ -1,0 +1,19 @@
+{
+  "manuscript": "baroanswer/20261009-basic-pension-calculator.md",
+  "plan": "baroanswer/20261009-basic-pension-calculator.images.json",
+  "title": "기초연금 수급 자격 2026 부부 소득인정액 280만 원이면 한 달에 얼마 받을까",
+  "started": "2026-10-09T10:08:31",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 215,
+  "codex_log": "logs/codex/20261009-basic-pension-calculator-20261009-100831.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261009-basic-pension-calculator-20261009-100831",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224436041441,
+  "images_uploaded": 4,
+  "images_in_draft": 4,
+  "title_verified": true,
+  "finished": "2026-10-09T10:12:21"
+}

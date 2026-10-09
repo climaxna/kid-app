@@ -165,7 +165,7 @@
 | 은퇴자산 인출 시뮬레이션 | /pension/withdrawal | 대기 |
 | 연금 공백기 계산기 | /pension/gap | 대기 |
 | 유족연금·장애연금 계산기 | /pension/survivor | 대기 |
-| 기초연금 계산기 | /pension/basic | 대기 |
+| 기초연금 계산기 | /pension/basic | 임시저장 baroanswer/20261009-basic-pension-calculator.md |
 | DC형 퇴직연금·IRP 적립금 계산기 | /pension/dc-irp | 대기 |
 | 퍼센트 계산기 | /life/percent | 대기 |
 | 단위 변환기 | /life/unit | 대기 |
