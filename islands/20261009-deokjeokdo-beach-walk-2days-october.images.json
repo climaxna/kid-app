@@ -1,0 +1,40 @@
+{
+  "concept": "photoreal",
+  "reference": "design/thumbnail-references/photoreal/00.png",
+  "host_references": [
+    "private_media/personas/island-host/male50-01.png",
+    "private_media/personas/island-host/male50-03.png"
+  ],
+  "images": [
+    {
+      "file": "assets/posts/20261009-deokjeokdo-beach-walk-2days-october/01-thumbnail.png",
+      "insert": "top",
+      "text": ["덕적도 해변 코스", "산 없이 1박2일"],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 10월 늦은 오후 역광, 인천 덕적도 서포리해변의 넓고 한적한 백사장과 해변 뒤로 길게 이어진 소나무 숲, 잔잔한 서해. 진행자(첨부 host 얼굴, 50대 초반 남성)는 화면 오른쪽 앞에서 크게(화면 높이 약 65%) 카키색 방풍 점퍼와 회색 니트, 편한 운동화 차림으로 한 손으로 솔숲 쪽을 가리키며 카메라를 보고 웃는다. 바닷바람에 옷깃이 살짝 날리고 채도는 낮게. 화면 위쪽에 크고 굵은 흰색 한글 고딕 제목 '덕적도 해변 코스'를 한 줄로, 그 아래 제목보다 크게 노란색 '산 없이 1박2일'. 글자 뒤 옅은 그림자만, 테두리, 배지, 말풍선 없음. 글자는 가장자리에서 충분히 떨어뜨린다. 표지판, 로고, 다른 사람 얼굴 없음. 다른 섬의 랜드마크를 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261009-deokjeokdo-beach-walk-2days-october/02-ferry-to-island.png",
+      "insert": "## 02. 인천에서 덕적도 가는 배",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 이른 아침 여객선 갑판에서 바라본 서해 바다, 멀리 안개 속에 낮은 능선의 섬이 보이고 갈매기 몇 마리가 배 뒤를 따른다. 갑판 난간과 바다 위에 부드러운 아침 햇빛, 채도 낮게. 글자와 사람 얼굴은 넣지 않는다. 선사 로고, 표지판, 시간 숫자, 특정 선박 이름은 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261009-deokjeokdo-beach-walk-2days-october/03-seopori-pine-walk.png",
+      "insert": "## 03. 첫날은 서포리해변 솔숲 천천히 걷기",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 10월 오후, 덕적도 서포리해변 뒤편의 솔숲 산책로, 소나무 사이로 비치는 부드러운 햇빛과 멀리 보이는 넓은 백사장과 잔잔한 바다, 길 옆 나무 벤치 하나. 사람은 멀리 뒷모습 실루엣 두 명 정도만, 얼굴이 보이지 않게. 채도 낮고 자연스러운 질감. 글자, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261009-deokjeokdo-beach-walk-2days-october/04-reed-gravel-beach.png",
+      "insert": "## 05. 둘째 날은 능동자갈마당 갈대 보기",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 늦가을 오전, 덕적도 능동자갈마당: 둥근 몽돌이 깔린 해변, 해변 뒤 갈대습지에서 은빛 갈대가 바람에 흔들리고 한쪽에 소사나무숲과 작은 정자가 보인다. 낮은 채도, 얕은 심도. 글자, 사람 얼굴, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261009-deokjeokdo-beach-walk-2days-october/05-before-departure.png",
+      "insert": "## 07. 출발 전 마지막 확인",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 오후 늦은 시간 섬 선착장 근처 방파제 길, 바다와 멀리 작은 여객선이 보이는 풍경. 진행자(첨부 host 얼굴, 50대 초반 남성)는 화면 오른쪽 30% 안쪽에 허리 위까지만 작게, 썸네일과 다른 옷으로 짙은 남색 바람막이와 크림색 목도리 차림, 한 손에 휴대폰을 들고 다른 손으로 엄지를 세운 차분한 미소, 썸네일과 다른 포즈와 표정. 채도 낮게. 글자, 표지판, 선사 로고, 다른 사람 얼굴은 넣지 않는다."
+    }
+  ]
+}
