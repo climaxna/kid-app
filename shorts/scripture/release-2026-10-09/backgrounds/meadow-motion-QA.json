@@ -1,0 +1,14 @@
+{
+  "source": "meadow.png",
+  "video": "meadow-motion.mp4",
+  "duration": 12,
+  "fps": 30,
+  "method": "Localized image warping for cloud drift, water ripples and foliage sway. Not generated live-action video. No global zoom.",
+  "portrait_pixel_difference": 0,
+  "motion_region_mean_pixel_difference": [
+    9.592915694576456,
+    7.154380022466085,
+    11.295576485497854
+  ],
+  "loop_period_seconds": 12
+}

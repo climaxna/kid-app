@@ -1,0 +1,14 @@
+{
+  "source": "forest.png",
+  "video": "forest-motion.mp4",
+  "duration": 12,
+  "fps": 30,
+  "method": "Localized image warping for cloud drift, water ripples and foliage sway. Not generated live-action video. No global zoom.",
+  "portrait_pixel_difference": 0,
+  "motion_region_mean_pixel_difference": [
+    20.964742516158648,
+    21.44605532792663,
+    25.158678977801387
+  ],
+  "loop_period_seconds": 12
+}

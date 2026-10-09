@@ -1,0 +1,13 @@
+{
+  "outDir": "assets/posts/baroanswer-basic-pension",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/pension/basic",
+      "fill": {
+        "월 소득인정액": "2800000",
+        "국민연금 월 수령액(해당 시)": "300000"
+      }
+    }
+  ]
+}

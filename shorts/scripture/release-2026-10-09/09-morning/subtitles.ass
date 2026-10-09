@@ -1,0 +1,41 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Verse,Malgun Gothic,104,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,5,2,8,0,0,0,1
+Style: Reference,Malgun Gothic,54,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,3,1,8,0,0,0,1
+Style: Credit,Malgun Gothic,30,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,0,0,0,0,100,100,0,0,1,2,1,8,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:01.00,0:00:05.72,Verse,,0,0,0,,{\pos(495,810)\fs83\fad(130,80)}어제의 무거운 마음으로
+Dialogue: 0,0:00:01.00,0:00:05.72,Verse,,0,0,0,,{\pos(495,938)\fs83\fad(130,80)}새 아침을 맞으셨나요?
+Dialogue: 0,0:00:01.00,0:00:05.72,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}오늘의 말씀
+Dialogue: 0,0:00:05.72,0:00:09.68,Verse,,0,0,0,,{\pos(495,810)\fs83\fad(130,80)}여호와의 자비와 긍휼이
+Dialogue: 0,0:00:05.72,0:00:09.68,Verse,,0,0,0,,{\pos(495,938)\fs83\fad(130,80)}무궁하시므로
+Dialogue: 0,0:00:05.72,0:00:09.68,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:09.68,0:00:13.22,Verse,,0,0,0,,{\pos(495,810)\fs100\fad(130,80)}우리가 진멸되지
+Dialogue: 0,0:00:09.68,0:00:13.22,Verse,,0,0,0,,{\pos(495,938)\fs100\fad(130,80)}아니함이니이다
+Dialogue: 0,0:00:09.68,0:00:13.22,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:13.22,0:00:16.25,Verse,,0,0,0,,{\pos(495,810)\fs100\fad(130,80)}이것이 아침마다
+Dialogue: 0,0:00:13.22,0:00:16.25,Verse,,0,0,0,,{\pos(495,938)\fs100\fad(130,80)}새로우니
+Dialogue: 0,0:00:13.22,0:00:16.25,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:16.25,0:00:19.20,Verse,,0,0,0,,{\pos(495,810)\fs83\fad(130,80)}주의 성실이 크도소이다
+Dialogue: 0,0:00:16.25,0:00:19.20,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:19.20,0:00:23.79,Verse,,0,0,0,,{\pos(495,810)\fs100\fad(130,80)}어려움 속에서도
+Dialogue: 0,0:00:19.20,0:00:23.79,Verse,,0,0,0,,{\pos(495,938)\fs100\fad(130,80)}하나님의 자비를
+Dialogue: 0,0:00:19.20,0:00:23.79,Verse,,0,0,0,,{\pos(495,1066)\fs100\fad(130,80)}기억합니다
+Dialogue: 0,0:00:19.20,0:00:23.79,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}묵상
+Dialogue: 0,0:00:23.79,0:00:30.26,Verse,,0,0,0,,{\pos(495,810)\fs88\fad(130,80)}주님, 오늘을 다시
+Dialogue: 0,0:00:23.79,0:00:30.26,Verse,,0,0,0,,{\pos(495,938)\fs88\fad(130,80)}시작할 힘을 주시고 제
+Dialogue: 0,0:00:23.79,0:00:30.26,Verse,,0,0,0,,{\pos(495,1066)\fs88\fad(130,80)}걸음을 인도해 주세요
+Dialogue: 0,0:00:23.79,0:00:30.26,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}기도
+Dialogue: 0,0:00:30.26,0:00:34.00,Verse,,0,0,0,,{\pos(495,810)\fs100\fad(130,80)}아멘
+Dialogue: 0,0:00:30.26,0:00:34.00,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}기도
+Dialogue: 0,0:00:00.00,0:00:34.00,Reference,,0,0,0,,{\pos(495,1505)\fs42\fad(130,80)}예레미야애가 3장 22~23절
+Dialogue: 0,0:00:00.00,0:00:34.00,Credit,,0,0,0,,{\pos(495,1588)\fs30\fad(130,80)}개역한글 · 대한성서공회

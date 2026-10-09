@@ -1,0 +1,41 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Verse,Malgun Gothic,104,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,5,2,8,0,0,0,1
+Style: Reference,Malgun Gothic,54,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,3,1,8,0,0,0,1
+Style: Credit,Malgun Gothic,30,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,0,0,0,0,100,100,0,0,1,2,1,8,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:01.00,0:00:04.54,Verse,,0,0,0,,{\pos(495,810)\fs100\fad(130,80)}두려운 시간을 홀로
+Dialogue: 0,0:00:01.00,0:00:04.54,Verse,,0,0,0,,{\pos(495,938)\fs100\fad(130,80)}지나고 계신가요?
+Dialogue: 0,0:00:01.00,0:00:04.54,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}오늘의 말씀
+Dialogue: 0,0:00:04.54,0:00:09.03,Verse,,0,0,0,,{\pos(495,810)\fs95\fad(130,80)}내가 사망의 음침한
+Dialogue: 0,0:00:04.54,0:00:09.03,Verse,,0,0,0,,{\pos(495,938)\fs95\fad(130,80)}골짜기로 다닐찌라도
+Dialogue: 0,0:00:04.54,0:00:09.03,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:09.03,0:00:12.00,Verse,,0,0,0,,{\pos(495,810)\fs91\fad(130,80)}해를 두려워하지 않을
+Dialogue: 0,0:00:09.03,0:00:12.00,Verse,,0,0,0,,{\pos(495,938)\fs91\fad(130,80)}것은
+Dialogue: 0,0:00:09.03,0:00:12.00,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:12.00,0:00:15.23,Verse,,0,0,0,,{\pos(495,810)\fs100\fad(130,80)}주께서 나와 함께
+Dialogue: 0,0:00:12.00,0:00:15.23,Verse,,0,0,0,,{\pos(495,938)\fs100\fad(130,80)}하심이라
+Dialogue: 0,0:00:12.00,0:00:15.23,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:15.23,0:00:20.01,Verse,,0,0,0,,{\pos(495,810)\fs83\fad(130,80)}주의 지팡이와 막대기가
+Dialogue: 0,0:00:15.23,0:00:20.01,Verse,,0,0,0,,{\pos(495,938)\fs83\fad(130,80)}나를 안위하시나이다
+Dialogue: 0,0:00:15.23,0:00:20.01,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:20.01,0:00:24.53,Verse,,0,0,0,,{\pos(495,810)\fs83\fad(130,80)}어려운 길에서도 주님과
+Dialogue: 0,0:00:20.01,0:00:24.53,Verse,,0,0,0,,{\pos(495,938)\fs83\fad(130,80)}함께 걸어갑니다
+Dialogue: 0,0:00:20.01,0:00:24.53,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}묵상
+Dialogue: 0,0:00:24.53,0:00:30.41,Verse,,0,0,0,,{\pos(495,810)\fs86\fad(130,80)}주님, 두려운 제 마음을
+Dialogue: 0,0:00:24.53,0:00:30.41,Verse,,0,0,0,,{\pos(495,938)\fs86\fad(130,80)}붙드시고 바른 길로
+Dialogue: 0,0:00:24.53,0:00:30.41,Verse,,0,0,0,,{\pos(495,1066)\fs86\fad(130,80)}이끌어 주세요
+Dialogue: 0,0:00:24.53,0:00:30.41,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}기도
+Dialogue: 0,0:00:30.41,0:00:34.00,Verse,,0,0,0,,{\pos(495,810)\fs100\fad(130,80)}아멘
+Dialogue: 0,0:00:30.41,0:00:34.00,Reference,,0,0,0,,{\pos(495,718)\fs40\fad(130,80)}기도
+Dialogue: 0,0:00:00.00,0:00:34.00,Reference,,0,0,0,,{\pos(495,1505)\fs54\fad(130,80)}시편 23편 4절
+Dialogue: 0,0:00:00.00,0:00:34.00,Credit,,0,0,0,,{\pos(495,1588)\fs30\fad(130,80)}개역한글 · 대한성서공회
