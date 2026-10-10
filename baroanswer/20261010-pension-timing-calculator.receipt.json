@@ -1,0 +1,19 @@
+{
+  "manuscript": "baroanswer/20261010-pension-timing-calculator.md",
+  "plan": "baroanswer/20261010-pension-timing-calculator.images.json",
+  "title": "국민연금 조기수령 연기연금 2026 60세에 당겨 받으면 몇 살부터 손해일까",
+  "started": "2026-10-10T15:52:01",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 155,
+  "codex_log": "logs/codex/20261010-pension-timing-calculator-20261010-155201.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261010-pension-timing-calculator-20261010-155201",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224437179047,
+  "images_uploaded": 6,
+  "images_in_draft": 6,
+  "title_verified": true,
+  "finished": "2026-10-10T15:55:00"
+}

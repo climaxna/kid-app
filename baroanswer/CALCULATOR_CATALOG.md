@@ -152,7 +152,7 @@
 | 군인 월급 계산기 | /work/military-pay | 대기 |
 | 연봉 인상률 계산기 | /work/raise-rate | 대기 |
 | 휴업수당 계산기 | /work/suspension-pay | 대기 |
-| 국민연금 조기·연기수령 계산기 | /pension/timing | 대기 |
+| 국민연금 조기·연기수령 계산기 | /pension/timing | 임시저장 baroanswer/20261010-pension-timing-calculator.md |
 | 국민연금 추납·임의가입 계산기 | /pension/catch-up | 대기 |
 | 국민연금 임의계속가입 계산기 | /pension/voluntary-continue | 대기 |
 | 절세계좌 납입 우선순위 계산기 | /pension/account-order | 대기 |
