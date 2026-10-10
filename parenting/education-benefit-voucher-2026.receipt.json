@@ -1,0 +1,19 @@
+{
+  "manuscript": "parenting/education-benefit-voucher-2026.md",
+  "plan": "parenting/education-benefit-voucher-2026.images.json",
+  "title": "2026 교육급여 바우처 초등 50만원 중학생 70만원 고등학생 86만원 신청 기한 전에 학부모가 확인할 5가지",
+  "started": "2026-10-10T11:45:16",
+  "images_planned": 4,
+  "codex_exit": 0,
+  "codex_seconds": 202,
+  "codex_log": "logs/codex/education-benefit-voucher-2026-20261010-114516.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\education-benefit-voucher-2026-20261010-114516",
+  "images_ready": 4,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224436993776,
+  "images_uploaded": 4,
+  "images_in_draft": 4,
+  "title_verified": true,
+  "finished": "2026-10-10T11:49:00"
+}
