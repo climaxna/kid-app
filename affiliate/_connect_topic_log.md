@@ -20,3 +20,4 @@
 - 2026-10-07 | 가정용 파라핀 베스 | 에코따숨 프라임, 에코따숨 마스터, 웰비오 클래식 | affiliate/posts/20261007-paraffin-bath-guide.md | 임시저장 logNo 224434108041 | 이미지 3/3
 - 2026-10-08 | 종아리 공기압 마사지기 | 풀리오 종아리 마사지기 V3, 닥터라이프 V7MAX, 닥터웰 에어라이너 HDW-5000 | affiliate/posts/20261008-calf-air-massager-guide.md | 임시저장 logNo 224435455897 | 이미지 0/3 (Codex 실행 환경 오류)
 - 2026-10-09 | 경추베개 | 슬립앤슬립 아이유 깊은잠 베개 S+, 슬리필로우 경추베개 스탠다드, 슬립퍼 낮은 메모리폼 경추베개 | affiliate/posts/20261009-neck-pillow-guide.md | 임시저장 logNo 224436388009 | 이미지 3/3
+- 2026-10-10 | 전기 난방기 | 한양 라디에이터 HYR05, 한일 오방난로 6방난로, 신일 무타공 욕실난방기 | affiliate/posts/20261010-electric-heater-guide.md | 임시저장 logNo 224437176301 | 이미지 3/3

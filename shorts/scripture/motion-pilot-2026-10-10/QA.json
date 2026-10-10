@@ -162,31 +162,5 @@
   "transition_seconds": 0.55,
   "audio_reused_from": "C:\\blog\\shorts\\scripture\\release-2026-10-08\\03-peace\\mix.wav",
   "audio_peak": 0.7658168077468872,
-  "output": "C:\\blog\\shorts\\scripture\\motion-pilot-2026-10-10\\peace-live-motion-sample.mp4",
-  "actual_duration": 35.03333333333333,
-  "fps": 30.0,
-  "width": 1080,
-  "height": 1920,
-  "motion_checks": [
-    {
-      "time": 1,
-      "upper_picture_mean_change_over_half_second": 1.369380174291939
-    },
-    {
-      "time": 7,
-      "upper_picture_mean_change_over_half_second": 4.3743289760348585
-    },
-    {
-      "time": 15,
-      "upper_picture_mean_change_over_half_second": 18.377616557734203
-    },
-    {
-      "time": 23,
-      "upper_picture_mean_change_over_half_second": 2.9933747276688454
-    },
-    {
-      "time": 29,
-      "upper_picture_mean_change_over_half_second": 16.085415032679737
-    }
-  ]
+  "output": "C:\\blog\\shorts\\scripture\\motion-pilot-2026-10-10\\peace-live-motion-upload.mp4"
 }

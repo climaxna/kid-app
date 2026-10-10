@@ -1,0 +1,40 @@
+{
+  "outDir": "assets/posts/baroanswer-pension-timing",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/pension/timing",
+      "fill": {
+        "태어난 해": "1973",
+        "처음 가입한 해": "1999",
+        "총 가입기간": "25",
+        "평균 기준소득월액": "3000000",
+        "몇 살까지 산다고 볼까": "85"
+      }
+    },
+    {
+      "file": "02-compare-trend.png",
+      "url": "https://u-jeverse.com/pension/timing",
+      "fill": {
+        "태어난 해": "1973",
+        "처음 가입한 해": "1999",
+        "총 가입기간": "25",
+        "평균 기준소득월액": "3000000",
+        "몇 살까지 산다고 볼까": "85"
+      },
+      "figure": "나이가 들수록 누적액이"
+    },
+    {
+      "file": "03-compare-total.png",
+      "url": "https://u-jeverse.com/pension/timing",
+      "fill": {
+        "태어난 해": "1973",
+        "처음 가입한 해": "1999",
+        "총 가입기간": "25",
+        "평균 기준소득월액": "3000000",
+        "몇 살까지 산다고 볼까": "85"
+      },
+      "figure": "85세까지 산다면"
+    }
+  ]
+}
