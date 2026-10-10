@@ -1,0 +1,30 @@
+[
+  {
+    "episode": "02-gongseri",
+    "place": "아산 공세리성당",
+    "licensed_photos": 5,
+    "collection": 1264,
+    "upload_characters": 295
+  },
+  {
+    "episode": "03-jeongdong",
+    "place": "서울 정동제일교회",
+    "licensed_photos": 5,
+    "collection": 597,
+    "upload_characters": 294
+  },
+  {
+    "episode": "04-gyesan",
+    "place": "대구 계산성당",
+    "licensed_photos": 5,
+    "collection": 684,
+    "upload_characters": 292
+  },
+  {
+    "episode": "05-geumsari",
+    "place": "부여 금사리성당",
+    "licensed_photos": 5,
+    "collection": 1262,
+    "upload_characters": 295
+  }
+]

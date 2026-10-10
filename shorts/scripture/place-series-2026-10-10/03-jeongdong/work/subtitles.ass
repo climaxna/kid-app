@@ -1,0 +1,40 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Verse,Malgun Gothic,104,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,5,2,8,0,0,0,1
+Style: Reference,Malgun Gothic,54,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,3,1,8,0,0,0,1
+Style: Credit,Malgun Gothic,30,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,0,0,0,0,100,100,0,0,1,2,1,8,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:33.70,Reference,,0,0,0,,{\pos(510,138)\fs38\c&HB7DCEB&\fad(120,100)}사진으로 만나는 신앙의 장소
+Dialogue: 0,0:00:00.00,0:00:33.70,Verse,,0,0,0,,{\pos(510,207)\fs62\c&HFFFFFF&\fad(120,100)}서울 정동제일교회
+Dialogue: 0,0:00:00.00,0:00:03.94,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}이 붉은 벽돌 교회는
+Dialogue: 0,0:00:00.00,0:00:03.94,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}어떻게 시작됐을까요?
+Dialogue: 0,0:00:03.94,0:00:09.92,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}서울 정동제일교회
+Dialogue: 0,0:00:03.94,0:00:09.92,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}아펜젤러 선교사의
+Dialogue: 0,0:00:03.94,0:00:09.92,Verse,,0,0,0,,{\pos(510,1318)\fs75\c&HFFFFFF&\fad(120,100)}작은 시작에서 자랐습니다
+Dialogue: 0,0:00:09.92,0:00:16.23,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}1885년 창립
+Dialogue: 0,0:00:09.92,0:00:16.23,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}예배당은 1897년 준공
+Dialogue: 0,0:00:16.23,0:00:21.38,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}오랜 벽돌과 창문에서
+Dialogue: 0,0:00:16.23,0:00:21.38,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}이어져 온 기도를
+Dialogue: 0,0:00:16.23,0:00:21.38,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}떠올립니다
+Dialogue: 0,0:00:21.38,0:00:26.34,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}우리의 작은 기도도
+Dialogue: 0,0:00:21.38,0:00:26.34,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}누군가에게 힘이 되기를
+Dialogue: 0,0:00:21.38,0:00:26.34,Reference,,0,0,0,,{\pos(510,1030)\fs36\c&HB7DCEB&\fad(120,100)}묵상 · 창작 기도
+Dialogue: 0,0:00:26.34,0:00:33.70,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}주님, 작게 시작해도
+Dialogue: 0,0:00:26.34,0:00:33.70,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}포기하지 않고
+Dialogue: 0,0:00:26.34,0:00:33.70,Verse,,0,0,0,,{\pos(510,1318)\fs72\c&HFFFFFF&\fad(120,100)}사랑을 이어가게 해 주세요
+Dialogue: 0,0:00:26.34,0:00:33.70,Reference,,0,0,0,,{\pos(510,1030)\fs36\c&HB7DCEB&\fad(120,100)}묵상 · 창작 기도
+Dialogue: 0,0:00:31.49,0:00:33.70,Verse,,0,0,0,,{\pos(510,1420)\fs55\c&HFFFFFF&\fad(120,100)}아멘
+Dialogue: 0,0:00:00.00,0:00:33.70,Credit,,0,0,0,,{\pos(510,1515)\fs32\c&HFFFFFF&\fad(120,100)}자료 사진: 대한민국역사박물관 · 2015
+Dialogue: 0,0:00:00.00,0:00:33.70,Credit,,0,0,0,,{\pos(510,1560)\fs29\c&HFFFFFF&\fad(120,100)}공공누리 제1유형 · 사진 확대·이동 편집
+Dialogue: 0,0:00:00.00,0:00:33.70,Credit,,0,0,0,,{\pos(510,1602)\fs28\c&HFFFFFF&\fad(120,100)}archive.much.go.kr · 자료집 597
+Dialogue: 0,0:00:00.00,0:00:33.70,Credit,,0,0,0,,{\pos(510,1650)\fs26\c&HFFFFFF&\fad(120,100)}AI 낭독 · 피아노 샘플 Alexander Holm
+Dialogue: 0,0:00:00.00,0:00:33.70,Credit,,0,0,0,,{\pos(510,1690)\fs25\c&HFFFFFF&\fad(120,100)}Salamander Grand Piano · CC BY 3.0 · 선율 편집

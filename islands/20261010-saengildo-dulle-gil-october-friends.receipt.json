@@ -1,0 +1,25 @@
+{
+  "manuscript": "islands/20261010-saengildo-dulle-gil-october-friends.md",
+  "plan": "islands/20261010-saengildo-dulle-gil-october-friends.images.json",
+  "title": "생일도 둘레길 2026년 10월 완도 추천 걷기 코스 10.6km 3시간 30분 친구들과 가는 법",
+  "started": "2026-10-10T22:51:44",
+  "images_planned": 5,
+  "codex_exit": 1,
+  "codex_seconds": 213,
+  "codex_log": "logs/codex/20261010-saengildo-dulle-gil-october-friends-20261010-225144.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261010-saengildo-dulle-gil-october-friends-20261010-225144",
+  "images_ready": 0,
+  "missing": [
+    "assets/posts/20261010-saengildo-dulle-gil-october-friends/01-thumbnail.png",
+    "assets/posts/20261010-saengildo-dulle-gil-october-friends/02-ferry-from-dangmok.png",
+    "assets/posts/20261010-saengildo-dulle-gil-october-friends/03-yongchul-pebble-shore.png",
+    "assets/posts/20261010-saengildo-dulle-gil-october-friends/04-geumgok-beach-camellia.png",
+    "assets/posts/20261010-saengildo-dulle-gil-october-friends/05-before-last-ferry.png"
+  ],
+  "status": "saved_text_only",
+  "logNo": 224437477147,
+  "images_uploaded": 0,
+  "images_in_draft": 0,
+  "title_verified": true,
+  "finished": "2026-10-10T22:55:17"
+}

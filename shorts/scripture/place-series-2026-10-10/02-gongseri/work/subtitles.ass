@@ -1,0 +1,42 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Verse,Malgun Gothic,104,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,5,2,8,0,0,0,1
+Style: Reference,Malgun Gothic,54,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,3,1,8,0,0,0,1
+Style: Credit,Malgun Gothic,30,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,0,0,0,0,100,100,0,0,1,2,1,8,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:33.90,Reference,,0,0,0,,{\pos(510,138)\fs38\c&HB7DCEB&\fad(120,100)}사진으로 만나는 신앙의 장소
+Dialogue: 0,0:00:00.00,0:00:33.90,Verse,,0,0,0,,{\pos(510,207)\fs62\c&HFFFFFF&\fad(120,100)}아산 공세리성당
+Dialogue: 0,0:00:00.00,0:00:05.10,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}이 성당 자리가
+Dialogue: 0,0:00:00.00,0:00:05.10,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}옛날에는
+Dialogue: 0,0:00:00.00,0:00:05.10,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}곡식 창고였다고요?
+Dialogue: 0,0:00:05.10,0:00:10.55,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}아산 공세리성당
+Dialogue: 0,0:00:05.10,0:00:10.55,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}조선 시대 공세창이
+Dialogue: 0,0:00:05.10,0:00:10.55,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}있던 곳입니다
+Dialogue: 0,0:00:10.55,0:00:14.89,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}지금의 성당은
+Dialogue: 0,0:00:10.55,0:00:14.89,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}1922년에 완공됐습니다
+Dialogue: 0,0:00:14.89,0:00:21.14,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}박해 속에서 믿음을 지킨
+Dialogue: 0,0:00:14.89,0:00:21.14,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}순교자들의 기억도
+Dialogue: 0,0:00:14.89,0:00:21.14,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}남아 있습니다
+Dialogue: 0,0:00:21.14,0:00:25.89,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}곡식을 거두던 자리에서
+Dialogue: 0,0:00:21.14,0:00:25.89,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}오늘 나눌 사랑을
+Dialogue: 0,0:00:21.14,0:00:25.89,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}생각합니다
+Dialogue: 0,0:00:21.14,0:00:25.89,Reference,,0,0,0,,{\pos(510,1030)\fs36\c&HB7DCEB&\fad(120,100)}묵상 · 창작 기도
+Dialogue: 0,0:00:25.89,0:00:33.90,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}주님, 이웃을 돌아보고
+Dialogue: 0,0:00:25.89,0:00:33.90,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}작은 사랑을
+Dialogue: 0,0:00:25.89,0:00:33.90,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}실천하게 해 주세요
+Dialogue: 0,0:00:25.89,0:00:33.90,Reference,,0,0,0,,{\pos(510,1030)\fs36\c&HB7DCEB&\fad(120,100)}묵상 · 창작 기도
+Dialogue: 0,0:00:31.69,0:00:33.90,Verse,,0,0,0,,{\pos(510,1420)\fs55\c&HFFFFFF&\fad(120,100)}아멘
+Dialogue: 0,0:00:00.00,0:00:33.90,Credit,,0,0,0,,{\pos(510,1515)\fs32\c&HFFFFFF&\fad(120,100)}자료 사진: 대한민국역사박물관 · 2018
+Dialogue: 0,0:00:00.00,0:00:33.90,Credit,,0,0,0,,{\pos(510,1560)\fs29\c&HFFFFFF&\fad(120,100)}공공누리 제1유형 · 사진 확대·이동 편집
+Dialogue: 0,0:00:00.00,0:00:33.90,Credit,,0,0,0,,{\pos(510,1602)\fs28\c&HFFFFFF&\fad(120,100)}archive.much.go.kr · 자료집 1264
+Dialogue: 0,0:00:00.00,0:00:33.90,Credit,,0,0,0,,{\pos(510,1650)\fs26\c&HFFFFFF&\fad(120,100)}AI 낭독 · 피아노 샘플 Alexander Holm
+Dialogue: 0,0:00:00.00,0:00:33.90,Credit,,0,0,0,,{\pos(510,1690)\fs25\c&HFFFFFF&\fad(120,100)}Salamander Grand Piano · CC BY 3.0 · 선율 편집
