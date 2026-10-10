@@ -1,0 +1,40 @@
+{
+  "concept": "photoreal",
+  "reference": "design/thumbnail-references/photoreal/00.png",
+  "host_references": [
+    "private_media/personas/island-host/female40-01.png",
+    "private_media/personas/island-host/female40-02.png"
+  ],
+  "images": [
+    {
+      "file": "assets/posts/20261010-saengildo-dulle-gil-october-friends/01-thumbnail.png",
+      "insert": "top",
+      "text": ["생일도 둘레길", "10.6km"],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 10월 오전 맑은 자연광, 전남 완도 생일도의 해안도로와 둥근 갯돌이 깔린 해변, 멀리 다도해 섬들이 겹쳐 보이는 풍경. 진행자(첨부 host 얼굴, 40대 후반 여성)는 화면 오른쪽 앞에서 크게(화면 높이 약 65%) 연한 베이지 바람막이와 감색 니트, 편한 운동화 차림으로 한 손을 들어 바다 쪽 길을 가리키며 카메라를 보고 밝게 웃는다. 바닷바람에 머리카락이 살짝 날리고 채도는 낮게. 화면 위쪽에 크고 굵은 흰색 한글 고딕 제목 '생일도 둘레길'을 한 줄로, 그 아래 제목보다 크게 노란색 '10.6km'. 글자 뒤 옅은 그림자만, 테두리, 배지, 말풍선 없음. 글자는 가장자리에서 충분히 떨어뜨린다. 표지판, 로고, 다른 사람 얼굴 없음. 다른 섬의 랜드마크를 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261010-saengildo-dulle-gil-october-friends/02-ferry-from-dangmok.png",
+      "insert": "## 02. 완도항이 아니라 당목항에서 배를 타요",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 이른 아침 남해 다도해의 작은 항구, 차량을 싣는 작은 차도선 여객선이 선착장에 대기하고 있고 뒤로 낮은 섬들이 안개 속에 보인다. 부드러운 아침 햇빛, 채도 낮게. 글자, 사람 얼굴, 선사 로고, 표지판, 선박 이름, 시간 숫자는 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261010-saengildo-dulle-gil-october-friends/03-yongchul-pebble-shore.png",
+      "insert": "## 03. 용출 갯돌 해안 파도 소리 듣기",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 10월 낮, 둥글고 매끈한 갯돌(몽돌)이 가득 깔린 남해 섬 해안, 잔잔한 파도가 돌 사이로 밀려왔다 빠지는 순간, 해안 옆으로 이어진 좁은 해안도로와 멀리 섬. 낮은 채도, 얕은 심도. 글자, 사람 얼굴, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261010-saengildo-dulle-gil-october-friends/04-geumgok-beach-camellia.png",
+      "insert": "## 05. 금곡해수욕장에서 쉬고 금곡마을로",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 늦은 오후의 한적한 남해 섬 금빛 모래 해변, 해변 뒤로 짙은 녹색 동백나무 숲, 잔잔한 바다와 멀리 작은 섬, 모래밭 위 발자국. 사람은 멀리 뒷모습 실루엣 한 명 정도만, 얼굴이 보이지 않게. 낮은 채도, 자연스러운 질감. 글자, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261010-saengildo-dulle-gil-october-friends/05-before-last-ferry.png",
+      "insert": "## 08. 출발 전 마지막 확인",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 해 질 무렵 남해 섬 작은 선착장 근처 방파제 길, 바다와 멀리 작은 여객선이 보이는 풍경. 진행자(첨부 host 얼굴, 40대 후반 여성)는 화면 왼쪽 30% 안쪽에 허리 위까지만 작게, 썸네일과 다른 옷으로 짙은 보라 계열 경량 패딩과 아이보리 목도리 차림, 한 손에 휴대폰을 들고 시간표를 확인하며 고개를 살짝 기울여 미소 짓는다. 썸네일과 다른 포즈와 표정. 채도 낮게. 글자, 표지판, 선사 로고, 다른 사람 얼굴은 넣지 않는다."
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+[aist#1:0/pcm_s24le @ 0000021ae03f7000] Guessed Channel Layout: stereo
+[swscaler @ 0000021ae618bdc0] deprecated pixel format used, make sure you did set range correctly
