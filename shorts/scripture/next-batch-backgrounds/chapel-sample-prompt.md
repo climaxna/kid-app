@@ -1,0 +1,11 @@
+Generated with built-in image_gen. Background sample only; not yet approved for videos.
+
+Use case: illustration-story.
+Asset type: ONE new portrait 9:16 background sample for Korean Christian scripture shorts, aimed at adults over 50.
+Primary request: a completely different setting from previous sky/Jesus/ocean/meadow scenes. An intimate, quiet chapel interior, painted as a traditional sacred oil painting.
+Scene: aged stone chapel with tall arched window on upper left. Muted blue and dusty burgundy stained glass admitting soft warm morning light. A few softly glowing candles near the bottom left, a small wooden cross and an open Bible on a simple wooden prayer table at the bottom right.
+Subject: Jesus stands naturally inside the chapel in the upper-right area, visible from head to waist, head gently bowed, calm compassionate solemn expression, dark brown shoulder-length hair and short beard, ivory robe and subdued burgundy mantle. He is a fully present painted figure, NOT a gigantic floating face in clouds. His hands are simply held together near waist. Face and hands safely within the upper 40% and right portion. No other people.
+Composition: vertical 9:16. Strong architectural arch framing. The central area from 42% to 65% of the canvas is quiet, softly shaded warm stone wall and diffuse light, with no important objects, intended for large white scripture subtitles added later. Keep candles, Bible and wooden cross below the central text area. Restrained, readable composition without clutter.
+Style: traditional church devotional oil painting, soft brush edges, delicate painted face, fine visible canvas texture, gentle atmospheric depth, low-to-moderate saturation, aged ivory, muted stone brown, dusty blue, subdued burgundy. Rich but restrained shadows. Reverent, comforting and intimate, not gloomy.
+Avoid: exterior scenery, sea, lake, mountains, fields, clouds around Jesus, previous sunset composition, glossy AI photorealistic face, HDR, bright orange/yellow saturation, lens flare, neon, cartoon, 3D, dramatic supernatural effects, any letters or text, logos, watermark. No crucified body, no wounds.
+Deliver a single complete background painting, not a collage or mockup.

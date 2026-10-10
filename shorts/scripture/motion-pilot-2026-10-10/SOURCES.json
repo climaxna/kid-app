@@ -1,0 +1,25 @@
+{
+  "footage": [
+    {
+      "name": "촛불을 켜는 손",
+      "creator": "Anna Shvets",
+      "url": "https://www.pexels.com/video/woman-lighting-candle-in-church-6671195/"
+    },
+    {
+      "name": "십자가와 촛불",
+      "creator": "Anna Shvets",
+      "url": "https://www.pexels.com/video/golden-crucifix-and-candles-inside-a-church-6670962/"
+    },
+    {
+      "name": "흐르는 구름",
+      "creator": "Dmitry Marchenkov",
+      "url": "https://www.pexels.com/video/moving-clouds-against-sun-12549516/"
+    }
+  ],
+  "license": "https://www.pexels.com/license/",
+  "license_checked": "2026-10-10",
+  "bible": "https://www.bible.com/ko/bible/88/PSA.4.8.KRV",
+  "music_sample_author": "Alexander Holm",
+  "music_license": "https://creativecommons.org/licenses/by/3.0/",
+  "music_source": "https://github.com/Tonejs/audio/tree/master/salamander"
+}

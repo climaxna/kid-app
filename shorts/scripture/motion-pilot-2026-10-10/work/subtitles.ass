@@ -1,0 +1,44 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Verse,Malgun Gothic,104,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,5,2,8,0,0,0,1
+Style: Reference,Malgun Gothic,54,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,3,1,8,0,0,0,1
+Style: Credit,Malgun Gothic,30,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,0,0,0,0,100,100,0,0,1,2,1,8,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:05.02,Verse,,0,0,0,,{\pos(495,1040)\fs82\fad(130,80)}잠자리에 누워도 내일
+Dialogue: 0,0:00:00.00,0:00:05.02,Verse,,0,0,0,,{\pos(495,1168)\fs82\fad(130,80)}걱정이 떠오르시나요?
+Dialogue: 0,0:00:00.00,0:00:05.02,Reference,,0,0,0,,{\pos(495,948)\fs40\fad(130,80)}오늘의 말씀
+Dialogue: 0,0:00:05.02,0:00:07.86,Verse,,0,0,0,,{\pos(495,1040)\fs100\fad(130,80)}내가 평안히 눕고
+Dialogue: 0,0:00:05.02,0:00:07.86,Verse,,0,0,0,,{\pos(495,1168)\fs100\fad(130,80)}자기도 하리니
+Dialogue: 0,0:00:05.02,0:00:07.86,Reference,,0,0,0,,{\pos(495,948)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:07.86,0:00:12.28,Verse,,0,0,0,,{\pos(495,1040)\fs82\fad(130,80)}나를 안전히 거하게
+Dialogue: 0,0:00:07.86,0:00:12.28,Verse,,0,0,0,,{\pos(495,1168)\fs82\fad(130,80)}하시는 이는 오직
+Dialogue: 0,0:00:07.86,0:00:12.28,Verse,,0,0,0,,{\pos(495,1296)\fs82\fad(130,80)}여호와시니이다
+Dialogue: 0,0:00:07.86,0:00:12.28,Reference,,0,0,0,,{\pos(495,948)\fs40\fad(130,80)}말씀
+Dialogue: 0,0:00:12.28,0:00:17.02,Verse,,0,0,0,,{\pos(495,1040)\fs82\fad(130,80)}다 풀지 못한 걱정도
+Dialogue: 0,0:00:12.28,0:00:17.02,Verse,,0,0,0,,{\pos(495,1168)\fs82\fad(130,80)}하나님께 말씀드려
+Dialogue: 0,0:00:12.28,0:00:17.02,Verse,,0,0,0,,{\pos(495,1296)\fs82\fad(130,80)}봅니다
+Dialogue: 0,0:00:12.28,0:00:17.02,Reference,,0,0,0,,{\pos(495,948)\fs40\fad(130,80)}묵상
+Dialogue: 0,0:00:17.02,0:00:22.66,Verse,,0,0,0,,{\pos(495,1040)\fs82\fad(130,80)}오늘의 수고를 내려놓고
+Dialogue: 0,0:00:17.02,0:00:22.66,Verse,,0,0,0,,{\pos(495,1168)\fs82\fad(130,80)}주님을 의지하며 하루를
+Dialogue: 0,0:00:17.02,0:00:22.66,Verse,,0,0,0,,{\pos(495,1296)\fs82\fad(130,80)}마무리합니다
+Dialogue: 0,0:00:17.02,0:00:22.66,Reference,,0,0,0,,{\pos(495,948)\fs40\fad(130,80)}묵상
+Dialogue: 0,0:00:22.66,0:00:26.76,Verse,,0,0,0,,{\pos(495,1040)\fs82\fad(130,80)}주님, 저와 사랑하는
+Dialogue: 0,0:00:22.66,0:00:26.76,Verse,,0,0,0,,{\pos(495,1168)\fs82\fad(130,80)}가족을 돌보아 주세요
+Dialogue: 0,0:00:22.66,0:00:26.76,Reference,,0,0,0,,{\pos(495,948)\fs40\fad(130,80)}기도
+Dialogue: 0,0:00:26.76,0:00:31.36,Verse,,0,0,0,,{\pos(495,1040)\fs82\fad(130,80)}이 밤에도 주님을
+Dialogue: 0,0:00:26.76,0:00:31.36,Verse,,0,0,0,,{\pos(495,1168)\fs82\fad(130,80)}신뢰하며 평안히 쉬게
+Dialogue: 0,0:00:26.76,0:00:31.36,Verse,,0,0,0,,{\pos(495,1296)\fs82\fad(130,80)}해 주세요
+Dialogue: 0,0:00:26.76,0:00:31.36,Reference,,0,0,0,,{\pos(495,948)\fs40\fad(130,80)}기도
+Dialogue: 0,0:00:31.36,0:00:35.03,Verse,,0,0,0,,{\pos(495,1040)\fs100\fad(130,80)}아멘
+Dialogue: 0,0:00:31.36,0:00:35.03,Reference,,0,0,0,,{\pos(495,948)\fs40\fad(130,80)}기도
+Dialogue: 0,0:00:00.00,0:00:35.03,Reference,,0,0,0,,{\pos(495,1505)\fs54\fad(130,80)}시편 4편 8절
+Dialogue: 0,0:00:00.00,0:00:35.03,Credit,,0,0,0,,{\pos(495,1588)\fs30\fad(130,80)}개역한글 · 대한성서공회
