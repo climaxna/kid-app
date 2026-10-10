@@ -22,6 +22,13 @@ ass=(OLD/'subtitles.ass').read_text(encoding='utf-8-sig')
 for old,new in [(1066,1296),(938,1168),(810,1040),(718,948)]:
  ass=ass.replace(f'pos(495,{old})',f'pos(495,{new})')
 ass=ass.replace('Dialogue: 0,0:00:01.00,','Dialogue: 0,0:00:00.00,')
+def credit(start,end,author,detail):
+ def stamp(t):
+  n=round(t*100);return f'{n//360000}:{n//6000%60:02}:{n%6000//100:02}.{n%100:02}'
+ return '\n'.join(f'Dialogue: 1,{stamp(start)},{stamp(end)},Credit,,0,0,0,,{{\\pos(540,{y})\\fs{size}\\fad(150,150)}}{text}' for y,size,text in [(1650,38,'출처: '+author+' / Pexels'),(1700,32,detail)])
+ass+='\n'+credit(0,13.0,'Anna Shvets','2021.02.01 · 영상 6671195 / 6670962')
+ass+='\n'+credit(13.0,21.5,'Dmitry Marchenkov','2022.06.19 · 영상 12549516')
+ass+='\n'+credit(21.5,duration,'Anna Shvets','2021.02.01 · 영상 6671195 / 6670962')
 (WORK/'subtitles.ass').write_text(ass,encoding='utf-8-sig')
 
 shots=[('lighting',0,6),('cross',0,8),('sky',4,9),('cross',5,7),('lighting',5,duration-27.8)]
@@ -41,7 +48,7 @@ for i in range(1,len(shots)):
  print(f'transition {i} ready',flush=True)
 assert abs(elapsed-duration)<.01,(elapsed,duration)
 
-output=ROOT/'peace-live-motion-sample.mp4'
+output=ROOT/'peace-live-motion-upload.mp4'
 run(['-v','warning','-i',str(current),'-i',str(WORK/'mix.wav'),'-vf','scale=1080:1920,ass=work/subtitles.ass,fade=t=in:st=0:d=0.25,fade=t=out:st=34.23:d=0.8,format=yuv420p','-t',str(duration),'-c:v','libx264','-preset','fast','-crf','19','-threads','3','-c:a','aac','-b:a','192k','-ar','48000','-movflags','+faststart',str(output)],'final')
 run(['-v','error','-i',str(output),'-f','null','-'],'decode')
 frames=[]
