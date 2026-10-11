@@ -1,0 +1,15 @@
+{
+  "output": "../out/purple-island-clip.mp4",
+  "scenes": [
+    {"image": "assets/posts/20261007-purple-island-aster-group-trip/01-thumbnail.png", "seconds": 3.5,
+     "top": ["가을 단체 여행", "여기 어때요?"]},
+    {"image": "assets/posts/20261007-purple-island-aster-group-trip/02-purple-bridge.png", "seconds": 4.5,
+     "top": ["보라색 다리를 건너", "걸어 들어가는 섬"], "bottom": ["퍼플교 547m"]},
+    {"image": "assets/posts/20261007-purple-island-aster-group-trip/03-aster.png", "seconds": 4.5,
+     "top": ["10월 하순이면", "보라색 아스타가 가득"], "bottom": ["축제 날짜는 신안군 공지 확인"]},
+    {"image": "assets/posts/20261007-purple-island-aster-group-trip/04-bus-parking.png", "seconds": 4,
+     "top": ["관광버스는", "입구 주차장까지"], "bottom": ["입구 주차장 무료"]},
+    {"image": "assets/posts/20261007-purple-island-aster-group-trip/05-final.png", "seconds": 4.5,
+     "top": ["보라색 하나만 입으면", "입장료 0원"], "bottom": ["자세한 일정은 블로그에서"]}
+  ]
+}

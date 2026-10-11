@@ -1,0 +1,19 @@
+{
+  "manuscript": "affiliate/posts/20261011-dish-rack-guide.md",
+  "plan": "affiliate/posts/20261011-dish-rack-guide.images.json",
+  "title": "식기건조대 스텐 2단 살까 우리 식구 하루 설거지 그릇이 몇 개인지 세어 봤어요",
+  "started": "2026-10-11T18:21:48",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 182,
+  "codex_log": "logs/codex/20261011-dish-rack-guide-20261011-182148.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261011-dish-rack-guide-20261011-182148",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224438139250,
+  "images_uploaded": 3,
+  "images_in_draft": 3,
+  "title_verified": true,
+  "finished": "2026-10-11T18:25:08"
+}
