@@ -1,0 +1,19 @@
+{
+  "manuscript": "baroanswer/20261011-health-insurance-calculator.md",
+  "plan": "baroanswer/20261011-health-insurance-calculator.images.json",
+  "title": "은퇴 후 건강보험료 2026 연금 2400만 원이면 피부양자에서 떨어질까",
+  "started": "2026-10-11T23:56:12",
+  "images_planned": 3,
+  "codex_exit": 0,
+  "codex_seconds": 208,
+  "codex_log": "logs/codex/20261011-health-insurance-calculator-20261011-235612.log",
+  "codex_job": "C:\\Users\\kim\\AppData\\Local\\Temp\\codex_image_jobs\\20261011-health-insurance-calculator-20261011-235612",
+  "images_ready": 3,
+  "missing": [],
+  "status": "saved",
+  "logNo": 224438434886,
+  "images_uploaded": 5,
+  "images_in_draft": 5,
+  "title_verified": true,
+  "finished": "2026-10-11T23:59:56"
+}

@@ -160,7 +160,7 @@
 | 연금 인출 순서 계산기 | /pension/withdrawal-order | 대기 |
 | 연금저축·IRP 세액공제 계산기 | /pension/tax-credit | 대기 |
 | 연금소득세 계산기 | /pension/income-tax | 대기 |
-| 은퇴 후 건강보험료 계산기 | /pension/health-insurance | 원고 (사이트 수정 커밋 782eb12, push 후 캡처·임시저장) baroanswer/20261011-health-insurance-calculator.md, 캡처 spec baroanswer/images/health-insurance.json, 이미지 계획 .images.json 준비 |
+| 은퇴 후 건강보험료 계산기 | /pension/health-insurance | 임시저장 baroanswer/20261011-health-insurance-calculator.md (사이트 수정 커밋 782eb12 배포 확인, 캡처 2장 + Codex 이미지 3장) |
 | 노후자금 계산기 | /pension/retire-plan | 대기 |
 | 은퇴자산 인출 시뮬레이션 | /pension/withdrawal | 대기 |
 | 연금 공백기 계산기 | /pension/gap | 대기 |
