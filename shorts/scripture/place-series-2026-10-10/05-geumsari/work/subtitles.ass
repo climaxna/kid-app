@@ -1,0 +1,42 @@
+﻿[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Verse,Malgun Gothic,104,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,5,2,8,0,0,0,1
+Style: Reference,Malgun Gothic,54,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,-1,0,0,0,100,100,0,0,1,3,1,8,0,0,0,1
+Style: Credit,Malgun Gothic,30,&H00FFFFFF,&H00FFFFFF,&H0014100D,&H80000000,0,0,0,0,100,100,0,0,1,2,1,8,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:33.20,Reference,,0,0,0,,{\pos(510,138)\fs38\c&HB7DCEB&\fad(120,100)}사진으로 만나는 신앙의 장소
+Dialogue: 0,0:00:00.00,0:00:33.20,Verse,,0,0,0,,{\pos(510,207)\fs62\c&HFFFFFF&\fad(120,100)}부여 금사리성당
+Dialogue: 0,0:00:00.00,0:00:04.87,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}작은 시골 성당에는
+Dialogue: 0,0:00:00.00,0:00:04.87,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}얼마나 오랜 기도가
+Dialogue: 0,0:00:00.00,0:00:04.87,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}쌓였을까요?
+Dialogue: 0,0:00:04.87,0:00:10.70,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}부여 금사리성당
+Dialogue: 0,0:00:04.87,0:00:10.70,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}옛 성당은
+Dialogue: 0,0:00:04.87,0:00:10.70,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}1906년에 완공됐습니다
+Dialogue: 0,0:00:10.70,0:00:16.19,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}낮은 지붕과 벽돌
+Dialogue: 0,0:00:10.70,0:00:16.19,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}나무 기둥이 이루는
+Dialogue: 0,0:00:10.70,0:00:16.19,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}소박한 공간
+Dialogue: 0,0:00:16.19,0:00:20.88,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}화려하지 않아도
+Dialogue: 0,0:00:16.19,0:00:20.88,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}마음을 모아
+Dialogue: 0,0:00:16.19,0:00:20.88,Verse,,0,0,0,,{\pos(510,1318)\fs75\c&HFFFFFF&\fad(120,100)}기도할 자리는 충분합니다
+Dialogue: 0,0:00:20.88,0:00:26.06,Verse,,0,0,0,,{\pos(510,1110)\fs72\c&HFFFFFF&\fad(120,100)}우리 집의 평범한 하루에도
+Dialogue: 0,0:00:20.88,0:00:26.06,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}감사할 일을 찾아봅니다
+Dialogue: 0,0:00:20.88,0:00:26.06,Reference,,0,0,0,,{\pos(510,1030)\fs36\c&HB7DCEB&\fad(120,100)}묵상 · 창작 기도
+Dialogue: 0,0:00:26.06,0:00:33.20,Verse,,0,0,0,,{\pos(510,1110)\fs76\c&HFFFFFF&\fad(120,100)}주님, 가족과 나누는
+Dialogue: 0,0:00:26.06,0:00:33.20,Verse,,0,0,0,,{\pos(510,1214)\fs76\c&HFFFFFF&\fad(120,100)}작은 시간을
+Dialogue: 0,0:00:26.06,0:00:33.20,Verse,,0,0,0,,{\pos(510,1318)\fs76\c&HFFFFFF&\fad(120,100)}소중히 여기게 해 주세요
+Dialogue: 0,0:00:26.06,0:00:33.20,Reference,,0,0,0,,{\pos(510,1030)\fs36\c&HB7DCEB&\fad(120,100)}묵상 · 창작 기도
+Dialogue: 0,0:00:30.97,0:00:33.20,Verse,,0,0,0,,{\pos(510,1420)\fs55\c&HFFFFFF&\fad(120,100)}아멘
+Dialogue: 0,0:00:00.00,0:00:33.20,Credit,,0,0,0,,{\pos(510,1515)\fs32\c&HFFFFFF&\fad(120,100)}자료 사진: 대한민국역사박물관 · 2018
+Dialogue: 0,0:00:00.00,0:00:33.20,Credit,,0,0,0,,{\pos(510,1560)\fs29\c&HFFFFFF&\fad(120,100)}공공누리 제1유형 · 사진 확대·이동 편집
+Dialogue: 0,0:00:00.00,0:00:33.20,Credit,,0,0,0,,{\pos(510,1602)\fs28\c&HFFFFFF&\fad(120,100)}archive.much.go.kr · 자료집 1262
+Dialogue: 0,0:00:00.00,0:00:33.20,Credit,,0,0,0,,{\pos(510,1650)\fs26\c&HFFFFFF&\fad(120,100)}AI 낭독 · 피아노 샘플 Alexander Holm
+Dialogue: 0,0:00:00.00,0:00:33.20,Credit,,0,0,0,,{\pos(510,1690)\fs25\c&HFFFFFF&\fad(120,100)}Salamander Grand Piano · CC BY 3.0 · 선율 편집

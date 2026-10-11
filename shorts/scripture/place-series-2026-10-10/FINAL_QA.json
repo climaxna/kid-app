@@ -1,0 +1,54 @@
+[
+  {
+    "place": "아산 공세리성당",
+    "file": "C:\\blog\\shorts\\scripture\\place-series-2026-10-10\\02-gongseri\\02-gongseri.mp4",
+    "duration": 33.9,
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "fps": 30.0,
+    "decode_passed": true,
+    "visual_review": "6 representative frames inspected",
+    "published": false
+  },
+  {
+    "place": "서울 정동제일교회",
+    "file": "C:\\blog\\shorts\\scripture\\place-series-2026-10-10\\03-jeongdong\\03-jeongdong.mp4",
+    "duration": 33.7,
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "fps": 30.0,
+    "decode_passed": true,
+    "visual_review": "6 representative frames inspected",
+    "published": false
+  },
+  {
+    "place": "대구 계산성당",
+    "file": "C:\\blog\\shorts\\scripture\\place-series-2026-10-10\\04-gyesan\\04-gyesan.mp4",
+    "duration": 34.03333333333333,
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "fps": 30.0,
+    "decode_passed": true,
+    "visual_review": "6 representative frames inspected",
+    "published": false
+  },
+  {
+    "place": "부여 금사리성당",
+    "file": "C:\\blog\\shorts\\scripture\\place-series-2026-10-10\\05-geumsari\\05-geumsari.mp4",
+    "duration": 33.2,
+    "dimensions": [
+      1080,
+      1920
+    ],
+    "fps": 30.0,
+    "decode_passed": true,
+    "visual_review": "6 representative frames inspected",
+    "published": false
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "outDir": "assets/posts/baroanswer-health-insurance",
+  "captures": [
+    {
+      "file": "01-calculator.png",
+      "url": "https://u-jeverse.com/pension/health-insurance",
+      "fill": {
+        "연금·근로소득 (연간)": "24000000",
+        "이자·배당·사업·기타소득 (연간)": "0",
+        "재산세 과세표준": "300000000"
+      }
+    },
+    {
+      "file": "02-compare-property.png",
+      "url": "https://u-jeverse.com/pension/health-insurance",
+      "fill": {
+        "연금·근로소득 (연간)": "24000000",
+        "이자·배당·사업·기타소득 (연간)": "0",
+        "재산세 과세표준": "300000000"
+      },
+      "figure": "재산이 늘면 보험료가"
+    }
+  ]
+}
