@@ -1,0 +1,15 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=NhJ3RogRo7Q
+[youtube] NhJ3RogRo7Q: Downloading webpage
+[youtube] NhJ3RogRo7Q: Downloading visionos player API JSON
+[youtube] NhJ3RogRo7Q: Downloading m3u8 information
+[info] NhJ3RogRo7Q: Downloading 1 format(s): 616+251-1
+[info] Writing video metadata as JSON to: C:\blog\shorts\local_clipper\jobs\61c7d343f8bd7d\source.info.json
+[hlsnative] Downloading m3u8 manifest
+[hlsnative] Total fragments: 35
+[download] Destination: C:\blog\shorts\local_clipper\jobs\61c7d343f8bd7d\source.f616.mp4
+[download] Download completed
+[download] Destination: C:\blog\shorts\local_clipper\jobs\61c7d343f8bd7d\source.f251-1.webm
+[download] Download completed
+[Merger] Merging formats into "C:\blog\shorts\local_clipper\jobs\61c7d343f8bd7d\source.mp4"
+Deleting original file C:\blog\shorts\local_clipper\jobs\61c7d343f8bd7d\source.f251-1.webm (pass -k to keep)
+Deleting original file C:\blog\shorts\local_clipper\jobs\61c7d343f8bd7d\source.f616.mp4 (pass -k to keep)

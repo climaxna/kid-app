@@ -1,0 +1,14 @@
+{
+  "source": "C:/blog/output/snl-sample/source.mp4",
+  "start": 119.6,
+  "end": 141.8,
+  "title": ["업무 부탁했다가", "눈치 보게 된 이유"],
+  "series": "SNL 코리아 · MZ 오피스",
+  "footer": "전종서 편 하이라이트",
+  "credit": "출처  쿠팡플레이 공식 YouTube",
+  "captions": [
+    {"start": 0, "end": 7, "text": "자료 정리 부탁했을 뿐인데…"},
+    {"start": 7, "end": 13.5, "text": "대답은 평범한데 눈빛이…"},
+    {"start": 13.5, "end": 22.2, "text": "부탁한 사람이 눈치 보는 중"}
+  ]
+}
