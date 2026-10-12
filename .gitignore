@@ -25,3 +25,4 @@ scripts/*.mjs
 
 # 쇼츠 영상(mp4·음성·장면 이미지)은 폴더에만 두고 저장소에 올리지 않는다. 운영자가 직접 유튜브에 올린다.
 /baroanswer/shorts/
+/islands/shorts/

@@ -1,0 +1,40 @@
+{
+  "concept": "photoreal",
+  "reference": "design/thumbnail-references/photoreal/00.png",
+  "host_references": [
+    "private_media/personas/island-host/female40-02.png",
+    "private_media/personas/island-host/female40-03.png"
+  ],
+  "images": [
+    {
+      "file": "assets/posts/20261012-cheongsando-ferry-last-boat-october/01-thumbnail.png",
+      "insert": "top",
+      "text": ["청산도 막배", "17시"],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 10월 늦은 오후 낮게 기운 금빛 햇빛, 완도 앞바다를 가르며 청산도로 가는 작은 여객선 갑판 난간과 멀리 낮게 누운 청산도 섬 윤곽, 잔잔하지만 바람이 느껴지는 바다. 진행자(첨부 host 얼굴, 40대 후반 여성)는 화면 오른쪽 앞에서 크게(화면 높이 약 65%) 갑판 난간 옆에 서서 짙은 남색 방풍 점퍼와 연회색 목도리 차림, 바람에 머리카락이 살짝 날리며 한 손으로 멀리 섬을 가리키고 놀란 듯 웃는 표정. 채도는 낮게. 화면 위쪽에 크고 굵은 흰색 한글 고딕 제목 '청산도 막배'를 한 줄로, 그 아래 제목보다 크게 노란색 '17시'. 글자 뒤 옅은 그림자만, 테두리, 배지, 말풍선 없음. 글자는 가장자리에서 충분히 떨어뜨린다. 표지판, 선사 로고, 선박 이름, 다른 사람 얼굴 없음. 다른 섬의 랜드마크를 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261012-cheongsando-ferry-last-boat-october/02-wando-ferry-view.png",
+      "insert": "## 청산도 배편 시간표 2026년 10월",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 이른 아침 완도 앞바다를 향해 출항하는 작은 여객선의 뒷갑판 난간, 잔잔한 파도와 멀리 흐릿한 섬들의 윤곽, 갈매기 몇 마리, 부드러운 아침 햇빛, 채도 낮게. 글자와 사람 얼굴은 넣지 않는다. 선사 로고, 표지판, 시간 숫자, 선박 이름은 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261012-cheongsando-ferry-last-boat-october/03-dodam-slow-road.png",
+      "insert": "## 도청항에 내려서 어디로 갈까요",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 10월 낮, 청산도 느낌의 돌담이 이어진 좁은 시골 흙길과 길 옆 가을 들판, 멀리 바다가 살짝 보이는 풍경. 돌담 위로 늘어진 풀과 따뜻한 햇빛, 사람은 없거나 아주 멀리 뒷모습 실루엣 하나, 얼굴은 보이지 않게. 채도 낮고 자연스러운 질감, 얕은 심도. 글자, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261012-cheongsando-ferry-last-boat-october/04-gudeuljang-autumn-field.png",
+      "insert": "## 걷는 시간으로 당일치기 일정 짜기",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 가을 오후, 바다를 향해 완만하게 이어진 계단식 논의 황금빛과 연한 초록이 섞인 풍경, 논 사이의 돌 경계와 좁은 농로, 멀리 잔잔한 바다. 낮게 비치는 햇빛과 부드러운 그림자, 채도 낮게. 사람 얼굴 없음. 글자, 표지판, 로고는 넣지 않는다."
+    },
+    {
+      "file": "assets/posts/20261012-cheongsando-ferry-last-boat-october/05-before-last-boat.png",
+      "insert": "## 출발 전 마지막 확인",
+      "text": [],
+      "prompt": "스마트폰으로 찍은 실제 여행 사진. 늦은 오후 작은 섬 선착장 근처 방파제 길, 낮게 비치는 금빛 햇빛과 바다, 멀리 작은 여객선 한 척. 진행자(첨부 host 얼굴, 40대 후반 여성)는 화면 오른쪽 30% 안쪽에 허리 위까지만 작게, 썸네일과 다른 옷으로 베이지 카디건과 흰 셔츠 차림, 한 손에 휴대폰을 들고 화면을 확인하며 고개를 살짝 숙인 차분한 표정, 썸네일과 다른 포즈. 채도 낮게. 글자, 표지판, 선사 로고, 다른 사람 얼굴은 넣지 않는다."
+    }
+  ]
+}
